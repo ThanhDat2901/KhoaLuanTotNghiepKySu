@@ -10,7 +10,7 @@
 ?>
         <div class="grid_10">
             <div class="box round first grid">
-                <h2>Chi Tiết Size Của Sản Phẩm</h2>
+                <h2>Chi Tiết Màu Sắc Của Sản Phẩm</h2>
                 <div class="block">    
                 <?php
 
@@ -25,6 +25,7 @@
 							<th>Số Thứ Tự</th>
 							<th>Tên Sản Phẩm</th>
 							<th>Tên Màu</th>
+                            <th>Màu Sắc</th> <!-- Thêm cột mới -->
 							<th>Thao Tác</th>
 						</tr>
 					</thead>
@@ -40,9 +41,9 @@
 						<tr class="odd gradeX">
 							<td><?php echo $i; ?></td>
 							<td><?php echo $result['TenSanPham'] ?></td>
-							<td><?php echo $result['TenSize'] ?></td>
-							<td><?php echo $result['SoLuong'] ?></td>
-							<td><a href="chitietsanphamedit.php?brandid=<?php echo $result['IDMauSanPham'] ?>">Thay Đổi</a> || <a onclick = "return confirm('bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDMauSanPham'] ?>">Xóa</a></td>
+							<td><?php echo $result['TenMau'] ?></td>
+                            <td><div style="width: 20px; height: 20px; background-color: <?php echo $result['MaMau']; ?>; border: 1px solid black;"></div></td>
+							<td><a href="chitietmausacedit.php?brandid=<?php echo $result['IDMauSanPham'] ?>">Thay Đổi</a> || <a onclick = "return confirm('bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDMauSanPham'] ?>">Xóa</a></td>
 						</tr>
 						<?php
 					}
@@ -62,4 +63,3 @@
 	});
 </script>
 <?php include 'inc/footer.php';?>
-

@@ -133,7 +133,19 @@
                         <li><a href="menuadd.php"><h style="color: red;font-size:14px">Tạo Menu Trang Chủ</h></a> </li>
                         <li><a href="menulist.php"><h style="color: blue;font-size:14px">Danh Sách Các Menu Trang Chủ</h></a> </li>
                     </ul>
-                </li>  
+                </li> 
+                <li><a class="menuitem"><i class="fas fa-palette"></i> Màu Sắc</a>
+                    <ul class="submenu">
+                        <li><a href="mausacadd.php"><h style="color: red;font-size:14px">Thêm Màu</h></a> </li>
+                        <li><a href="mausaclist.php"><h style="color: blue;font-size:14px">Danh Sách Màu</h></a> </li>
+                    </ul>
+                </li> 
+                <li><a class="menuitem"><i class="fas fa-paint-roller"></i> Màu Sắc Của Sản Phẩm</a>
+                    <ul class="submenu">
+                        <li><a href="chitietmausacadd.php"><h style="color: red;font-size:14px">Thêm Màu Sắc Cho Sản Phẩm</h></a> </li>
+                        <li><a href="chitietmausaclist.php"><h style="color: blue;font-size:14px">Danh Sách Màu Sắc Của Sản Phẩm</h></a> </li>
+                    </ul>
+                </li> 
                  <li><a class="menuitem">Đơn hàng</a>
                     <ul class="submenu">
                         <li><a href="inbox.php">Liệt kê đơn hàng</a> </li>             

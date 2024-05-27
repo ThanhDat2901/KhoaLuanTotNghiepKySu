@@ -270,11 +270,11 @@
 
 			$query = "
 
+			
 			SELECT sanpham.*,loaisanpham.TenLoai,chuongtrinhkhuyenmai.TenKhuyenMai 
 			FROM sanpham 
 			INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai 
 			INNER JOIN chuongtrinhkhuyenmai ON sanpham.IDKhuyenMai = chuongtrinhkhuyenmai.IDKhuyenMai 
-			WHERE sanpham.isDel=0 
 			order by sanpham.IDSanPham desc";
 
 			// $query = "SELECT * FROM tbl_product order by productId desc";
