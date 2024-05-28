@@ -44,12 +44,19 @@
 				$alert = "<span class='error'>Không thể để trống</span>";
 				return $alert;
 			}else{
-				$check_email = "SELECT * FROM thongtinnguoidung WHERE Email='$Email' AND SDT='$SDT' LIMIT 1";
+				$check_email = "SELECT * FROM thongtinnguoidung WHERE Email='$Email' LIMIT 1";
 				$result_check = $this->db->select($check_email);
+
+				$check_sdt = "SELECT * FROM thongtinnguoidung WHERE SDT='$SDT' LIMIT 1";
+				$result_checksdt = $this->db->select($check_sdt);
 				if($result_check){
-					$alert = "<span class='error'>Email này đã được đăng kí</span>";
-					return $alert;
-				}else{
+					return "<span class='error'>Email này đã được đăng kí</span>";
+				}
+				elseif($result_checksdt){
+					return "<span class='error'>SDT này đã được đăng kí</span>";
+				}
+				
+				else{
 				$query = "INSERT INTO thongtinnguoidung(TenNguoiDung,DiaChi,SDT,Email,MatKhau)
 				 VALUES('$TenNguoiDung','$DiaChi','$SDT','$Email','$MatKhau')";
 				$result = $this->db->insert($query);
@@ -58,8 +65,7 @@
 					$alert = "<span class='success'>Đăng kí thành công</span>";
 					return $inserted_id;
 				}else{
-					$alert = "<span class='error'>Đăng kí thất bại</span>";
-					return false;
+					return "<span class='error'>Đăng kí thất bại</span>";
 				}
 			}
 		}

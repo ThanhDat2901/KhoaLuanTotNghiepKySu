@@ -106,6 +106,22 @@
 		}
 
 
+		public function getAvailableQuantity($IDChiTiet) {
+			// Thực hiện truy vấn để lấy số lượng sản phẩm còn trong cửa hàng dựa trên IDChiTiet
+			$sql = "SELECT SoLuong FROM chitietsanpham WHERE IDChiTiet = $IDChiTiet";
+		
+			// Thực hiện truy vấn bằng phương thức select
+			$result = $this->db->select($sql);
+		
+			if ($result) {
+				// Nếu có kết quả trả về, trả về giá trị số lượng
+				$row = $result->fetch_assoc();
+				return $row['SoLuong'];
+			} else {
+				// Nếu không có kết quả, trả về 0
+				return 0;
+			}
+		}
 
 		public function getChiTietBoSuuTapById($id){
 			$query = "SELECT * FROM `chitietbosuutap`,bosuutap,sanpham 

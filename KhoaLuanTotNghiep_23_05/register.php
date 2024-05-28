@@ -75,13 +75,13 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
         $fullAddress = $housenumber . ', ' . $wardName . ', ' . $districtName . ', ' . $cityName;
 
         $insertnguoidung = $nguoidung->insert_nguoidung($username,$fullAddress,$Phone,$userEmail,$password);
-        if ($insertnguoidung) {
+        if (is_int($insertnguoidung)) {
             $insertphanquyen = $phanquyen->PhanQuyenNguoiDung(3,$insertnguoidung);
             $success_message = 'Đăng kí thành công'; // Thêm thông điệp thành công
             header('Location: login.php?success='.$success_message); // Chuyển hướng với thông điệp thành công
             exit();
         } else {
-            $error = 'Register failed.';
+            $error = $insertnguoidung;
         }
     }
 }
@@ -91,6 +91,41 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
 require 'init.php';
 include 'inc/header.php'?>
 
+<style>
+.error-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .error-popup-content {
+        position: relative;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 5px;
+        background-color: #f5c6cb;
+        margin-top: 10px;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background-color: #721c24;
+        width: 0;
+        transition: width 5s linear; /* Adjust time according to your requirement */
+    }
+</style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
     const citySelect = document.getElementById("city");
@@ -161,6 +196,22 @@ include 'inc/header.php'?>
         repasswordInput.setAttribute('type', type);
         this.querySelector('i').classList.toggle('fa-eye-slash');
     });
+    const errorPopup = document.getElementById("errorPopup");
+    const progressBarFill = document.getElementById("progressBarFill");
+
+    <?php if($error): ?>
+        // Display the popup
+        errorPopup.style.display = "block";
+
+        // Start the progress bar
+        progressBarFill.style.width = "100%";
+
+        // Hide the popup after 5 seconds
+        setTimeout(function() {
+            errorPopup.style.display = "none";
+        }, 5000); // 5 seconds
+    <?php endif; ?>
+
     });
     
 </script>
@@ -173,8 +224,17 @@ include 'inc/header.php'?>
                         <div class="row justify-content-center">
                             <div class="">
 
-                                <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4">Register</p>
-
+                                <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4">ĐĂNG KÝ</p>
+                                <?php if($error): ?>
+                                    <div id="errorPopup" class="error-popup" style="display: none;">
+                                            <div class="error-popup-content">
+                                                <span id="errorMessage"><?= $error ?></span>
+                                                <div class="progress-bar">
+                                                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php endif; ?>
                                 <form action=""method="POST">
                                     <div class="row"> 
                                         <div class="col-lg-6">   
@@ -280,11 +340,7 @@ include 'inc/header.php'?>
                                             <button class="btn btn-primary btn-lg" id="saveButton" type="submit" name="submit">Đăng ký</button>
                                             <a href="index.php" class="btn btn-danger btn-lg ms-5">trở lại</a>
                                         </div>
-                                        <?php if($error): ?>
-                                            <div> 
-                                                <p class="text-danger"><?=$error ?></p>
-                                            </div>
-                                        <?php endif; ?>
+
                                     </div>
                                 </form>
                             </div>

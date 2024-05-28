@@ -187,7 +187,7 @@
 							<nav class="navbar navbar-expand-lg ">
 								<ul class="navbar-nav justify-content-end">
 									<li class="nav-item" >
-										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="#"  role="button" aria-expanded="false">
+										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="cart.php"  role="button" aria-expanded="false">
 										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  0  <span></span></span>
 										</a>
 									</li>

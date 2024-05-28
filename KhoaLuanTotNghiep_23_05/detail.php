@@ -27,30 +27,54 @@ require 'classes/hinhanh.php';
     //     header('location: cart.php');
 
     // }
+// Hàm kiểm tra xem sản phẩm có tồn tại trong giỏ hàng hay không
+function productExistsInCart($cart, $productId) {
+    foreach ($cart as $key => $item) {
+        if ($item['IDChiTiet'] == $productId) {
+            return $key; 
+        }
+    }
+    return -1; 
+}
 
-    // Xử lý thêm sản phẩm vào giỏ hàng
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy thông tin sản phẩm từ form
+
     $IDChiTiet = $_POST['IDChiTiet'];
     $SoLuong = $_POST['SoLuong'];
 
-    // Lưu thông tin sản phẩm vào session
-    $cart_item = array(
-        'IDChiTiet' => $IDChiTiet,
-        'SoLuong' => $SoLuong
-    );
 
-    // Kiểm tra xem session giỏ hàng đã được tạo chưa
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
+    $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
+
+
+    $index = productExistsInCart($_SESSION['cart'], $IDChiTiet);
+
+    if ($index !== -1) {
+
+        if ($_SESSION['cart'][$index]['SoLuong'] < $availableQuantity) {
+
+            $_SESSION['cart'][$index]['SoLuong'] += $SoLuong;
+            
+        } else {
+
+            echo "Số lượng sản phẩm trong giỏ hàng vượt quá số lượng còn trong cửa hàng.";
+            
+        }
+    } else {
+        // Nếu sản phẩm chưa tồn tại trong giỏ hàng, kiểm tra số lượng mới thêm vào
+        if ($SoLuong <= $availableQuantity) {
+
+            $cart_item = array(
+                'IDChiTiet' => $IDChiTiet,
+                'SoLuong' => $SoLuong
+            );
+            $_SESSION['cart'][] = $cart_item;
+        } else {
+
+            echo "Số lượng sản phẩm không được lớn hơn số lượng còn trong cửa hàng.";
+
+        }
     }
-
-    // Thêm sản phẩm vào giỏ hàng
-    $_SESSION['cart'][] = $cart_item;
-
-    // Chuyển hướng người dùng đến trang giỏ hàng
-    header('location: cart.php');
-    exit;
 }
 ?> 
 
@@ -110,10 +134,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         background-color: #000000; 
         color: #ffffff; 
     }
+    .notification-popup {
+        position: fixed;
+        top: 40px;
+        right: 20px;
+        background-color: #28a745; 
+        color: white; 
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        font-size: 16px;
+    }
     
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+    var formElements = document.querySelectorAll('form');
+
+    formElements.forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData(form);
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    var notificationPopup = document.getElementById('notificationPopup');
+                    notificationPopup.style.display = 'block';
+
+                    setTimeout(function() {
+                        notificationPopup.style.display = 'none';
+                    }, 3000); 
+
+                } else {
+                    console.error('Request failed');
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Request failed');
+            };
+
+            xhr.open('POST', '', true);
+            xhr.send(formData);
+        });
+    });
+
+
+
         var swiper = new Swiper(".swiper", {
             effect: "cube",
             grabCursor: true,
@@ -185,7 +255,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </script>
 
 <div id="about" class="shop" style="margin-top:12vh">
-
+    <div id="notificationPopup" class="notification-popup" style="display: none;">
+        Đã cập nhật giỏ hàng thành công!
+    </div>
     <div class="container">
         <div class="row">
             
