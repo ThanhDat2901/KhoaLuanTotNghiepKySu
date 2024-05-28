@@ -140,12 +140,12 @@
                         <li><a href="mausaclist.php"><h style="color: blue;font-size:14px">Danh Sách Màu</h></a> </li>
                     </ul>
                 </li> 
-                <li><a class="menuitem"><i class="fas fa-paint-roller"></i> Màu Sắc Của Sản Phẩm</a>
+                <!-- <li><a class="menuitem"><i class="fas fa-paint-roller"></i> Màu Sắc Của Sản Phẩm</a>
                     <ul class="submenu">
                         <li><a href="chitietmausacadd.php"><h style="color: red;font-size:14px">Thêm Màu Sắc Cho Sản Phẩm</h></a> </li>
                         <li><a href="chitietmausaclist.php"><h style="color: blue;font-size:14px">Danh Sách Màu Sắc Của Sản Phẩm</h></a> </li>
                     </ul>
-                </li> 
+                </li>  -->
                  <li><a class="menuitem">Đơn hàng</a>
                     <ul class="submenu">
                         <li><a href="inbox.php">Liệt kê đơn hàng</a> </li>             

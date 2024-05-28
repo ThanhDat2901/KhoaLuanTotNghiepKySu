@@ -56,7 +56,7 @@
 			return $result;
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 26 order by IDKhuyenMai desc";
+			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 25 order by IDKhuyenMai desc";
 			$result = $this->db->select($query);
 			return $result;
 		}

@@ -36,6 +36,7 @@
 					<th>Loại Sản Phẩm</th>
 					<th>Tên Khuyến Mãi</th>
 					<th>Hình Ảnh</th>
+					<th>Màu Sắc</th>
 					<th>Kiểu Sản Phẩm</th>
 					<th>Thao Tác</th>
 				</tr>
@@ -59,6 +60,7 @@
 					<td><?php echo $result['TenKhuyenMai'] ?></td>
 					<!-- <td><img src="uploads/<?php echo $result['HinhAnh'] ?>" width="80"></td> -->
 					<td><img src="<?php echo $result['HinhAnh'] ?>"  width="80"></td>
+					<td><div style="width: 20px; height: 20px; background-color: <?php echo $result['MaMau']; ?>; border: 1px solid black;"></div></td>
 					<td><?php 
 						if($result['type']==0){
 							echo 'Nổi Bật';

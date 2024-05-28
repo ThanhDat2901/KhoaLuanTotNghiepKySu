@@ -150,7 +150,7 @@
 			$GiaDau = mysqli_real_escape_string($this->db->link, $data['GiaDau']);
 			// $GiaCuoi = mysqli_real_escape_string($this->db->link, $data['GiaCuoi']);
 			
-			// $IDBo = mysqli_real_escape_string($this->db->link, $data['IDBo']);
+			 $IDMau = mysqli_real_escape_string($this->db->link, $data['IDMau']);
 			// $IDBoSuuTap = mysqli_real_escape_string($this->db->link, $data['IDBoSuuTap']);
 			$IDLoai = mysqli_real_escape_string($this->db->link, $data['IDLoai']);
 			$IDKhuyenMai = mysqli_real_escape_string($this->db->link, $data['IDKhuyenMai']);
@@ -174,7 +174,7 @@
 			// $uploaded_image = "uploads/".$unique_image;
 			
 			if($TenSanPham=="" || $GiaDau=="" || $GiaCuoi==""  || $ThongTin=="" 
-			|| $IDLoai=="" || $IDKhuyenMai==""| $HinhAnh ==""){
+			|| $IDLoai=="" || $IDKhuyenMai==""| $HinhAnh =="" || $IDMau == ""){
 				$alert = "<span class='error'>Nhập đầy đủ thông tin sản phẩm</span>";
 				return $alert;
 			}else{
@@ -185,7 +185,7 @@
 					return $alert;
 				}else{
 				//move_uploaded_file($file_temp,$uploaded_image);
-				$query = "INSERT INTO sanpham(TenSanPham,ThongTin,GiaDau,GiaCuoi,IDLoai,IDKhuyenMai,type,HinhAnh,isDel) VALUES('$TenSanPham','$ThongTin','$GiaDau','$GiaCuoi','$IDLoai','$IDKhuyenMai','$type','$HinhAnh',0)";
+				$query = "INSERT INTO sanpham(TenSanPham,ThongTin,GiaDau,GiaCuoi,IDLoai,IDKhuyenMai,type,HinhAnh,IDMau,isDel) VALUES('$TenSanPham','$ThongTin','$GiaDau','$GiaCuoi','$IDLoai','$IDKhuyenMai','$type','$HinhAnh','$IDMau',0)";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";
@@ -271,10 +271,11 @@
 			$query = "
 
 			
-			SELECT sanpham.*,loaisanpham.TenLoai,chuongtrinhkhuyenmai.TenKhuyenMai 
+			SELECT sanpham.*,loaisanpham.TenLoai,chuongtrinhkhuyenmai.TenKhuyenMai ,mausac.MaMau
 			FROM sanpham 
 			INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai 
 			INNER JOIN chuongtrinhkhuyenmai ON sanpham.IDKhuyenMai = chuongtrinhkhuyenmai.IDKhuyenMai 
+			INNER JOIN mausac ON sanpham.IDMau = mausac.IDMau 
 			order by sanpham.IDSanPham desc";
 
 			// $query = "SELECT * FROM tbl_product order by productId desc";
@@ -306,7 +307,7 @@
 			$GiaDau = mysqli_real_escape_string($this->db->link, $data['GiaDau']);
 			// $GiaCuoi = mysqli_real_escape_string($this->db->link, $data['GiaCuoi']);
 			
-			// $IDBo = mysqli_real_escape_string($this->db->link, $data['IDBo']);
+			$IDMau = mysqli_real_escape_string($this->db->link, $data['IDMau']);
 			// $IDBoSuuTap = mysqli_real_escape_string($this->db->link, $data['IDBoSuuTap']);
 			$IDLoai = mysqli_real_escape_string($this->db->link, $data['IDLoai']);
 			$IDKhuyenMai = mysqli_real_escape_string($this->db->link, $data['IDKhuyenMai']);
@@ -333,7 +334,7 @@
 
 
 			if($TenSanPham=="" || $ThongTin==""  || $GiaDau=="" || $GiaCuoi=="" 
-			|| $IDLoai=="" || $IDKhuyenMai=="" || $type ==""){
+			|| $IDLoai=="" || $IDKhuyenMai=="" || $type =="" || $IDMau ==""){
 				$alert = "<span class='error'>Không thể để trống</span>";
 				return $alert;
 			}else{
@@ -361,7 +362,8 @@
 					IDKhuyenMai = '$IDKhuyenMai',
 					
 					type = '$type', 
-					HinhAnh = '$HinhAnh'
+					HinhAnh = '$HinhAnh',
+					IDMau = '$IDMau'
 					WHERE IDSanPham = '$id'";					
 				}else{
 					$query = "UPDATE 
@@ -373,8 +375,9 @@
 					ThongTin = '$ThongTin',
 					IDLoai = '$IDLoai',
 					IDKhuyenMai = '$IDKhuyenMai',
-	
+					IDMau = '$IDMau',
 					type = '$type'
+					
 					WHERE IDSanPham = '$id'";
 					
 				}
