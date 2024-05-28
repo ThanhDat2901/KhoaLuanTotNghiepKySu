@@ -15,7 +15,7 @@
 ?> 
 <div class="grid_10">
     <div class="box round first grid">
-        <h2>Thêm Màu</h2>
+        <h2>Thêm Màu Mới</h2>
         <div class="block copyblock"> 
             <?php if(isset($insertBrand)) echo $insertBrand; ?> 
             <form name="brandForm" action="mausacadd.php" method="post" onsubmit="return validateForm()">
