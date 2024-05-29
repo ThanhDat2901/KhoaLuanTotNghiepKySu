@@ -19,18 +19,21 @@ $chitiethoadon = new chitiethoadon();
 $pr = new product();
 $ha = new hinhanh();
 
-// Hàm tính tổng số tiền trong giỏ hàng
+
+
+if (isset($_SESSION['cart'])) {
+    // Hàm tính tổng số tiền trong giỏ hàng
 function calculateTotal($cart, $pr)
 {
     $total = 0;
     foreach ($cart as $item) {
+        if (isset($item['IDChiTiet']) && !empty($item['IDChiTiet'])) {
         $product = $pr->getproductbyIdChiTietSanPham($item['IDChiTiet'])->fetch_assoc();
         $total += $product['GiaCuoi'] * $item['SoLuong'];
+        }
     }
     return $total;
 }
-
-if (isset($_SESSION['cart'])) {
 $totalAmount = calculateTotal($_SESSION['cart'], $pr);
 }
 else{
