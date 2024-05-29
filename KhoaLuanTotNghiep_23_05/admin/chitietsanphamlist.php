@@ -1,8 +1,8 @@
 <?php include 'inc/header.php';?>
 <?php include 'inc/sidebar.php';?>
-<?php include '../classes/chitietmausac.php' ?>
+<?php include '../classes/chitietsanpham.php' ?>
 <?php
-    $brand = new chitietmausac();
+    $brand = new chitietsanpham();
      if(isset($_GET['delid'])){
         $id = $_GET['delid']; 
         $delbrand = $brand->del_brand($id);
@@ -24,7 +24,8 @@
 						<tr>
 							<th>Số Thứ Tự</th>
 							<th>Tên Sản Phẩm</th>
-							<th>Tên Màu</th>
+							<th>Tên Size</th>
+							<th>Số Lượng</th>
 							<th>Thao Tác</th>
 						</tr>
 					</thead>
@@ -42,7 +43,7 @@
 							<td><?php echo $result['TenSanPham'] ?></td>
 							<td><?php echo $result['TenSize'] ?></td>
 							<td><?php echo $result['SoLuong'] ?></td>
-							<td><a href="chitietsanphamedit.php?brandid=<?php echo $result['IDMauSanPham'] ?>">Thay Đổi</a> || <a onclick = "return confirm('bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDMauSanPham'] ?>">Xóa</a></td>
+							<td><a href="chitietsanphamedit.php?brandid=<?php echo $result['IDChiTiet'] ?>">Thay Đổi</a> || <a onclick = "return confirm('bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDChiTiet'] ?>">Xóa</a></td>
 						</tr>
 						<?php
 					}

@@ -304,7 +304,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div style="margin-top: 3vh;"> 
                         <?php if (!empty($result_size)): ?>
-                            <?php foreach($result_size as $datasize): ?>    
+                            <?php foreach($result_size as $datasize): ?>   
+                                <?php if ($datasize['SoLuong'] > 0): ?> 
                                 <form action="" method="post">
                                 <input type="hidden" name="IDChiTiet" id="IDChiTiet" value="<?=$datasize['IDChiTiet'] ?>" />
                                 <input type="hidden" name="SoLuong" value="1">
@@ -322,9 +323,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </tbody>
                                     </table>
                                 </form> 
-
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         <?php else: ?>
+                            <h4 style="color: red;">Sản phẩm đã hết hàng</h4>
                         <?php endif; ?>
                         </div>
                         <div>

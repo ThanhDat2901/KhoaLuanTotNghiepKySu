@@ -6,10 +6,16 @@ require 'init.php';
 //     exit;
 // }
 
-
+require 'classes/nguoidung.php';
 require 'classes/product.php';
 require 'classes/hinhanh.php';
-
+require 'classes/phanquyen.php';
+require 'classes/hoadon.php';
+require 'classes/chitiethoadon.php';
+$nguoidung = new nguoidung();
+$phanquyen = new phanquyen();
+$hoadon = new hoadon();
+$chitiethoadon = new chitiethoadon();
 $pr = new product();
 $ha = new hinhanh();
 
@@ -23,34 +29,234 @@ function calculateTotal($cart, $pr)
     }
     return $total;
 }
+
+if (isset($_SESSION['cart'])) {
+$totalAmount = calculateTotal($_SESSION['cart'], $pr);
+}
+else{
+    $totalAmount =0;
+}
+
+$errorscity='';
+$errorsdistrict='';
+$errorsward='';
+$errorshousenumber='';
+$cleaned_guest_id='';
+if($_SERVER["REQUEST_METHOD"]  == "POST"){
+
+    if (!isset($_SESSION['login_detail'])) {
+        // Tạo một ID tạm thời cho khách hàng nếu chưa có
+        if (!isset($_SESSION['guest_id'])) {
+            $_SESSION['guest_id'] = uniqid('guest_', true);
+           
+        }
+
+        // $cleaned_guest_id = str_replace('.', '', $_SESSION['guest_id']);
+        // $IDNguoiDung  = crc32( $_SESSION['guest_id']);
+
+    $md5_hash = md5($_SESSION['guest_id']);
+    $IDNguoiDung = crc32(substr($md5_hash, 0, 8)); 
+
+    } else {
+        $IDNguoiDung  = $_SESSION['user_id'];
+    }
+    $username = $_POST['userName'];
+    $userEmail = $_POST['userEmail'];
+    $Phone = $_POST['Phone'];
+    $NgayLap = date('Y-m-d H:i:s'); 
+    $city = $_POST['city'];
+    $district = $_POST['district'];
+    $ward = $_POST['ward'];
+    $housenumber = $_POST['housenumber'];
+    $txtNote = $_POST['txtNote'];
+    $bac = range(1, 25);
+    $trung = range(26, 44);
+    $nam = range(45, 63);
+    if (in_array((int)$city, $bac)) {
+        $shippingFee = 39000; 
+    } elseif (in_array((int)$city, $trung)) {
+        $shippingFee = 29000; 
+    } elseif (in_array((int)$city, $nam)) {
+        $shippingFee = 19000; 
+    } else {
+        $shippingFee = 0;
+    }
+    $totalAmount2 = calculateTotal($_SESSION['cart'], $pr);
+    $Thanhtien = $totalAmount2 + $shippingFee;
+
+
+    $cityName =$nguoidung->getNameAdressById('cities',$city); 
+    $districtName = $nguoidung->getNameAdressById('districts',$district); 
+    $wardName = $nguoidung->getNameAdressById('wards',$ward); 
+  
+
+        $fullAddress = $housenumber . ', ' . $wardName . ', ' . $districtName . ', ' . $cityName;
+
+        // $insertnguoidung = $nguoidung->insert_nguoidungGuest($IDNguoiDung);
+        // if (is_int($insertnguoidung)) {
+        //     // $insertphanquyen = $phanquyen->PhanQuyenNguoiDung(3,$insertnguoidung);
+        //     $inserthoadon = $hoadon->insert_HoaDonGuest(1,$username,$Phone,$userEmail,$fullAddress,$NgayLap,$txtNote,$Thanhtien);
+
+        //     session_unset();
+        //     session_destroy();
+        //       header('Location: thanhtoanthanhcong.php'); 
+        //     exit();
+        // } else {
+        //     $error = '$insertnguoidung;';
+        // }
+
+            // $insertphanquyen = $phanquyen->PhanQuyenNguoiDung(3,$insertnguoidung);
+        $inserthoadon = $hoadon->insert_HoaDonGuest(1,$username,$Phone,$userEmail,$fullAddress,$NgayLap,$txtNote,$Thanhtien);
+        
+        // $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest();
+            // Bạn có thể thêm mã kiểm tra để đảm bảo rằng giỏ hàng không trống
+        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+            foreach ($_SESSION['cart'] as $item) {
+                $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest($inserthoadon,$item['IDChiTiet'],$item['SoLuong']);
+                // Kiểm tra kết quả của việc thêm vào cơ sở dữ liệu, và xử lý nếu cần
+                if ($insertchitiethoadon !== true) {
+                    // Xử lý lỗi nếu có
+                }
+            }
+        }
+        session_unset();
+        session_destroy();
+        header('Location: thanhtoanthanhcong.php'); 
+        exit();
+
+
+}
+
+
 ?>
 
 <?php include 'inc/header.php' ;?>  
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const citySelect = document.getElementById("city");
+    const districtSelect = document.getElementById("district");
+    const wardSelect = document.getElementById("ward");
+    const houseNumberInput = document.getElementById("housenumber");
+    const shippingFeeDisplay = document.getElementById("shippingFeeDisplay");
+
+    const grandTotal= document.getElementById("grandTotal");
+    // Load cities
+    fetch("yameshop/getCity.php")
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(city => {
+                let option = document.createElement("option");
+                option.value = city.id;
+                option.text = city.name;
+                citySelect.add(option);
+            });
+        });
+        // Function to calculate shipping fee based on city ID
+        function calculateShippingFee(cityId) {
+            let shippingFee = 0;
+            const bac = Array.from({length: 25}, (_, i) => i + 1);
+            const trung = Array.from({length: 19}, (_, i) => i + 26);
+            const nam = Array.from({length: 19}, (_, i) => i + 45);
+            if (bac.includes(parseInt(cityId))) {
+                shippingFee = 39000; 
+            } else if (trung.includes(parseInt(cityId))) {
+                shippingFee = 29000; 
+            } else if (nam.includes(parseInt(cityId))) {
+                shippingFee = 19000; 
+            } else{
+                shippingFee=0;
+            }
+
+            return shippingFee;
+        }
+        function updateGrandTotal(shippingFee) {
+            const grandTotalElement = document.getElementById("grandTotal");
+            const currentTotal = parseFloat(grandTotalElement.dataset.total);
+            const newTotal = currentTotal + shippingFee;
+            grandTotalElement.innerHTML = "<b>" + numberWithCommas(newTotal) + "<span>đ</span></b>";
+        }
+            // Event listener for city select box
+        citySelect.addEventListener("change", function() {
+            const selectedCityId = this.value;
+            const shippingFee = calculateShippingFee(selectedCityId);
+
+            // Update shipping fee display
+            shippingFeeDisplay.innerHTML = "Phí giao hàng: " + numberWithCommas(shippingFee) + "đ";
+            
+            console.log(shippingFee);
+            updateGrandTotal(shippingFee);
+        });    
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    // Load districts when city is selected
+    citySelect.addEventListener("change", function() {
+        districtSelect.innerHTML = "<option value=''>Chọn quận/huyện</option>";
+        wardSelect.innerHTML = "<option value=''>Chọn xã/phường</option>";
+        wardSelect.disabled = true;
+        districtSelect.disabled = false;
+
+        fetch(`yameshop/getDistrict.php?city_id=${citySelect.value}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(district => {
+                    let option = document.createElement("option");
+                    option.value = district.id;
+                    option.text = district.name;
+                    districtSelect.add(option);
+                });
+            });
+    });
+
+    // Load wards when district is selected
+    districtSelect.addEventListener("change", function() {
+        wardSelect.innerHTML = "<option value=''>Chọn xã/phường</option>";
+        wardSelect.disabled = false;
+
+        fetch(`yameshop/getWard.php?district_id=${districtSelect.value}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(ward => {
+                    let option = document.createElement("option");
+                    option.value = ward.id;
+                    option.text = ward.name;
+                    wardSelect.add(option);
+                });
+            });
+    });
+    wardSelect.addEventListener("change", function() {
+            houseNumberInput.disabled = false;
+        });
+
+    });
+    
+</script>
+
 <div id="about" class="shop" style="margin-top:10vh">
 <?php if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])): ?>
     <div class="" style="width:100%;align-items: center;justify-content: center;text-align: center; background-color: #FFFFFF ">
 
 <div class="container text-center mt-4">
-<div class="row">
-    <div class="col-sm-12 " style="background-color: #e9ecef;">
-        <div class="breadcrumb" style="margin-top: 10px;">
-            <a href="index.php" style="color: black;"><i class="icon fa fa-home"></i></a>
-            <span class="mx-2 mb-0">/</span>
-            <strong class="text-black">Thông tin giỏ hàng của bạn</strong>
-            </div>
-    </div>
+    <div class="row">
+        <div class="col-sm-12 " style="background-color: #e9ecef;">
+            <div class="breadcrumb" style="margin-top: 10px;">
+                <a href="index.php" style="color: black;"><i class="icon fa fa-home"></i></a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Thông tin giỏ hàng của bạn</strong>
+                </div>
+        </div>
 
-</div>   
-<div class="row">
-    <div class="col-12 text-center">
-    <br>
-    <h3>Bạn chưa chọn sản phẩm.</h3>
-    <div>
-        <img src="images/giohangrong.png" alt="">
+    </div>   
+    <div class="row">
+        <div class="col-12 text-center">
+        <br>
+        <h3>Bạn chưa chọn sản phẩm.</h3>
+        <div>
+            <img src="images/giohangrong.png" alt="">
+        </div>
+            <p>Hãy nhanh tay chọn ngay sản phẩm yêu thích.</p>
+        </div>
     </div>
-        <p>Hãy nhanh tay chọn ngay sản phẩm yêu thích.</p>
-    </div>
-</div>
 
 </div>
 
@@ -59,43 +265,8 @@ function calculateTotal($cart, $pr)
 
 <?php else: ?> 
     
-    
-    <div class="container">
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Tên sản phẩm</th>
-			<th scope="col">Tên size</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Giá</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($_SESSION['cart'] as $item): ?>
-            <?php $product = $pr->getproductbyIdChiTietSanPham($item['IDChiTiet'])->fetch_assoc(); ?>
-            <tr>
-                <td><?=$product['TenSanPham']?></td>
-				<td><?=$product['TenSize']?></td>
-                <td><?=$item['SoLuong']?></td>
-                <td><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?></td>
-                <td>
-                    <a href="remove_from_cart.php?id=<?=$item['IDChiTiet']?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?')">Xóa</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-</div>
 
-
-</div>
-<p>Tổng tiền: <?=number_format(calculateTotal($_SESSION['cart'], $pr), 0, ',', '.')?></p>
-
-
-
-
-
-<div class="container-fluid mb-4">
+<div class="container mb-4">
     <div class="row">
     <div class="col-sm-12 " style="background-color: #e9ecef;">
         <div class="breadcrumb" style="margin-top: 10px;">
@@ -105,52 +276,46 @@ function calculateTotal($cart, $pr)
             </div>
     </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 2vh;">
+
         <div class="col-sm-12 col-md-6">
             <h4 style="text-transform:uppercase;">Chi tiết đơn hàng</h4>
                 <table class="table" style="color:#111;">
                     <tbody>
+                    <?php foreach ($_SESSION['cart'] as $item): ?>
+                    <?php $product = $pr->getproductbyIdChiTietSanPham($item['IDChiTiet'])->fetch_assoc(); ?>
                         <tr>
                             <td rowspan="2" style="width:100px;padding-left:0; padding-right:0;">
-                                <img class="img-fluid" src="https://cdn2.yame.vn/pimg/cart-thumb/5a85fcbb-8c58-6800-556d-001ac2f69796.jpg?w=70&amp;h=100&amp;c=true" alt="Áo Sơ Mi Cổ Mở Tay Ngắn Sợi Modal Ít Nhăn Trơn Dáng Rộng Đơn Giản WRINKLE FREE 04">
+                                <img class="img" src="<?=$product['HinhAnh']?>" style="width: 70px;height: 100px;" alt="#">
                                 <div>
                                     <form action="/cart/RemoveItem" id="formRemoveItem" method="POST">
                                         <input type="hidden" name="__ProductUpc" value="0022631001">
-                                        <a href="javascript:void(0);" class="js-removeFromCart"><span class="icon-delete"></span> Xóa</a>
+                                        <a href="remove_from_cart.php?id=<?=$item['IDChiTiet']?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?')"><i class="fa-solid fa-trash"></i> Xóa</a>
                                     </form>
                                 </div>
                             </td>
                             <td style="padding-left:0; padding-right:0;">
                                 <p class="mb-1">
-                                    <a href="/shop/Wrinkle-free-vai-khong-can-ui/ao-so-mi-cuban-soi-poly-wrinkle-free-04-0022631?c=Đen" style="font-size:14px;">Áo Sơ Mi Cổ Mở Tay Ngắn Sợi Modal Ít Nhăn Trơn Dáng Rộng Đơn Giản WRINKLE FREE 04 - Đen, S</a>
+                                    <a href="detail.php?id=<?=$product['IDSanPham']?>" style="font-size:14px;text-decoration: none;color:black"><?=$product['TenSanPham']?>- Đen, <?=$product['TenSize']?></a>
                                 </p>
                                 <p class="mb-0">
-                                    <span>Số lượng <b>3</b></span> * <span class="text-black">267,000 đ</span>
+                                    <span>Số lượng <b><?=$item['SoLuong']?></b></span> * <span class="text-black"> <?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span>
                                 </p>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="padding-left:0; padding-right:0;">
-                                <div style="display:none;">
-                                    <span style="font-size:11px;">Mã giảm giá</span>
-                                    <form action="/cart/SetVoucher" method="POST" class="form-inline">
-                                        <input type="hidden" name="__ProductUpc" value="0022631001">
-                                        <input type="hidden" name="__Qty" value="3">
-                                        <div class="form-group mb-2">
-                                            <input class="form-control-sm" type="text" placeholder="" style="width:150px;" name="__txtVoucher">
-                                        </div>
-                                        <button type="submit" class="btn-sm btn-outline-secondary mb-2" style="height:31px;">Thêm mã</button>
-                                    </form>
-                                </div>
-                                = <b>801,000 <span>đ</span></b>
+                                = <b><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?> <span>đ</span></b>
                             </td>
                         </tr>
+                        <?php endforeach; ?>
                         <tr>
                             <td class="text-right" style="padding-left:0; padding-right:0;">
                                 Giao hàng
                             </td>
                             <td>
-                                <div style="font-size:16px; color:#f00;">Miễn phí (-19,000đ)</div>
+                                <div id="shippingFeeDisplay" style="font-size:16px; color:#f00;">Phí giao hàng:</div>
                             </td>
                         </tr>
                         <tr>
@@ -158,24 +323,28 @@ function calculateTotal($cart, $pr)
                             Tổng:
                             </td>
                             <td>
-                                <div id="grandTotal" style="font-size:16px; color:#f00;"><b>801,000 <span>đ</span></b></div>
+
+                                <div id="grandTotal" style="font-size:16px; color:#f00;" data-total="<?= $totalAmount?>"><b> <?=number_format($totalAmount, 0, ',', '.')?><span>đ</span></b></div>
                             </td>
                         </tr>
                     </tbody>
             </table>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6" style="line-height: 2.5;">
             <h4 style="text-transform:uppercase;">Người mua/nhận hàng</h4>
-            <form id="formPlaceOrder" action="/cart/PlaceOrder" method="POST">
+            <form action="" method="POST">
                 <input name="__RequestVerificationToken" type="hidden" value="VtXJhrH_4rfgzUc7l0eplSyx6Jz9KkPejoEODV2PPsdrcdt2xssxRJ3I-lkvYF5EiEQOFMizrOPD5-F2Kwjw6Aw5XbTXGdK1sL5nXmikEX01">
                 <div class="form-group">
-                    <label for="txtCustomerName">Tên</label>
-                    <input type="text" class="required form-control" id="txtCustomerName" name="txtCustomerName" placeholder="Tên người nhận" fdprocessedid="0pn2sf">
+                    <label for="userName">Họ và tên</label>
+                    <input type="text" class="required form-control" id="userName" name="userName" placeholder="Tên người nhận" fdprocessedid="0pn2sf">
                 </div>
                 <div class="form-group">
-                    <label for="txtPhone">Điện thoại liên lạc</label>
-                    <input type="text" class="required form-control" id="txtPhone" name="txtPhone" placeholder="Số điện thoại" fdprocessedid="90fv7">
-                    <input type="hidden" name="txtEmail" value="" id="txtEmail">
+                    <label for="Phone">Số điện thoại </label>
+                    <input type="text" class="required form-control" id="Phone" name="Phone" placeholder="Số điện thoại" fdprocessedid="90fv7">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="text" class="required form-control" id="userEmail" name="userEmail" placeholder="Email" fdprocessedid="90fv7">
                 </div>
                 <div>
                     <div class="radio">
@@ -184,17 +353,49 @@ function calculateTotal($cart, $pr)
                         </label>
                     </div>
                 </div>
-                <div class="form-group" id="pnlAddress">
-                    <input type="text" class="required form-control" id="txtAddressLine" name="txtAddressLine" placeholder="Địa chỉ nhận hàng" fdprocessedid="poq27">
-                </div>
+                <div class="row">
+                                            <div class="form-group col-md-4">
+                                                <div class="flex-fill mb-0">
+                                                    <label class="form-label" for="city">Tỉnh/Thành phố</label>
+                                                    <select id="city" class="form-control" name="city" required >
+                                                        <option value="" disabled selected>Chọn tỉnh/thành phố</option>
+                                                    </select>
+                                                    <span class="text-danger" style="color:red"><?= $errorscity?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="flex-fill mb-0">
+                                                    <label class="form-label" for="district">Quận/Huyện</label>
+                                                    <select id="district" class="form-control" name="district" required  disabled></select>
+                                                    <span class="text-danger" style="color:red"><?= $errorsdistrict?></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="flex-fill mb-0">
+                                                    <label class="form-label" for="ward">Xã/Phường</label>
+                                                    <select id="ward" class="form-control" name="ward" required  disabled></select>
+                                                    <span class="text-danger" style="color:red"><?= $errorsward?></span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                            <div class="form-group ">
+                                                <div class="flex-fill mb-0">
+                                                    <label class="form-label" for="housenumber">Tên đường, tòa nhà, số nhà</label>
+                                                    <input type="text" id="housenumber" class="form-control" name="housenumber" required disabled>
+                                                    <span class="text-danger" style="color:red"><?= $errorshousenumber?></span>
+                                                </div>
+                                            </div>
+                                                                     
                 <div class="form-group">
                     <label for="txtNote">Ghi chú</label>
                     <textarea rows="2" class="form-control" id="txtNote" name="txtNote"></textarea>
                 </div>
+                <button type="submit" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Đặt hàng</button>
             </form>
-            <button class="js-btnPlaceOrder btn btn-info fw" style="width:100%; " fdprocessedid="745y">Đặt hàng</button>
+            
+
             <hr>
-            <a href="/" class="btn btn-warning fw" style="width:100%;">Cần sản phẩm khác? Chọn thêm...</a>
+            <a href="danhsachsanpham.php" class="btn btn-warning fw" style="width:100%;">Cần sản phẩm khác? Chọn thêm...</a>
         </div>
     </div>
 </div>
