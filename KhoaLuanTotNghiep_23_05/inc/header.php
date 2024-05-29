@@ -81,7 +81,7 @@
     opacity: 1;
 }
 
-.white-text { /* Thêm class white-text để áp dụng màu trắng cho chữ */
+.white-text { 
     color: #fff;
 }
 </style>
@@ -93,8 +93,6 @@
 	$loaisanpham = new loai();
     $databosuutap= $bosuutap->DanhSachBoSuuTap();
 	$dataloaisanpham = $loaisanpham->DanhSachLoaiSanPham();
-
-    // $dataBoSuuTapSpeed = $pr->getChiTietBoSuuTapById('11');
 ?>
 
 <body style="overflow-x:hidden; background-color: #FFFFFF;">
@@ -139,14 +137,7 @@
 										<?php foreach($dataloaisanpham as  $loaisanphamitem ):?> 
 										<li><a class="dropdown-item white-text" href="danhsachsanphamtheoloai.php?id=<?=$loaisanphamitem['IDLoai']?>"><?php echo $loaisanphamitem['TenLoai'] ?></a></li>
 										<?php endforeach ;?>
-										<!-- <li><a class="dropdown-item white-text" href="/shop/Ao-polo-don-gian-thiet-ke-yame?sort=11">Áo Polo</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/ao-so-mi?sort=11">Áo Sơ Mi</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/ao-khoac?sort=11">Áo Khoác</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/quan-jean?sort=11">Quần Jean</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/quan-tay?sort=11">Quần Tây</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/quan-dai?sort=11">Quần Kaki, Thun</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/quan-short?sort=11">Quần Short</a></li>
-										<li><a class="dropdown-item white-text" href="/shop/quan-lot?sort=11">Quần Lót</a></li>																																																													 -->
+																																																												 -->
 											</ul>
 									</li>
 										<li class="nav-item"  style="margin-left: 10px;">
@@ -187,8 +178,26 @@
 							<nav class="navbar navbar-expand-lg ">
 								<ul class="navbar-nav justify-content-end">
 									<li class="nav-item" >
+										<?php   
+										$totalUniqueIDChiTiet = 0;
+										if (isset($_SESSION['cart'])) {
+											function countUniqueIDChiTiet($cart) {
+												$uniqueIDs = array();
+												foreach ($cart as $item) {
+													if (!in_array($item['IDChiTiet'], $uniqueIDs)) {
+														$uniqueIDs[] = $item['IDChiTiet'];
+													}
+												}
+												return count($uniqueIDs);
+											}
+											$totalUniqueIDChiTiet = countUniqueIDChiTiet($_SESSION['cart']); 
+										}
+
+										
+										?>
+
 										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="cart.php"  role="button" aria-expanded="false">
-										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  0  <span></span></span>
+										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  <?php echo $totalUniqueIDChiTiet ?>  <span></span></span>
 										</a>
 									</li>
 									<li class="nav-item dropdown">

@@ -158,7 +158,7 @@
                
                 <?php endforeach ;?>
             <?php else: ?>
-                <h5 style="color: red;">DATA của bạn đang rỗng</h5>
+                <h5 style="color: red;">Chưa có sản phẩm thuộc bộ sưu tập!</h5>
             <?php endif; ?>    
         </div>
 

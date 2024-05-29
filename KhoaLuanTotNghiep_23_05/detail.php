@@ -284,9 +284,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         </div>    
-            <div class="col">
+            <div class="col" style="line-height: 2.0;">
                         <h5 style="color: black"><?php echo $product['TenSanPham']?></h5>
-                        <p> Mã số: <?php echo $product['IDSanPham']?></p>
+                        <span> Mã số: <?php echo $product['IDSanPham']?></span>
+                        <span style="color: black; display: flex; align-items: center;">
+                            Màu sắc: <?php echo $product['TenMau'] ?> 
+                            <div style="width: 20px; height: 20px; background-color: <?php echo $product['MaMau']; ?>; border: 1px solid #000; margin-left: 10px;"></div>
+                        </span>
+
                         <div>
                         <?php if ($product['GiaCuoi'] < $product['GiaDau']) {
 
@@ -335,9 +340,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <img style="margin-top: 10px; height: 700px; width: 500px;" src="https://cmsv2.yame.vn/uploads/96de2b6a-7cba-42ec-82ab-a80a62693726/size-chart-01.jpg" alt="Size Chart">
                                 </div>
                             </div>
-                        <div>
-                            <h4 style="color: black;">Mô tả sản phẩm</h4>
+                        <div style="margin-top: 5px;">
+                            
                             <div id="product-description" class="description">
+                                <h4 style="color: black;">Mô tả sản phẩm</h4>
                                 <p><?php echo $product['ThongTin']?></p>
                             </div>
                             <span id="toggle-description" class="toggle-button" style="color: red;text-decoration: none;">Đọc tiếp</span>                         

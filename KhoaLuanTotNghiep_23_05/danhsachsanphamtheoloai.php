@@ -42,7 +42,7 @@ include 'inc/header.php' ;?>
                         $row = mysqli_fetch_assoc($data2);
                         if ($row) {
                     ?>
-                <strong class="text-black">Bộ sưu tập <?= $row['TenLoai'] ?></strong>
+                <strong class="text-black">Loại <?= $row['TenLoai'] ?></strong>
                 <?php 
                     } else {
                         echo "No data found!";
@@ -126,7 +126,7 @@ include 'inc/header.php' ;?>
                
                 <?php endforeach ;?>
             <?php else: ?>
-                <h5 style="color: red;">DATA của bạn đang rỗng</h5>
+                <h3 style="color: red;">Chưa có sản phẩm!</h3>
             <?php endif; ?>    
         </div>
 

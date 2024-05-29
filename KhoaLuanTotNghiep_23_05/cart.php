@@ -296,7 +296,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                             </td>
                             <td style="padding-left:0; padding-right:0;">
                                 <p class="mb-1">
-                                    <a href="detail.php?id=<?=$product['IDSanPham']?>" style="font-size:14px;text-decoration: none;color:black"><?=$product['TenSanPham']?>- Đen, <?=$product['TenSize']?></a>
+                                    <a href="detail.php?id=<?=$product['IDSanPham']?>" style="font-size:14px;text-decoration: none;color:black"><?=$product['TenSanPham']?>- <?=$product['TenMau']?>, <?=$product['TenSize']?></a>
                                 </p>
                                 <p class="mb-0">
                                     <span>Số lượng <b><?=$item['SoLuong']?></b></span> * <span class="text-black"> <?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span>

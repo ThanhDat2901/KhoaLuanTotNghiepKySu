@@ -79,26 +79,26 @@
 		/* SEARCH*/
 		public  function getAllSanPhamSearch($search, $limit, $offset){
  
-			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi ASC LIMIT $limit OFFSET $offset";
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%' OR sanpham.IDSanPham LIKE '%$search%' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi ASC LIMIT $limit OFFSET $offset";
 			$result = $this->db->select($sql);
 			return $result;
 		}
 		public  function getSearchByPriceAsc($search,$limit, $offset) 
 		{
-			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%'AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi ASC LIMIT $limit OFFSET $offset";
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%' OR sanpham.IDSanPham LIKE '%$search%' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi ASC LIMIT $limit OFFSET $offset";
 			$result = $this->db->select($sql);
 			return $result;
 		}
 
 		public  function getSearchByPriceDesc($search,$limit, $offset) 
 		{
-			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%'AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi DESC LIMIT $limit OFFSET $offset";
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai WHERE TenSanPham LIKE '%$search%' OR sanpham.IDSanPham LIKE '%$search%' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi DESC LIMIT $limit OFFSET $offset";
 			$result = $this->db->select($sql);
 			return $result;
 		}
 		public function countAllSearch($search)
 		{
-			$sql = "SELECT COUNT(*) FROM sanpham WHERE TenSanPham LIKE '%$search%' AND sanpham.isDel=0 ";
+			$sql = "SELECT COUNT(*) FROM sanpham WHERE TenSanPham LIKE '%$search%' OR sanpham.IDSanPham LIKE '%$search%'  AND sanpham.isDel=0 ";
 			$result = $this->db->select($sql);
 			$row = $result->fetch_row(); 
 			$count = $row[0]; 
@@ -143,12 +143,12 @@
 			return $result;
 		}
 		public function getproductbyId($id){
-			$query = "SELECT sanpham.*,chuongtrinhkhuyenmai.* FROM sanpham,chuongtrinhkhuyenmai  where sanpham.IDKhuyenMai=chuongtrinhkhuyenmai.IDKhuyenMai AND IDSanPham =  '$id'";
+			$query = "SELECT sanpham.*,chuongtrinhkhuyenmai.*,mausac.* FROM sanpham,chuongtrinhkhuyenmai,mausac  where sanpham.IDKhuyenMai=chuongtrinhkhuyenmai.IDKhuyenMai AND sanpham.IDMau = mausac.IDMau AND IDSanPham =  '$id'";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function getproductbyIdChiTietSanPham($id){
-			$query = "SELECT sanpham.*,size.*,chitietsanpham.* FROM sanpham,size,chitietsanpham  where sanpham.IDSanPham = chitietsanpham.IDSanPham AND size.IDSize = chitietsanpham.IDSize AND chitietsanpham.IDChiTiet='$id'";
+			$query = "SELECT sanpham.*,size.*,chitietsanpham.*,mausac.* FROM sanpham,size,chitietsanpham,mausac  where sanpham.IDSanPham = chitietsanpham.IDSanPham AND sanpham.IDMau = mausac.IDMau AND size.IDSize = chitietsanpham.IDSize AND chitietsanpham.IDChiTiet='$id'";
 			$result = $this->db->select($query);
 			return $result;
 		}
