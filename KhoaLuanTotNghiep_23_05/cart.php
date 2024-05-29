@@ -45,15 +45,10 @@ $cleaned_guest_id='';
 if($_SERVER["REQUEST_METHOD"]  == "POST"){
 
     if (!isset($_SESSION['login_detail'])) {
-        // Tạo một ID tạm thời cho khách hàng nếu chưa có
         if (!isset($_SESSION['guest_id'])) {
             $_SESSION['guest_id'] = uniqid('guest_', true);
            
         }
-
-        // $cleaned_guest_id = str_replace('.', '', $_SESSION['guest_id']);
-        // $IDNguoiDung  = crc32( $_SESSION['guest_id']);
-
     $md5_hash = md5($_SESSION['guest_id']);
     $IDNguoiDung = crc32(substr($md5_hash, 0, 8)); 
 
@@ -109,13 +104,10 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
         $inserthoadon = $hoadon->insert_HoaDonGuest(1,$username,$Phone,$userEmail,$fullAddress,$NgayLap,$txtNote,$Thanhtien);
         
         // $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest();
-            // Bạn có thể thêm mã kiểm tra để đảm bảo rằng giỏ hàng không trống
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             foreach ($_SESSION['cart'] as $item) {
                 $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest($inserthoadon,$item['IDChiTiet'],$item['SoLuong']);
-                // Kiểm tra kết quả của việc thêm vào cơ sở dữ liệu, và xử lý nếu cần
                 if ($insertchitiethoadon !== true) {
-                    // Xử lý lỗi nếu có
                 }
             }
         }
@@ -229,7 +221,18 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
         });
 
     });
-    
+    function changeQuantity(productId, action) {
+        // Gửi yêu cầu AJAX để cập nhật số lượng sản phẩm
+        $.ajax({
+            url: 'update_cart.php',
+            type: 'POST',
+            data: {productId: productId, action: action},
+            success: function(response) {
+                // Nếu cập nhật thành công, tải lại trang
+                location.reload();
+            }
+        });
+    }
 </script>
 
 <div id="about" class="shop" style="margin-top:10vh">
@@ -299,7 +302,11 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                                     <a href="detail.php?id=<?=$product['IDSanPham']?>" style="font-size:14px;text-decoration: none;color:black"><?=$product['TenSanPham']?>- <?=$product['TenMau']?>, <?=$product['TenSize']?></a>
                                 </p>
                                 <p class="mb-0">
-                                    <span>Số lượng <b><?=$item['SoLuong']?></b></span> * <span class="text-black"> <?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span>
+                                    <span> Số lượng:  
+                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>, 'decrease')" style="vertical-align: middle;">-</button>
+                                    <span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$item['SoLuong']?></b></span>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>, 'increase')" style="vertical-align: middle;">+</button>
+                                     * <span class="text-black"><?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span> </span>
                                 </p>
                             </td>
                         </tr>
