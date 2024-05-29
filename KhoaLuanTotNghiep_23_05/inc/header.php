@@ -87,7 +87,7 @@
 </style>
 </head>
 <?php 
-	require 'init.php';
+	require_once 'init.php';
     require 'classes/bosuutap.php';
 	require 'classes/loai.php';
     $bosuutap = new category();
