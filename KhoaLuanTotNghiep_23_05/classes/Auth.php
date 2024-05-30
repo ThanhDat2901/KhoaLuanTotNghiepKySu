@@ -66,7 +66,7 @@ class Auth
                 } else {
                     $_SESSION['login_detail'] = $HoTen;
                     $_SESSION['name'] = $HoTen;
-                    $_SESSION['gianvien_id'] = $IDNguoiDung;
+                    $_SESSION['user_id'] = $IDNguoiDung;
                     header('location: index.php');
                 }
             } else {

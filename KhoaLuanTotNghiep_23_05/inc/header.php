@@ -37,7 +37,11 @@
 
 	</title>
 	<link rel="icon" href="admin/img/logoyame3.ico" type="image/x-icon">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+	<!-- SweetAlert JS -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 
 <style>
@@ -90,6 +94,8 @@
 	require_once 'init.php';
     require 'classes/bosuutap.php';
 	require 'classes/loai.php';
+	require_once 'classes/giohang.php';
+	$gh2 = new giohang();
     $bosuutap = new category();
 	$loaisanpham = new loai();
     $databosuutap= $bosuutap->DanhSachBoSuuTap();
@@ -179,6 +185,7 @@
 							<nav class="navbar navbar-expand-lg ">
 								<ul class="navbar-nav justify-content-end">
 									<li class="nav-item" >
+
 									<?php   
 									$totalUniqueIDChiTiet = 0;
 									if (isset($_SESSION['cart'])) {
@@ -196,11 +203,19 @@
 										}
 										$totalUniqueIDChiTiet = countUniqueIDChiTiet($_SESSION['cart']); 
 									}
+									if(isset($_SESSION['login_detail'])){
+										$totalUniqueIDChiTiet = $gh2->DemSoLuongSanPhamTrongGioHangByNguoiDung($_SESSION['user_id']);
+									}
 									?>
-
+									<?php if(isset($_SESSION['login_detail'])): ?>	
+										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="cartuser.php"  role="button" aria-expanded="false">
+										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  <?php echo $totalUniqueIDChiTiet ?>  <span></span></span>
+										</a>
+									<?php else:?>
 										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="cart.php"  role="button" aria-expanded="false">
 										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  <?php echo $totalUniqueIDChiTiet ?>  <span></span></span>
 										</a>
+									<?php endif ?>	
 									</li>
 									<li class="nav-item dropdown">
 										<a style="text-decoration:none;font-size: 14px;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

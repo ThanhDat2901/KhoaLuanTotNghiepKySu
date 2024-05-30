@@ -232,10 +232,27 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             data: {productId: productId, action: action},
             success: function(response) {
                 // Nếu cập nhật thành công, tải lại trang
+                console.log(response);
                 location.reload();
-            }
+            },
         });
     }
+    function confirmRemoval(itemId) {
+    Swal.fire({
+        title: 'Bạn có chắc chắn?',
+        text: "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('id' + itemId).submit();
+        }
+    });
+}
 </script>
 
 <div id="about" class="shop" style="margin-top:10vh">
@@ -294,9 +311,9 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                             <td rowspan="2" style="width:100px;padding-left:0; padding-right:0;">
                                 <img class="img" src="<?=$product['HinhAnh']?>" style="width: 70px;height: 100px;" alt="#">
                                 <div>
-                                    <form action="/cart/RemoveItem" id="formRemoveItem" method="POST">
-                                        <input type="hidden" name="__ProductUpc" value="0022631001">
-                                        <a href="remove_from_cart.php?id=<?=$item['IDChiTiet']?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?')"><i class="fa-solid fa-trash"></i> Xóa</a>
+                                    <form action="remove_from_cart.php" id="id<?=$item['IDChiTiet']?>" method="POST">
+                                    <input type="hidden" name="id" value="<?=$item['IDChiTiet']?>">
+                                        <a href="#" class="btn btn-danger btn-sm" onclick="confirmRemoval(<?=$item['IDChiTiet']?>)"><i class="fa-solid fa-trash"></i> Xóa</a>
                                     </form>
                                 </div>
                             </td>
@@ -306,10 +323,12 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                                 </p>
                                 <p class="mb-0">
                                     <span> Số lượng:  
-                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>, 'decrease')" style="vertical-align: middle;">-</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>,'decrease')" style="vertical-align: middle;">-</button>
+
+                                 
                                     <span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$item['SoLuong']?></b></span>
-                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>, 'increase')" style="vertical-align: middle;">+</button>
-                                     * <span class="text-black"><?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span> </span>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item['IDChiTiet']?>,'increase')" style="vertical-align: middle;">+</button>
+                                    * <span class="text-black"><?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span> </span>
                                 </p>
                             </td>
                         </tr>
@@ -408,7 +427,6 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             <a href="danhsachsanpham.php" class="btn btn-warning fw" style="width:100%;">Cần sản phẩm khác? Chọn thêm...</a>
         </div>
     </div>
-    
 </div>
 <?php endif; ?>
 <?php 

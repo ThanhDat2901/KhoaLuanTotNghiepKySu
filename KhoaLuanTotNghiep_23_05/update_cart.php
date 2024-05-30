@@ -1,44 +1,102 @@
-<!-- <?php
-session_start();
-
-if (isset($_POST['index']) && isset($_POST['quantity'])) {
-    $index = $_POST['index'];
-    $quantity = $_POST['quantity'];
-    
-    // Cập nhật số lượng sản phẩm trong session cart
-    $_SESSION['cart'][$index]['SoLuong'] = $quantity;
-
-    // Trả về thông tin cập nhật nếu cần (ví dụ: tổng tiền mới)
-    // echo calculateNewTotal();
-}
-?> -->
 
 
 <?php
 session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['productId']) && isset($_POST['action'])) {
-    $productId = $_POST['productId'];
-    $action = $_POST['action'];
-
-    if ($action === 'increase') {
-        // Tăng số lượng sản phẩm
-        if (isset($_SESSION['cart'][$productId])) {
-            $_SESSION['cart'][$productId]['SoLuong']++;
+require 'classes/giohang.php';
+require 'classes/product.php';
+$gh = new giohang();
+$pr = new product();
+if(isset($_SESSION['login_detail'])){
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['productId']) && isset($_POST['action'])) {
+        $IDChiTiet = $_POST['productId'];
+        $action = $_POST['action'];
+        $IDNguoiDung=$_SESSION['user_id'];
+        if ($action === 'increase') {
+            // Tăng số lượng sản phẩm
+            $SoLuong=1;
+            $soluongtronggiohang = $gh->DemSoLuongSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung);
+            $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
+            if ($soluongtronggiohang < $availableQuantity) {
+                $capnhapsoluong = $gh->CapNhatSoLuongSanPhamTrongGioHang($IDChiTiet, $IDNguoiDung, $SoLuong);
+            }
+        } elseif ($action === 'decrease') {
+            // Giảm số lượng sản phẩm
+            $SoLuong = -1;
+            $soluongtronggiohang = $gh->DemSoLuongSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung);
+            if ($soluongtronggiohang > 1) {
+                $capnhapsoluong = $gh->CapNhatSoLuongSanPhamTrongGioHang($IDChiTiet, $IDNguoiDung, $SoLuong);
+            }
         }
-    } elseif ($action === 'decrease') {
-        // Giảm số lượng sản phẩm
-        if (isset($_SESSION['cart'][$productId]) && $_SESSION['cart'][$productId]['SoLuong'] > 1) {
-            $_SESSION['cart'][$productId]['SoLuong']--;
-        }
+
+        // Trả về kết quả thành công
+        echo 'success';
+        header('Location: cartuser.php'); 
+    } else {
+        // Trả về lỗi nếu yêu cầu không hợp lệ
+        http_response_code(400);
+        echo 'Invalid request';
     }
 
-    // Trả về kết quả thành công
-    echo 'success';
-    header('Location: cart.php'); 
-} else {
-    // Trả về lỗi nếu yêu cầu không hợp lệ
-    http_response_code(400);
-    echo 'Invalid request';
+   
 }
+else
+{
+    // if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['productId']) && isset($_POST['action'])) {
+    //     $IDChiTiet = $_POST['productId'];
+    //     $action = $_POST['action'];
+
+    //     if ($action === 'increase') {
+    //         // Tăng số lượng sản phẩm
+    //         if (isset($_SESSION['cart'][$IDChiTiet])) {
+    //             $_SESSION['cart'][$IDChiTiet]['SoLuong']++;
+    //         }
+    //     } elseif ($action === 'decrease') {
+    //         // Giảm số lượng sản phẩm
+    //         if (isset($_SESSION['cart'][$IDChiTiet]) && $_SESSION['cart'][$IDChiTiet]['SoLuong'] > 1) {
+    //             $_SESSION['cart'][$IDChiTiet]['SoLuong']--;
+    //         }
+    //     }
+
+    //     echo 'success';
+    //     header('Location: cart.php'); 
+    // } else {
+    //     http_response_code(400);
+    //     echo 'Invalid request';
+    // }
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['productId']) && isset($_POST['action'])) {
+        $IDChiTiet = $_POST['productId'];
+        $action = $_POST['action'];
+    
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = array();
+        }
+    
+        $cartIndex = array_search($IDChiTiet, array_column($_SESSION['cart'], 'IDChiTiet'));
+    
+        if ($action === 'increase') {
+            // Increase the quantity
+            if ($cartIndex !== false) {
+                $_SESSION['cart'][$cartIndex]['SoLuong']++;
+            } else {
+                // If the product is not in the cart, add it
+                $_SESSION['cart'][] = array(
+                    'IDChiTiet' => $IDChiTiet,
+                    'SoLuong' => 1
+                );
+            }
+        } elseif ($action === 'decrease') {
+            // Decrease the quantity
+            if ($cartIndex !== false && $_SESSION['cart'][$cartIndex]['SoLuong'] > 1) {
+                $_SESSION['cart'][$cartIndex]['SoLuong']--;
+            }
+        }
+    
+        echo 'success';
+        header('Location: cart.php');
+    } else {
+        http_response_code(400);
+        echo 'Invalid request';
+    }
+}
+
 ?>

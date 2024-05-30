@@ -8,7 +8,7 @@
 	/**
 	 * 
 	 */
-	class cart
+	class giohang
 	{
 		private $db;
 		private $fm;
@@ -18,40 +18,107 @@
 			$this->db = new Database();
 			$this->fm = new Format();
 		}
-        public function add($IDSanPham,$IDNguoiDung,$SoLuong)
-        {
-            // $IDSanPham = $this->fm->validation($IDSanPham);
-			$IDSanPham = mysqli_real_escape_string($this->db->link, $IDSanPham);
+        public function ThemSanPhamVaoGioHang($IDChiTiet,$IDNguoiDung,$SoLuong)
+			{
+				// $IDSanPham = $this->fm->validation($IDSanPham);
+				$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$SoLuong = mysqli_real_escape_string($this->db->link, $SoLuong);
+				$sql = "INSERT INTO giohang(IDChiTiet,IDNguoiDung,SoLuong) VALUES ('$IDChiTiet','$IDNguoiDung','$SoLuong')";
+				$insert_cart = $this->db->insert($sql);
+				if($insert_cart){
+								return true;
+							}else{
+								return false;
+							}
+			}
+		public function KiemTraSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung)
+			{
+				$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$sql = "SELECT * FROM giohang WHERE IDChiTiet = '$IDChiTiet' And IDNguoiDung ='$IDNguoiDung'";
+				$result = $this->db->select($sql);
+
+				if ($result && mysqli_num_rows($result) > 0) {
+					return 1;  
+				} else {
+					return -1; 
+				}
+			}
+		public function DemSoLuongSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung)
+			{
+				$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$sql = "SELECT SoLuong FROM giohang WHERE IDChiTiet = '$IDChiTiet' And IDNguoiDung ='$IDNguoiDung'";
+				$result = $this->db->select($sql);
+
+				if ($result) {
+					$row = mysqli_fetch_assoc($result);
+					return $row['SoLuong']; 
+				} else {
+					return 0; 
+				}
+			}
+			public function DemSoLuongSanPhamTrongGioHangByNguoiDung($IDNguoiDung)
+			{
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$sql = "SELECT COUNT(*) FROM giohang where IDNguoiDung = '$IDNguoiDung'";
+				$result = $this->db->select($sql);
+				$row = $result->fetch_row(); 
+				$count = $row[0]; 
+				return $count;
+			}
+		public function CapNhatSoLuongSanPhamTrongGioHang($IDChiTiet, $IDNguoiDung, $SoLuong)
+			{
+				$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$SoLuong = mysqli_real_escape_string($this->db->link, $SoLuong);
+
+				$sql = "UPDATE giohang SET SoLuong = SoLuong + $SoLuong WHERE IDChiTiet = '$IDChiTiet' AND IDNguoiDung = '$IDNguoiDung'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return "Cập nhật thành công";
+				} else {
+					return "Cập nhật thất bại";
+				}
+			}
+			public function XoaSanPhamKhoiGioHang($IDChiTiet, $IDNguoiDung){
+				$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+				$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$query = "DELETE FROM giohang where IDChiTiet = '$IDChiTiet' AND IDNguoiDung = '$IDNguoiDung'";
+				$result = $this->db->delete($query);
+				if($result){
+					$alert = "<span class='success'>Xóa thành công</span>";
+					return $alert;
+				}else{
+					$alert = "<span class='error'>Xóa thất bại</span>";
+					return $alert;
+				}
+				
+			}
+		public function DanhSachSanPhamGioHang(){
+				$query = "SELECT * FROM giohang order by IDGioHang desc";
+				$result = $this->db->select($query);
+				return $result;
+		}
+		public function DanhSachSanPhamGioHangPhanTrang($IDNguoiDung,$limit, $offset)
+		{
 			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
-            $SoLuong = mysqli_real_escape_string($this->db->link, $SoLuong);
-            $sql = "INSERT INTO giohang(IDSanPham,IDNguoiDung,SoLuong) VALUES ('$IDSanPham','$IDNguoiDung','$SoLuong')";
+			$sql = "SELECT * FROM giohang where IDNguoiDung = '$IDNguoiDung'   ORDER BY IDGioHang DESC LIMIT $limit OFFSET $offset";
+			$result = $this->db->select($sql);
+			return $result;
+		}
+		public function countAll($IDNguoiDung)
+		{
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+			$sql = "SELECT COUNT(*) FROM giohang where IDNguoiDung = '$IDNguoiDung' ";
+			$result = $this->db->select($sql);
+			$row = $result->fetch_row(); 
+			$count = $row[0]; 
+			return $count;
+		}
 
-        }
-        // public function add_to_cart($quantity, $id){
-
-		// 	$quantity = $this->fm->validation($quantity);
-		// 	$quantity = mysqli_real_escape_string($this->db->link, $quantity);
-		// 	$id = mysqli_real_escape_string($this->db->link, $id);
-		// 	$sId = session_id();
-		// 	$check_cart = "SELECT * FROM tbl_cart WHERE productId = '$id' AND sId ='$sId'";
-		// 	$result_check_cart = $this->db->select($check_cart);
-		// 	if($result_check_cart){
-		// 		$msg = "<span class='error'>Product Already Added</span>";
-		// 		return $msg;
-		// 	}else{
-
-			
-			
-		// 	$query_insert = "INSERT INTO tbl_cart(productId,quantity,sId,image,price,productName) VALUES('$id','$quantity','$sId','$image','$price','$productName')";
-		// 	$insert_cart = $this->db->insert($query_insert);
-		// 		if($insert_cart){
-		// 			header("Location:cart.php");
-		// 		}else{
-		// 			header("Location:404.php");
-		// 		}
-		// 	}
-			
-		// }
 
 	}
 ?>

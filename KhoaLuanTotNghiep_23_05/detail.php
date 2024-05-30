@@ -4,8 +4,10 @@
 
 require 'init.php' ;   
 require 'classes/product.php';
+require 'classes/giohang.php';
 require 'classes/hinhanh.php';
     $pr = new product();
+    $gh = new giohang();
     $ha = new hinhanh();
      // Lấy thông tin sản phẩm từ URL
      $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -18,63 +20,86 @@ require 'classes/hinhanh.php';
      $product = $product_by_id->fetch_assoc();
 
      $result_size = $pr->getSizeById($id);
-    //   if($_SERVER["REQUEST_METHOD"]  == "POST"){
-    //     $cart = new Cart();
-    //     // $order = new Order();
-    //     $Amount = $_POST['Amount'];      
-    //     $cart->add($pdo,$id,$_SESSION['id'], $Amount);
-    //     // $order->add($pdo,$id,$_SESSION['id'], $Amount);
-    //     header('location: cart.php');
 
-    // }
+
+
+
+if(!isset($_SESSION['login_detail'])){
 // Hàm kiểm tra xem sản phẩm có tồn tại trong giỏ hàng hay không
-function productExistsInCart($cart, $productId) {
-    foreach ($cart as $key => $item) {
-        if ($item['IDChiTiet'] == $productId) {
-            return $key; 
+    function productExistsInCart($cart, $productId) {
+        foreach ($cart as $key => $item) {
+            if ($item['IDChiTiet'] == $productId) {
+                return $key; 
+            }
+        }
+        return -1; 
+    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $IDChiTiet = $_POST['IDChiTiet'];
+        $SoLuong = $_POST['SoLuong'];
+
+
+        $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
+        $index = productExistsInCart($_SESSION['cart'], $IDChiTiet);
+
+        if ($index !== -1) {
+
+            if ($_SESSION['cart'][$index]['SoLuong'] < $availableQuantity) {
+
+                $_SESSION['cart'][$index]['SoLuong'] += $SoLuong;
+                
+            } else {
+
+                echo "Số lượng sản phẩm trong giỏ hàng vượt quá số lượng còn trong cửa hàng.";
+                
+            }
+        } else {
+            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, kiểm tra số lượng mới thêm vào
+                $cart_item = array(
+                    'IDChiTiet' => $IDChiTiet,
+                    'SoLuong' => $SoLuong
+                );
+                $_SESSION['cart'][] = $cart_item;
+                usort($_SESSION['cart'], function($a, $b) {
+                    return $a['IDChiTiet'] - $b['IDChiTiet'];
+                });
         }
     }
-    return -1; 
 }
+else{
+    if($_SERVER["REQUEST_METHOD"]  == "POST"){
 
+        $IDChiTiet = $_POST['IDChiTiet'];
+        $SoLuong = $_POST['SoLuong'];
+        $IDNguoiDung = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+       
+        $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
+        $index = $gh->KiemTraSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung);
+        if ($index === 1) {
+            // Nếu sản phẩm đã tồn tại trong giỏ hàng
+            $soluongtronggiohang = $gh->DemSoLuongSanPhamTrongGioHang($IDChiTiet,$IDNguoiDung);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($soluongtronggiohang < $availableQuantity) {
+                $capnhapsoluong = $gh->CapNhatSoLuongSanPhamTrongGioHang($IDChiTiet, $IDNguoiDung, $SoLuong);
+                
+            } else {
 
-    $IDChiTiet = $_POST['IDChiTiet'];
-    $SoLuong = $_POST['SoLuong'];
-
-
-    $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
-
-
-    $index = productExistsInCart($_SESSION['cart'], $IDChiTiet);
-
-    if ($index !== -1) {
-
-        if ($_SESSION['cart'][$index]['SoLuong'] < $availableQuantity) {
-
-            $_SESSION['cart'][$index]['SoLuong'] += $SoLuong;
-            
+                echo "Số lượng sản phẩm trong giỏ hàng vượt quá số lượng còn trong cửa hàng.";              
+            }
         } else {
+            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, kiểm tra số lượng mới thêm vào
+            if ($SoLuong <= $availableQuantity) {
+                $giohang = $gh->ThemSanPhamVaoGioHang($IDChiTiet,$IDNguoiDung,$SoLuong);
+            } else {
 
-            echo "Số lượng sản phẩm trong giỏ hàng vượt quá số lượng còn trong cửa hàng.";
-            
+                echo "Số lượng sản phẩm không được lớn hơn số lượng còn trong cửa hàng.";
+
+            }
         }
-    } else {
-        // Nếu sản phẩm chưa tồn tại trong giỏ hàng, kiểm tra số lượng mới thêm vào
-        if ($SoLuong <= $availableQuantity) {
 
-            $cart_item = array(
-                'IDChiTiet' => $IDChiTiet,
-                'SoLuong' => $SoLuong
-            );
-            $_SESSION['cart'][] = $cart_item;
-        } else {
-
-            echo "Số lượng sản phẩm không được lớn hơn số lượng còn trong cửa hàng.";
-
-        }
     }
+
 }
 ?> 
 
@@ -258,9 +283,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="notificationPopup" class="notification-popup" style="display: none;">
         Đã cập nhật giỏ hàng thành công!
     </div>
+
     <div class="container">
         <div class="row">
-            
+
         <div class="col-md-4" >
         <section>
             <div class="swiper">
@@ -278,14 +304,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </section>
-        
         <div id="zoom-overlay" class="zoom-overlay" style="display: none;">
             <img id="zoomed-image" style="margin-top: 10px;" src="#" alt="#">
         </div>
 
 
         </div>    
-            <div class="col" style="line-height: 2.0;margin-left: 430px;margin-top: -480px;">
+            <div class="col" style="line-height: 2.0;">
                         <h5 style="color: black"><?php echo $product['TenSanPham']?></h5>
                         <span> Mã số: <?php echo $product['IDSanPham']?></span>
                         <span style="color: black; display: flex; align-items: center;">
@@ -321,7 +346,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <td><?=$datasize['TenSize'] ?></td>
                                                 <td> <span style="font-weight: bold;"> <?=$datasize['SoLuong'] ?></span> Cửa Hàng còn</td>
                                                 <td>
-                                                    <button type="submit" style="text-decoration:none;color:red; background: none; border: none;">
+                                                    <button type="submit" id="specialButton" style="text-decoration:none;color:red; background: none; border: none;">
                                                         <i class="fa-solid fa-plus"></i>Chọn mua
                                                     </button>
                                                 </td>
@@ -335,30 +360,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h4 style="color: red;">Sản phẩm đã hết hàng</h4>
                         <?php endif; ?>
                         </div>
-                        
                         <div>
-                        <div style = "margin-top: 10px;margin-left: -5px;">
-             <img style="height: 200px; width: 870px;" src="images/banner1.png.png" alt="Size Chart">
-        </div>
                             <button id="size-guide-button" class="btn-outline-dark btn-sm" style="margin-top: 10px;">Hướng dẫn chọn size</button>
                                 <div id="size-chart-overlay" class="zoom-overlay" style="display: none;">
-
                                     <img style="margin-top: 10px; height: 700px; width: 500px;" src="https://cmsv2.yame.vn/uploads/96de2b6a-7cba-42ec-82ab-a80a62693726/size-chart-01.jpg" alt="Size Chart">
                                 </div>
                             </div>
-
-
-                            
                         <div style="margin-top: 5px;">
                             
                             <div id="product-description" class="description">
                                 <h4 style="color: black;">Mô tả sản phẩm</h4>
                                 <p><?php echo $product['ThongTin']?></p>
                             </div>
-                            <span id="toggle-description" class="toggle-button" style="color: red;text-decoration: none;">Đọc tiếp</span>        
-                                             
+                            <span id="toggle-description" class="toggle-button" style="color: red;text-decoration: none;">Đọc tiếp</span>                         
                         </div>
-                        
             </div>
         </div>
         <div class="row" style="margin-top: 10vh;">
