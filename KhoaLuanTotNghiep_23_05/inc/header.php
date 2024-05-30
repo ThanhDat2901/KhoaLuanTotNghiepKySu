@@ -87,6 +87,7 @@
 </style>
 </head>
 <?php 
+	require_once 'init.php';
     require 'classes/bosuutap.php';
 	require 'classes/loai.php';
     $bosuutap = new category();
@@ -178,23 +179,24 @@
 							<nav class="navbar navbar-expand-lg ">
 								<ul class="navbar-nav justify-content-end">
 									<li class="nav-item" >
-										<?php   
-										$totalUniqueIDChiTiet = 0;
-										if (isset($_SESSION['cart'])) {
-											function countUniqueIDChiTiet($cart) {
-												$uniqueIDs = array();
-												foreach ($cart as $item) {
+									<?php   
+									$totalUniqueIDChiTiet = 0;
+									if (isset($_SESSION['cart'])) {
+										function countUniqueIDChiTiet($cart) {
+											$uniqueIDs = array();
+											foreach ($cart as $item) {
+												// Kiểm tra xem phần tử có key 'IDChiTiet' không
+												if (isset($item['IDChiTiet']) && !empty($item['IDChiTiet'])) {
 													if (!in_array($item['IDChiTiet'], $uniqueIDs)) {
 														$uniqueIDs[] = $item['IDChiTiet'];
 													}
 												}
-												return count($uniqueIDs);
 											}
-											$totalUniqueIDChiTiet = countUniqueIDChiTiet($_SESSION['cart']); 
+											return count($uniqueIDs);
 										}
-
-										
-										?>
+										$totalUniqueIDChiTiet = countUniqueIDChiTiet($_SESSION['cart']); 
+									}
+									?>
 
 										<a style="text-decoration:none;font-size: 14px;" class="nav-link" href="cart.php"  role="button" aria-expanded="false">
 										<i class="fa-solid fa-cart-shopping"></i> <span class="badge badge-danger">  <?php echo $totalUniqueIDChiTiet ?>  <span></span></span>
