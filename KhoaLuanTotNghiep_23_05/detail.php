@@ -278,13 +278,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </section>
+        
         <div id="zoom-overlay" class="zoom-overlay" style="display: none;">
             <img id="zoomed-image" style="margin-top: 10px;" src="#" alt="#">
         </div>
 
 
         </div>    
-            <div class="col" style="line-height: 2.0;">
+            <div class="col" style="line-height: 2.0;margin-left: 430px;margin-top: -480px;">
                         <h5 style="color: black"><?php echo $product['TenSanPham']?></h5>
                         <span> Mã số: <?php echo $product['IDSanPham']?></span>
                         <span style="color: black; display: flex; align-items: center;">
@@ -334,20 +335,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h4 style="color: red;">Sản phẩm đã hết hàng</h4>
                         <?php endif; ?>
                         </div>
+                        
                         <div>
+                        <div style = "margin-top: 10px;margin-left: -5px;">
+             <img style="height: 200px; width: 870px;" src="images/banner1.png.png" alt="Size Chart">
+        </div>
                             <button id="size-guide-button" class="btn-outline-dark btn-sm" style="margin-top: 10px;">Hướng dẫn chọn size</button>
                                 <div id="size-chart-overlay" class="zoom-overlay" style="display: none;">
+
                                     <img style="margin-top: 10px; height: 700px; width: 500px;" src="https://cmsv2.yame.vn/uploads/96de2b6a-7cba-42ec-82ab-a80a62693726/size-chart-01.jpg" alt="Size Chart">
                                 </div>
                             </div>
+
+
+                            
                         <div style="margin-top: 5px;">
                             
                             <div id="product-description" class="description">
                                 <h4 style="color: black;">Mô tả sản phẩm</h4>
                                 <p><?php echo $product['ThongTin']?></p>
                             </div>
-                            <span id="toggle-description" class="toggle-button" style="color: red;text-decoration: none;">Đọc tiếp</span>                         
+                            <span id="toggle-description" class="toggle-button" style="color: red;text-decoration: none;">Đọc tiếp</span>        
+                                             
                         </div>
+                        
             </div>
         </div>
         <div class="row" style="margin-top: 10vh;">

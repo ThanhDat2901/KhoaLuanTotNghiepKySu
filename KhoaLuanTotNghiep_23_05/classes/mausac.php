@@ -48,7 +48,7 @@
 			}
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM mausac order by IDMau desc";
+			$query = "SELECT * FROM mausac WHERE isDel != 1 order by IDMau desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -89,7 +89,7 @@
 		}
 		
 		public function del_brand($id){
-			$query = "DELETE FROM mausac where IDMau = '$id'";
+			$query = "UPDATE mausac SET isDel = 1  where IDMau = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -91,7 +91,7 @@
 			return $count;
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM loaisanpham order by IDLoai desc";
+			$query = "SELECT * FROM loaisanpham WHERE isDel != 1 order by IDLoai desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -124,7 +124,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM loaisanpham where IDLoai = '$id'";
+			$query = "UPDATE loaisanpham SET isDel = 1 where IDLoai = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -89,12 +89,12 @@
 		
 		// }
 		public function show_size_by_name(){
-			$query = "SELECT * FROM Size order by IDSize desc";
+			$query = "SELECT * FROM Size WHERE isDel != 1 order by IDSize desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function show_sanpham_by_name(){
-			$query = "SELECT * FROM sanpham  where sanpham.isDel=0 order by IDSanPham desc";
+			$query = "SELECT * FROM sanpham  where sanpham.isDel != 1 order by IDSanPham desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -103,6 +103,7 @@
 			FROM chitietsanpham
 			JOIN Size ON chitietsanpham.IDSize = size.IDSize
 			JOIN sanpham ON chitietsanpham.IDSanPham = sanpham.IDSanPham
+			WHERE sanpham.isDel != 1
 			order by chitietsanpham.IDChiTiet desc";
 			$result = $this->db->select($query);
 			return $result;
@@ -141,7 +142,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM chitietbosuutap where IDChiTiet = '$id'";
+			$query = "DELETE FROM chitietsanpham where IDChiTiet = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -58,6 +58,7 @@
 			FROM mausacsanpam
 			JOIN mausac ON mausacsanpam.IDMau = mausac.IDMau
 			JOIN sanpham ON mausacsanpam.IDSanPham = sanpham.IDSanPham
+			WHERE sanpham.isDel != 1
 			order by mausacsanpam.IDMauSanPham desc";
 			$result = $this->db->select($query);
 			return $result;

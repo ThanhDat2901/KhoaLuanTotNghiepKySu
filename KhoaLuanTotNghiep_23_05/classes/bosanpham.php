@@ -49,7 +49,7 @@
 		}
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM bosanpham order by IDBo desc";
+			$query = "SELECT * FROM bosanpham WHERE isDel != 1 order by IDBo desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -82,7 +82,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM bosanpham where IDBo = '$id'";
+			$query = "UPDATE bosanpham SET isDel = 1 where IDBo = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xó bộ sản phẩm thành công</span>";

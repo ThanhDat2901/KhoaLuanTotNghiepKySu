@@ -44,12 +44,12 @@
 		
 		}
 		public function show_bosanpham_by_name(){
-			$query = "SELECT * FROM bosanpham order by IDBo desc";
+			$query = "SELECT * FROM bosanpham WHERE isDel != 1 order by IDBo desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function show_sanpham_by_name(){
-			$query = "SELECT * FROM sanpham where sanpham.isDel=0 order by IDSanPham desc";
+			$query = "SELECT * FROM sanpham where sanpham.isDel = 0 order by IDSanPham desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -58,6 +58,7 @@
 			FROM chitietbo
 			JOIN bosanpham ON chitietbo.IDBo = bosanpham.IDBo
 			JOIN sanpham ON chitietbo.IDSanPham = sanpham.IDSanPham
+			WHERE bosanpham.isDel != 1
 			order by chitietbo.IDChiTiet desc";
 			$result = $this->db->select($query);
 			return $result;
@@ -95,7 +96,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM chitietbo where IDChiTiet = '$id'";
+			$query = "UPDATE chitietbo SET isDel = 1 where IDChiTiet = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -274,28 +274,13 @@
 			return $result;
 		}
 		public function show_product(){
-			// $query = "
-
-			// SELECT p.*,c.catName, b.brandName
-
-			// FROM tbl_product as p,tbl_category as c, tbl_brand as b where p.catId = c.catId 
-
-			// AND p.brandId = b.brandId 
-
-			// order by p.productId desc";
-
-			$query = "
-
-			
-			SELECT sanpham.*,loaisanpham.TenLoai,chuongtrinhkhuyenmai.TenKhuyenMai ,mausac.MaMau
+			$query = "SELECT sanpham.*, loaisanpham.TenLoai, chuongtrinhkhuyenmai.TenKhuyenMai, mausac.MaMau
 			FROM sanpham 
 			INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai 
 			INNER JOIN chuongtrinhkhuyenmai ON sanpham.IDKhuyenMai = chuongtrinhkhuyenmai.IDKhuyenMai 
 			INNER JOIN mausac ON sanpham.IDMau = mausac.IDMau 
-			order by sanpham.IDSanPham desc";
-
-			// $query = "SELECT * FROM tbl_product order by productId desc";
-
+			WHERE sanpham.isDel != 1 
+			ORDER BY sanpham.IDSanPham DESC";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -410,7 +395,7 @@
 
 		}
 		public function del_product($id){
-			$query = "UPDATE sanpham SET isDel=1 where IDSanPham = '$id'";
+			$query = "UPDATE sanpham SET isDel = 1 where IDSanPham = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -62,7 +62,7 @@
 		}
 
         public function show_product(){
-			$query = "SELECT * FROM sanpham where sanpham.isDel=0 order by IDSanPham desc";
+			$query = "SELECT * FROM sanpham where sanpham.isDel = 0 order by IDSanPham desc";
 			$result = $this->db->select($query);
 			return $result;
 		}

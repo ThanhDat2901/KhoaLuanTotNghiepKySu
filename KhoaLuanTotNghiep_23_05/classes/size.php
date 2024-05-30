@@ -48,7 +48,7 @@
 		}
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM `size` order by IDSize desc";
+			$query = "SELECT * FROM `size` WHERE isDel != 1 order by IDSize desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -81,7 +81,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM `size` where IDSize = '$id'";
+			$query = "UPDATE `size` SET isDel =1 where IDSize = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

@@ -51,12 +51,12 @@
 		}
 		}
 		public function show_brand_DateOver(){
-			$query = "SELECT * FROM chuongtrinhkhuyenmai WHERE NgayKetThuc > CURDATE() ORDER BY IDKhuyenMai DESC";
+			$query = "SELECT * FROM chuongtrinhkhuyenmai WHERE NgayKetThuc > CURDATE() AND isDel != 1 ORDER BY IDKhuyenMai DESC";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 25 order by IDKhuyenMai desc";
+			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 25 AND isDel != 1 order by IDKhuyenMai desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -92,7 +92,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM chuongtrinhkhuyenmai where IDKhuyenMai = '$id'";
+			$query = "UPDATE `chuongtrinhkhuyenmai` SET `isDel`= 1 WHERE `IDKhuyenMai` = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

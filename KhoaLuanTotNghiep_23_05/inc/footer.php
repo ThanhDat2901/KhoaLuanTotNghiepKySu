@@ -102,6 +102,14 @@
             © 2022 Copyright:
             <a class="text-reset fw-bold" href="#">YaMe.Vn</a>
         </div>
+        <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+                    <df-messenger
+                    intent="WELCOME"
+                    chat-title="Tư Vấn Khách Hàng"
+                    agent-id="d9bde37b-19b8-437f-b64f-6122fcf83efd"
+                    language-code="vi"
+                    width:120px
+                    ></df-messenger> 
     </footer>
 </body>
 </html>

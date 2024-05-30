@@ -105,12 +105,12 @@
 		
 		}
 		public function show_bosuutap_by_name(){
-			$query = "SELECT * FROM bosuutap order by IDBoSuuTap desc";
+			$query = "SELECT * FROM bosuutap WHERE isDel != 1 order by IDBoSuuTap desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function show_sanpham_by_name(){
-			$query = "SELECT * FROM sanpham where sanpham.isDel=0  order by IDSanPham desc";
+			$query = "SELECT * FROM sanpham where sanpham.isDel != 1  order by IDSanPham desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -119,6 +119,7 @@
 			FROM chitietbosuutap
 			JOIN bosuutap ON chitietbosuutap.IDBoSuuTap = bosuutap.IDBoSuuTap
 			JOIN sanpham ON chitietbosuutap.IDSanPham = sanpham.IDSanPham
+			WHERE bosuutap.isDel != 1
 			order by chitietbosuutap.IDChiTiet desc";
 			$result = $this->db->select($query);
 			return $result;

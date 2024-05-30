@@ -47,7 +47,7 @@
 					$alert = "<span class='error'>Bộ sưu tập đã tồn tại</span>";
 					return $alert;
 				}else{
-				$query = "INSERT INTO bosuutap(TenBoSuuTap) VALUES('$TenBoSuuTap')";
+				$query = "INSERT INTO bosuutap(TenBoSuuTap,isDel) VALUES('$TenBoSuuTap',0)";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";
@@ -60,7 +60,7 @@
 		}
 		}
 		public function show_category(){
-			$query = "SELECT * FROM bosuutap order by IDBoSuuTap  desc";
+			$query = "SELECT * FROM bosuutap WHERE isDel != 1 order by IDBoSuuTap  desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -87,7 +87,7 @@
 
 		}
 		public function del_category($id){
-			$query = "DELETE FROM bosuutap where IDBoSuuTap = '$id'";
+			$query = "UPDATE bosuutap SET isDel = 1 where IDBoSuuTap = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";
@@ -104,7 +104,7 @@
 			return $result;
 		}
 		public function show_category_fontend(){
-			$query = "SELECT * FROM bosuutap order by IDBoSuuTap desc";
+			$query = "SELECT * FROM bosuutap WHERE isDel != 1 order by IDBoSuuTap desc";
 			$result = $this->db->select($query);
 			return $result;
 		}

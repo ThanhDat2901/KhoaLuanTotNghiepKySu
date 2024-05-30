@@ -248,15 +248,7 @@
                     <span style="color:black;" class="chat-text">Zalo</span>
                 </a>    
             </div>
-            <div class="floatleft logo" style="position: fixed; bottom: 0; right: 0; padding: 20px;margin-right: -28%">
-            <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-                    <df-messenger
-                    intent="WELCOME"
-                    chat-title="Tư Vấn Khách Hàng"
-                    agent-id="d9bde37b-19b8-437f-b64f-6122fcf83efd"
-                    language-code="vi"
-                    ></df-messenger>   
-            </div>
+
 <?php include 'inc/footer.php';?>    
 
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
