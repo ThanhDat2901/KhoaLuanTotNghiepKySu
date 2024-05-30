@@ -1,5 +1,6 @@
 <?php
-require 'init.php'; ?>
+require 'init.php';
+?>
 
 <?php include 'inc/header.php' ;?>  
 

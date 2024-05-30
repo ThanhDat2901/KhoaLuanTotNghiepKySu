@@ -43,5 +43,25 @@
 				}
 
 		}
+		public function show_HoaDon(){
+			$query = "SELECT * FROM hoadon order by IDHoaDon desc";
+			$result = $this->db->select($query);
+			return $result;
+		}
+		public function tongTienTheoNgay() {
+			$query = "SELECT NgayLap, SUM(ThanhTien) as TongTien
+			FROM hoadon GROUP BY NgayLap";
+			return $this->db->select($query);
+			}
+
+		public function tongTienTheoThang() {
+				$query = "SELECT DATE_FORMAT(NgayLap, '%Y-%m') as Thang, SUM(ThanhTien) as TongTien FROM hoadon GROUP BY Thang";
+				return $this->db->select($query);
+			}
+			
+		public function tongTienTheoNam() {
+				$query = "SELECT YEAR(NgayLap) as Nam, SUM(ThanhTien) as TongTien FROM hoadon GROUP BY Nam";
+				return $this->db->select($query);
+			}
 	}
 ?>

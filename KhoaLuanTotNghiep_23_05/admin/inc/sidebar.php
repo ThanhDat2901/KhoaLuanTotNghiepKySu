@@ -146,9 +146,10 @@
                         <li><a href="chitietmausaclist.php"><h style="color: blue;font-size:14px">Danh Sách Màu Sắc Của Sản Phẩm</h></a> </li>
                     </ul>
                 </li>  -->
-                 <li><a class="menuitem">Đơn hàng</a>
+                 <li><a class="menuitem"><i class="fas fa-shopping-bag"></i> Đơn hàng</a>
                     <ul class="submenu">
-                        <li><a href="inbox.php">Liệt kê đơn hàng</a> </li>             
+                        <li><a href="hoadonshow.php"><h style="color: red;font-size:14px">Chi Tiết Đơn Hàng</h></a> </li>
+                        <li><a href="thongke.php"><h style="color: blue;font-size:14px">Thống Kê Đơn Hàng</h></a> </li>                    
                     </ul>
                 </li>
                 
