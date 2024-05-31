@@ -48,6 +48,17 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function show_HoaDonDetail($id){
+			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.* 
+					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
+					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
+					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
+					  AND chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
+					  AND hoadon.IDHoaDon = '$id' 
+					  ORDER BY hoadon.IDHoaDon DESC";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function tongTienTheoNgay() {
 			$query = "SELECT NgayLap, SUM(ThanhTien) as TongTien
 			FROM hoadon GROUP BY NgayLap";
