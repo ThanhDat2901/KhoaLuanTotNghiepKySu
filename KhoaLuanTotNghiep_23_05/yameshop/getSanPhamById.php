@@ -1,13 +1,16 @@
 <?php
+header("Access-Control-Allow-Origin: *");
 include('connect.php');
 
-$sql = $conn->prepare("SELECT * FROM sanpham where isdel=0");
-$sql->execute();
+$IDSanPham = $_GET['IDSanPham'];
+
+$sql = $conn->prepare("SELECT * FROM sanpham WHERE IDSanPham = ?");
+$sql->execute([$IDSanPham]);
 $data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($data as &$product) {
     foreach ($product as $key => &$value) {
-        $value = strip_tags($value); 
+        $value = strip_tags($value);
         $value = str_replace(array("\r", "\n"), '', $value);
     }
 }

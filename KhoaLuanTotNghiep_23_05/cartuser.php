@@ -15,6 +15,7 @@ $pr = new product();
 
 if(isset($_SESSION['login_detail'])){
     $IDNguoiDung=$_SESSION['user_id'];
+    $soluongsanphamtronggiohang = $gh->DemSoLuongSanPhamTrongGioHangByNguoiDung($_SESSION['user_id']);
 }
 
 $perPage = 4;
@@ -24,7 +25,6 @@ $limit = $perPage;
 $data = $gh->DanhSachSanPhamGioHangPhanTrang($IDNguoiDung,$limit, $offset);
 $totalProducts = $gh->countAll($IDNguoiDung);
 $totalPages = ceil($totalProducts / $perPage);
-
 
 
 if($_SERVER["REQUEST_METHOD"]  == "POST"){
@@ -39,16 +39,48 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
 <?php include 'inc/header.php' ;?>  
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
     const shippingFeeDisplay = document.getElementById("shippingFeeDisplay");
-
     const grandTotal= document.getElementById("grandTotal");
-    // Load cities
 
+
+
+    document.getElementById('select-all').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('input[name="product_checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+    document.getElementById('delete-selected').addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('input[name="product_checkbox"]:checked');
+    if (checkboxes.length > 0) {
+        if (confirm('Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?')) {
+            const id = [];
+            checkboxes.forEach(checkbox => {
+                id.push(checkbox.value);
+            });
+            // Gửi yêu cầu AJAX để xóa sản phẩm
+            $.ajax({
+                url: 'remove_from_cart.php',
+                type: 'POST',
+                data: {id: id},
+                success: function(response) {
+                    // Nếu xóa thành công, tải lại trang
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Đã xảy ra lỗi khi xóa sản phẩm.');
+                }
+            });
+        }
+    } else {
+        alert('Vui lòng chọn ít nhất một sản phẩm để xóa.');
+    }
+});
 
     });
     function changeQuantity(productId, action) {
-        // Gửi yêu cầu AJAX để cập nhật số lượng sản phẩm
         $.ajax({
             url: 'update_cart.php',
             type: 'POST',
@@ -75,6 +107,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
         }
     });
 }
+
 </script>
 
 <div id="about" class="shop" style="margin-top:10vh">
@@ -186,7 +219,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                             </td>
                             <td style="text-align: center;vertical-align: middle;">
                                 <form action="remove_from_cart.php" id="id<?=$item['IDChiTiet']?>" method="POST">
-                                    <input type="hidden" name="id" value="<?=$item['IDChiTiet']?>"> <!-- Changed input name to 'id' -->
+                                    <input type="hidden" name="id" value="<?=$item['IDChiTiet']?>">
                                     <a href="#" class="btn btn-danger btn-sm" onclick="confirmRemoval(<?=$item['IDChiTiet']?>)"><i class="fa-solid fa-trash"></i> Xóa</a>
                                 </form>
                             </td>
@@ -197,60 +230,50 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             </table>
         </div>
         <div colspan="9">
-        <div class="pagination justify-content-center " style="margin-left:10vh; margin-top:8vh">
-                <?php if ($totalPages > 1) : ?>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination d-flex justify-content-center">
-                            <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                            <?php endfor; ?>
-                        </ul>
-                    </nav>
-                <?php endif; ?>
-        </div>
-    </div>  
+            <div class="pagination justify-content-center " style="margin-left:10vh; margin-top:8vh">
+                    <?php if ($totalPages > 1) : ?>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination d-flex justify-content-center">
+                                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                                    <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
+                    <?php endif; ?>
+            </div>
+        </div>  
     </div>
     
 </div>
 <?php endif; ?>
 
 
-<div class="text-center text-lg-start bg-white text-black ">
-    <div style="background-color: #ffffff;bottom: 0;width: 100%;position:fixed ;z-index:999">
+    <div id="movable-div" class="text-center text-lg-start bg-white text-black" style="background-color: #ffffff;width: 100%;z-index:999;">
         <div class="container text-center" style="width:100%">
             <div class="">
                 <div class="row d-flex " style="height:10vh">
                     <div class="col-2 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
-						<a href="index.php"><img src="//res.yame.vn/Content/images/yame-f-logo-white.png?v=20231127_2" alt="Yame.vn" style="width: 170px;margin-top: 2px;margin-left: 10px;"></a>
+                        <h5>  <input type="checkbox" id="select-all" name="" value="" style="vertical-align: middle;transform: scale(1.7);"> Chọn tất cả(<?=$soluongsanphamtronggiohang?>) </h5>
+                	</div>   
+                    <div class="col-1 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
+                        <h5><button type="button" id="delete-selected" class="btn btn-danger fw" style="width: 100%; height: 50px; text-transform: uppercase; font-size: 20px;">Xóa</button></h5>
                     </div>
-					<div class="col justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
-						<nav class="navbar navbar-expand-lg ">
-							<div class="collapse navbar-collapse" id="navbarSupportedContent">
-										<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                                <li class="nav-item dropdown" >
-                                                        <a class="nav-link dropdown-toggle" href="#" id="bo-suu-tap-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bộ Sưu Tập</a>
-                                                        <ul class="dropdown-menu" aria-labelledby="bo-suu-tap-dropdown">
-                                                        <?php foreach($databosuutap as  $bosuutapitem ):?> 
-                                                            <li><a class="dropdown-item white-text" href="danhsachsanphambosuutap.php?id=<?=$bosuutapitem['IDBoSuuTap']?>"><?php echo $bosuutapitem['TenBoSuuTap'] ?></a></li>
-                                                            <?php endforeach ;?>
-                                                        </ul>
-                                                </li>
-                                                 <li class="nav-item"  style="margin-left: 10px;">
-
-                                                </li>
-									</ul>
-									
-								</div>
-						</nav>
-                	</div>
-					                    
+                    <div class="col-3 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
+                        <h5> Tổng thanh toán n sản phẩm:</h5>
+                	</div>  
+                    <div class="col-3 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
+                        <h5> Tổng thanh toán n sản phẩm:</h5>
+                	</div>  
+                    <div class="col-2 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
+                        <h5> <button type="" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Mua hàng</button></h5>
+                	</div>                         
 					
                 </div>
             </div>
 
         </div>
     </div>
-</div>
+
 <?php 
 	include 'inc/footer.php';
 	

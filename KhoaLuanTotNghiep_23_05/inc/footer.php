@@ -1,4 +1,4 @@
-<footer class="text-center text-lg-start bg-white text-black ">
+<footer  class="text-center text-lg-start bg-white text-black " style=" position: relative;height: 300px;">
         <section class="">
             <div class="container text-center text-md-start mt-5">
                 <div class="row mt-3">
@@ -111,6 +111,8 @@
                     width:120px
                     ></df-messenger> 
     </footer>
+
+
 </body>
 </html>
 
