@@ -80,7 +80,10 @@ try {
                 $mail->setFrom('thuytrang17052901@gmail.com', 'YameShop.Vn');
                 $mail->addAddress($email);
                 $mail->isHTML(true);
-                $mail->Subject = 'Xác nhận đơn hàng từ YameShop.Vn';
+                
+                // Encode chủ đề email
+                $mail->Subject = '=?UTF-8?B?' . base64_encode('Xác nhận đơn hàng từ YameShop.Vn') . '?=';
+                
                 $mailContent = '
                     <p style="color: black;">Cảm ơn quý khách đã đặt hàng tại YameShop. Đơn hàng của bạn đã được xác nhận.</p>
                     ' . $shopInfo . '
