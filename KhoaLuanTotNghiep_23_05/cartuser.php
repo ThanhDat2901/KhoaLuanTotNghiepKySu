@@ -18,13 +18,26 @@ if(isset($_SESSION['login_detail'])){
     $soluongsanphamtronggiohang = $gh->DemSoLuongSanPhamTrongGioHangByNguoiDung($_SESSION['user_id']);
 }
 
-$perPage = 4;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $perPage;
-$limit = $perPage;
-$data = $gh->DanhSachSanPhamGioHangPhanTrang($IDNguoiDung,$limit, $offset);
-$totalProducts = $gh->countAll($IDNguoiDung);
-$totalPages = ceil($totalProducts / $perPage);
+// $perPage = 4;
+// $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+// $offset = ($page - 1) * $perPage;
+// $limit = $perPage;
+// $data = $gh->DanhSachSanPhamGioHangPhanTrang($IDNguoiDung,$limit, $offset);
+// $totalProducts = $gh->countAll($IDNguoiDung);
+// $totalPages = ceil($totalProducts / $perPage);
+
+$data = $gh->DanhSachSanPhamGioHangKhongPhanTrang($IDNguoiDung);
+function calculateTotal($cart, $pr)
+{
+    $total = 0;
+    foreach ($cart as $item) {
+        if (isset($item['IDChiTiet']) && !empty($item['IDChiTiet'])) {
+        $product = $pr->getproductbyIdChiTietSanPham($item['IDChiTiet'])->fetch_assoc();
+        $total += $product['GiaCuoi'] * $item['SoLuong'];
+        }
+    }
+    return $total;
+}
 
 
 if($_SERVER["REQUEST_METHOD"]  == "POST"){
@@ -41,13 +54,29 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
     document.addEventListener("DOMContentLoaded", function() {
     const shippingFeeDisplay = document.getElementById("shippingFeeDisplay");
     const grandTotal= document.getElementById("grandTotal");
-
+    const totalPrice= document.getElementById("totalPrice");
+    
 
 
     document.getElementById('select-all').addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('input[name="product_checkbox"]');
         checkboxes.forEach(checkbox => {
             checkbox.checked = this.checked;
+            
+        });
+        updateSelectedProductCount();
+        updateTotal();
+    });
+
+    const checkboxes = document.querySelectorAll('input[name="product_checkbox"]');
+    const selectedProductCount = document.getElementById("selectedProductCount");
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateSelectedProductCount();
+            updateTotal();
+            // let count = document.querySelectorAll('input[name="product_checkbox"]:checked').length;
+            // selectedProductCount.textContent = " Tổng thanh toán ("+count+ " sản phẩm):";
         });
     });
 
@@ -63,7 +92,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             $.ajax({
                 url: 'remove_from_cart.php',
                 type: 'POST',
-                data: {id: id},
+                data: {id: id}, 
                 success: function(response) {
                     // Nếu xóa thành công, tải lại trang
                     location.reload();
@@ -80,6 +109,28 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
 });
 
     });
+    function updateTotal() {
+        var checkboxes = document.querySelectorAll('input[name="product_checkbox"]:checked');
+        var total = 0;
+        for (var i = 0; i < checkboxes.length; i++) {
+            var row = checkboxes[i].closest('tr');
+            var priceElement = row.querySelector('.product_price');
+            if (priceElement) {
+
+                var priceString = priceElement.textContent.trim().replace(/[\.,]/g, '');
+                var price = parseInt(priceString);
+                total += price;
+            }
+        }
+        totalPrice.innerHTML =  formatCurrency2(total) +'<span style="font-size: smaller; vertical-align: super;">đ</span>';
+    }
+    function formatCurrency2(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    function updateSelectedProductCount() {
+        let count = document.querySelectorAll('input[name="product_checkbox"]:checked').length;
+        selectedProductCount.textContent = "Tổng thanh toán (" + count + " sản phẩm):";
+    }
     function changeQuantity(productId, action) {
         $.ajax({
             url: 'update_cart.php',
@@ -174,7 +225,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                     <?php $product = $pr->getproductbyIdChiTietSanPham($item['IDChiTiet'])->fetch_assoc(); ?>
                         <tr>
                             <td  style="text-align: center;">
-                                <input type="checkbox" name="product_checkbox" value="<?=$product['IDSanPham']?>" style="vertical-align: middle;transform: scale(1.7);">
+                                <input type="checkbox" name="product_checkbox" value="<?=$product['IDChiTiet']?>" style="vertical-align: middle;transform: scale(1.7);">
                                 <img class="img" src="<?=$product['HinhAnh']?>" style="width: 70px;height: 100px;" alt="#">
                             </td>
                             <td style="vertical-align: middle;">
@@ -214,7 +265,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                                     </span>
                                 </p>
                             </td>
-                            <td style="text-align: center;vertical-align: middle;">    
+                            <td style="text-align: center;vertical-align: middle;" class="product_price">    
                                 <b><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?> <span>đ</span></b>
                             </td>
                             <td style="text-align: center;vertical-align: middle;">
@@ -229,7 +280,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                     </tbody>
             </table>
         </div>
-        <div colspan="9">
+        <!-- <div colspan="9">
             <div class="pagination justify-content-center " style="margin-left:10vh; margin-top:8vh">
                     <?php if ($totalPages > 1) : ?>
                         <nav aria-label="Page navigation example">
@@ -241,7 +292,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                         </nav>
                     <?php endif; ?>
             </div>
-        </div>  
+        </div>   -->
     </div>
     
 </div>
@@ -259,10 +310,13 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                         <h5><button type="button" id="delete-selected" class="btn btn-danger fw" style="width: 100%; height: 50px; text-transform: uppercase; font-size: 20px;">Xóa</button></h5>
                     </div>
                     <div class="col-3 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
-                        <h5> Tổng thanh toán n sản phẩm:</h5>
+                        <h5 id="selectedProductCount"> Tổng thanh toán (0 sản phẩm):</h5>
                 	</div>  
-                    <div class="col-3 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
-                        <h5> Tổng thanh toán n sản phẩm:</h5>
+
+                    <div class="col-2 justify-content-start align-items-center m-lg-2  text-align-center text-center">
+                        <h5 style="color: red;" id="totalPrice">
+                                0<span style="font-size: smaller; vertical-align: super;">đ</span>
+                        </h5>
                 	</div>  
                     <div class="col-2 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
                         <h5> <button type="" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Mua hàng</button></h5>

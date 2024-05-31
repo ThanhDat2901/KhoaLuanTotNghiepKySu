@@ -47,6 +47,7 @@ else
             exit; 
         }
         $isFound = false;
+        
         $IDChiTiet = $_POST['id'];
         $IDNguoiDung=$_SESSION['user_id'];
         $capnhapgiohang= $gh->XoaSanPhamKhoiGioHang($IDChiTiet, $IDNguoiDung);

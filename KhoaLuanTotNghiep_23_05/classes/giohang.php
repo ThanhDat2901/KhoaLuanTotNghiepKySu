@@ -146,6 +146,13 @@
 			$result = $this->db->select($sql);
 			return $result;
 		}
+		public function DanhSachSanPhamGioHangKhongPhanTrang($IDNguoiDung)
+		{
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+			$sql = "SELECT * FROM giohang where IDNguoiDung = '$IDNguoiDung'   ORDER BY IDGioHang DESC";
+			$result = $this->db->select($sql);
+			return $result;
+		}
 		public function countAll($IDNguoiDung)
 		{
 			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
