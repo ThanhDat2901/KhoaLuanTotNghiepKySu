@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -6,9 +7,15 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 
-include '../classes/hoadon.php';
+require '../classes/hoadon.php';
 $brand = new hoadon();
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $idHoaDon = isset($_GET['email']) ? $_GET['email'] : 1;
+}
 $mail = new PHPMailer(true);
+
+
+
 try {
     // Cấu hình gửi email
     $mail->isSMTP();
@@ -20,12 +27,14 @@ try {
     $mail->Port       = 587;
 
     // Lấy thông tin hóa đơn
-    $show_brand = $brand->show_HoaDon();
+    $show_brand = $brand->show_HoaDonByID($idHoaDon);
     if($show_brand){
         while($result = $show_brand->fetch_assoc()){
+
             $email = $result['Email'];
             $email_sent = $result['email_sent'];
             if (!$email_sent) {
+                $capnhaptrangthai = $brand->CapNhatTrangthaiHoaDon($result['IDHoaDon']);
                 // Lấy chi tiết hóa đơn
                 $orderDetails = $brand->show_HoaDonDetail($result['IDHoaDon']);
                 

@@ -48,7 +48,12 @@
                         <td><?php echo $result['NgayLap'] ?></td>
                         <td><?php echo $result['GhiChu'] ?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
-                        <td><button style="border-radius: 5px;" class="send-email-btn" data-email="<?php echo $result['Email']; ?>">Xác Nhận Đơn Hàng</button></td>
+                        <?php if($result['TrangThai']==1): ?>
+                            <td><button style="border-radius: 5px;" class="send-email-btn" data-email="<?php echo $result['IdHoaDonFake']; ?>">Xác Nhận Đơn Hàng</button></td>
+                        <?php else: ?>
+                            <td><button style="border-radius: 5px;">Đã Xác Nhận Đơn Hàng</button></td>
+                        <?php endif ?>
+                       
                     </tr>
                     <?php
                 }
@@ -70,21 +75,19 @@
         $('.send-email-btn').click(function () {
             var email = $(this).data('email');
             var button = $(this);
-
-            // Khóa nút và thay đổi văn bản
-            button.prop('disabled', true).addClass('confirmed').text('Đã Xác Nhận');
+            button.prop('disabled', true).addClass('confirmed').html('<button style="border-radius: 5px;">Đã Xác Nhận Đơn Hàng</button>');
 
             $.ajax({
                 url: 'senemail.php',
-                method: 'POST',
+                method: 'GET',
                 data: { email: email },
                 success: function (response) {
-                    alert('Email xác nhận đã được gửi thành công đến người.');
+                    alert('Email xác nhận đã được gửi thành công đến người mua.');
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     alert('Đã xảy ra lỗi: ' + error);
                     
-                    // Mở khóa nút nếu có lỗi xảy ra
                     button.prop('disabled', false).removeClass('confirmed').text('Xác Nhận Đơn Hàng');
                 }
             });
@@ -94,9 +97,9 @@
 
 <style>
 .confirmed {
-    pointer-events: none; /* Khóa nút */
-    background-color: #ccc; /* Màu nền */
-    color: #000; /* Màu văn bản */
-    border-radius: 5px; /* Độ cong của góc */
+    pointer-events: none;
+    background-color: #ccc; 
+    color: #000;
+    border-radius: 5px; 
 }
 </style>

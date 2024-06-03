@@ -136,7 +136,7 @@
             data: {
                 labels: <?php echo json_encode($ngay); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Cột)',
+                    label: 'Thóng Kê(Biểu Đồ Cột)',
                     data: <?php echo json_encode($tongTienNgayArray); ?>,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -157,7 +157,7 @@
             data: {
                 labels: <?php echo json_encode($ngay); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Đường)',
+                    label: 'Thống Kê(Biểu Đồ Đường)',
                     data: <?php echo json_encode($tongTienNgayArray); ?>,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(153, 102, 255, 1)', 
@@ -184,7 +184,7 @@
             data: {
                 labels: <?php echo json_encode($thang); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Cột)',
+                    label: 'Thống Kê(Biểu Đồ Cột)',
                     data: <?php echo json_encode($tongTienThangArray); ?>,
                     backgroundColor: 'rgba(153, 102, 255, 0.2)',
                     borderColor: 'rgba(153, 102, 255, 1)',
@@ -205,7 +205,7 @@
             data: {
                 labels: <?php echo json_encode($thang); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Đường)',
+                    label: 'Thống Kê(Biểu Đồ Đường)',
                     data: <?php echo json_encode($tongTienThangArray); ?>,
                     backgroundColor: 'rgba(153, 102, 255, 0.2)',
                     borderColor: 'rgba(153, 102, 255, 1)',
@@ -232,7 +232,7 @@
             data: {
                 labels: <?php echo json_encode($nam); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Cột)',
+                    label: 'T(Biểu Đồ Đường)',
                     data: <?php echo json_encode($tongTienNamArray); ?>,
                     backgroundColor: 'rgba(255, 159, 64, 0.2)',
                     borderColor: 'rgba(255, 159, 64, 1)',
@@ -253,7 +253,7 @@
             data: {
                 labels: <?php echo json_encode($nam); ?>,
                 datasets: [{
-                    label: 'Tổng Tiền (Đường)',
+                    label: '(Biểu Đồ Cột)',
                     data: <?php echo json_encode($tongTienNamArray); ?>,
                     backgroundColor: 'rgba(255, 159, 64, 0.2)',
                     borderColor: 'rgba(255, 159, 64, 1)',

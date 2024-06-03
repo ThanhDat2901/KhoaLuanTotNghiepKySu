@@ -48,8 +48,13 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function show_HoaDonByID($IDHoaDon){
+			$query = "SELECT * FROM hoadon where IDHoaDon ='$IDHoaDon'";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function show_HoaDonDetail($id){
-			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.* 
+			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake
 					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
 					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
 					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
@@ -74,5 +79,18 @@
 				$query = "SELECT YEAR(NgayLap) as Nam, SUM(ThanhTien) as TongTien FROM hoadon GROUP BY Nam";
 				return $this->db->select($query);
 			}
+			public function CapNhatTrangthaiHoaDon($IDHoaDon)
+			{
+				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+
+				$sql = "UPDATE hoadon SET TrangThai = 2 WHERE IDHoaDon = '$IDHoaDon'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return "Cập nhật thành công";
+				} else {
+					return "Cập nhật thất bại";
+				}
+			}	
 	}
 ?>
