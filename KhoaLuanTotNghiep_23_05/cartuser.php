@@ -106,8 +106,58 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
     } else {
         alert('Vui lòng chọn ít nhất một sản phẩm để xóa.');
     }
-});
 
+
+
+});
+// document.getElementById("muahang-selected").addEventListener("click", function() {
+//         var selectedProducts = document.querySelectorAll('input[name="product_checkbox"]:checked');
+//         var formData = new FormData();
+
+//         selectedProducts.forEach(function(checkbox) {
+//             var productData = checkbox.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.querySelector('input[name="product_data"]').value;
+//             formData.append('selected_products', productData);
+//         });
+
+//         // Sử dụng AJAX để gửi dữ liệu đến trang thongtingiaohang.php
+//         $.ajax({
+//             url: 'giohang.php',
+//             type: 'POST',
+//             data: formData,
+//             processData: false,
+//             contentType: false,
+//             success: function(response) {
+//                 // Xử lý phản hồi từ server nếu cần
+//             },
+//             error: function(xhr, status, error) {
+//                 // Xử lý lỗi nếu có
+//                 console.error(xhr.responseText);
+//             }
+//         });
+//     });
+    document.getElementById("muahang-selected").addEventListener("click", function() {
+    var selectedProducts = document.querySelectorAll('input[name="product_checkbox"]:checked');
+    var selectedProductData = []; // Mảng để lưu trữ dữ liệu của các sản phẩm được chọn
+
+    selectedProducts.forEach(function(checkbox) {
+        var productData = checkbox.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.querySelector('input[name="product_data"]').value;
+        selectedProductData.push(productData); // Thêm dữ liệu của sản phẩm vào mảng
+    });
+
+    // Gửi mảng dữ liệu của các sản phẩm được chọn đến trang thongtingiaohang.php
+    $.ajax({
+        url: 'giohang.php',
+        type: 'POST',
+        data: { selected_products: selectedProductData }, // Truyền mảng dữ liệu dưới dạng object
+        success: function(response) {
+            // Xử lý phản hồi từ server nếu cần
+        },
+        error: function(xhr, status, error) {
+            // Xử lý lỗi nếu có
+            console.error(xhr.responseText);
+        }
+    });
+});
     });
     function updateTotal() {
         var checkboxes = document.querySelectorAll('input[name="product_checkbox"]:checked');
@@ -142,6 +192,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             }
         });
     }
+
     function confirmRemoval(itemId) {
     Swal.fire({
         title: 'Bạn có chắc chắn?',
@@ -267,6 +318,8 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                             </td>
                             <td style="text-align: center;vertical-align: middle;" class="product_price">    
                                 <b><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?> <span>đ</span></b>
+                                <?php $temp = $product['GiaCuoi'] * $item['SoLuong'] ?>
+                                <input type="hidden" name="product_data" value="<?= $product['IDChiTiet'] . ',' . $temp . ',' . $item['SoLuong'] ?>">
                             </td>
                             <td style="text-align: center;vertical-align: middle;">
                                 <form action="remove_from_cart.php" id="id<?=$item['IDChiTiet']?>" method="POST">
@@ -319,8 +372,10 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                         </h5>
                 	</div>  
                     <div class="col-2 justify-content-start align-items-center m-lg-2 justify-content-center text-align-center text-center">
-                        <h5> <button type="" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Mua hàng</button></h5>
-                	</div>                         
+                        <form id="checkoutForm" action="thongtingiaohang.php" method="POST">
+                            <h5> <button type=""id="muahang-selected"   class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Mua hàng</button></h5>
+                        </form>
+                    </div>                         
 					
                 </div>
             </div>

@@ -8,7 +8,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$dbname = "yameshop";
+$dbname = "dbyameshop";
 
 
 try {
