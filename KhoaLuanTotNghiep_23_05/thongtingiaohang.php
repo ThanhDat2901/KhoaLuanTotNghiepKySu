@@ -1,10 +1,6 @@
 <?php
 require 'init.php'; 
 
-// if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-//     echo "Giỏ hàng của bạn đang trống.";
-//     exit;
-// }
 
 require 'classes/nguoidung.php';
 require 'classes/product.php';
@@ -252,57 +248,114 @@ $detailnguoidung = $thongtinnguoidung->fetch_assoc();
         });
     });
     function loadCurrentAddress() {
-    fetch(`yameshop/getNguoiDungById.php?IDNguoiDung=${lala}`)
-    .then(response => response.json())
-    .then(data => {
-        if (data ) {
-            console.log(data);
-            console.log(data['DiaChi']);
-            const fullAddress = data['DiaChi'];
-            const parts = fullAddress.split(',');
-            const housenumber = parts[0].trim();
-            const ward = parts[1].trim();
-            const district = parts[2].trim();
-            const city = parts[3].trim();
+        setTimeout(() => {
+        fetch(`yameshop/getNguoiDungById.php?IDNguoiDung=${lala}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data ) {
+                const fullAddress = data['DiaChi'];
+                const parts = fullAddress.split(',');
+                const housenumber = parts[0].trim();
+                const ward = parts[1].trim();
+                const district = parts[2].trim();
+                const city = parts[3].trim();
+            
+                fetchCityDistrictWard(city, district, ward, housenumber);
+            } else {
+                console.error('Dữ liệu không hợp lệ.');
+            }
+            })
+            .catch(error => console.error('Lỗi khi tải địa chỉ hiện tại:', error));
+        }, 500);
+    }
+    function fetchCityDistrictWard(city, district, ward, housenumber) {
+        setTimeout(() => {
+        fetch(`yameshop/getCityByName.php?name=${city}`)
+            .then(response => response.json())
+            .then(cityData => {
+                document.getElementById('city2').value = cityData['id'];
+                citySelect2.dispatchEvent(new Event('change'));
 
-            fetch(`yameshop/getCityByName.php?name=${city}`)
-            .then(response2 => response2.json())
-            .then(data2 => {
-                document.getElementById('city2').value = data2['id'];
-                citySelect2.dispatchEvent(new Event('change')); 
-
-                fetch(`yameshop/getDistrictByName.php?city_id=${data2['id']}&name=${district}`)
-                    .then(response3 => response3.json())
-                    .then(data3 => {
-                        document.getElementById('district2').value = data3['id'];                   
-                        districtSelect2.dispatchEvent(new Event('change'));
-                        fetch(`yameshop/getWardByName.php?district_id=${data3['id']}&name=${ward}`)
-                            .then(response4 => response4.json())
-                            .then(data4 => {
-                                document.getElementById('ward2').value = data4['id'];                   
-                                // districtSelect2.dispatchEvent(new Event('change'));
-                                wardSelect2.dispatchEvent(new Event('change'));
-                            });
-                    });
+                fetchDistrict(cityData['id'], district, ward, housenumber);
             });
+        }, 500);
+    }
+    function fetchDistrict(cityId, district, ward, housenumber) {
+        setTimeout(() => {
+        fetch(`yameshop/getDistrictByName.php?city_id=${cityId}&name=${district}`)
+            .then(response => response.json())
+            .then(districtData => {
+                document.getElementById('district2').value = districtData['id'];
+                districtSelect2.dispatchEvent(new Event('change'));
+
+                fetchWard(districtData['id'], ward, housenumber);
+            });
+        }, 500);
+    }
+    function fetchWard(districtId, ward, housenumber) {
+        setTimeout(() => {
+        fetch(`yameshop/getWardByName.php?district_id=${districtId}&name=${ward}`)
+            .then(response => response.json())
+            .then(wardData => {
+                document.getElementById('ward2').value = wardData['id'];
+                wardSelect2.dispatchEvent(new Event('change'));
+
+                document.getElementById('housenumber2').value = housenumber;
+            });
+        }, 500);
+    }
+    // function loadCurrentAddress() {
+    // fetch(`yameshop/getNguoiDungById.php?IDNguoiDung=${lala}`)
+    // .then(response => response.json())
+    // .then(data => {
+    //     if (data ) {
+    //         console.log(data);
+    //         console.log(data['DiaChi']);
+    //         const fullAddress = data['DiaChi'];
+    //         const parts = fullAddress.split(',');
+    //         const housenumber = parts[0].trim();
+    //         const ward = parts[1].trim();
+    //         const district = parts[2].trim();
+    //         const city = parts[3].trim();
+
+    //         fetch(`yameshop/getCityByName.php?name=${city}`)
+    //         .then(response2 => response2.json())
+    //         .then(data2 => {
+    //             document.getElementById('city2').value = data2['id'];
+    //             citySelect2.dispatchEvent(new Event('change')); 
+
+    //             fetch(`yameshop/getDistrictByName.php?city_id=${data2['id']}&name=${district}`)
+    //                 .then(response3 => response3.json())
+    //                 .then(data3 => {
+    //                     document.getElementById('district2').value = data3['id'];                   
+    //                     districtSelect2.dispatchEvent(new Event('change'));
+    //                     fetch(`yameshop/getWardByName.php?district_id=${data3['id']}&name=${ward}`)
+    //                         .then(response4 => response4.json())
+    //                         .then(data4 => {
+    //                             document.getElementById('ward2').value = data4['id'];                   
+    //                             // districtSelect2.dispatchEvent(new Event('change'));
+    //                             wardSelect2.dispatchEvent(new Event('change'));
+    //                         });
+    //                 });
+    //         });
     
-            // document.getElementById('city2').value = city;
-            // document.getElementById('district2').value = district;
-            // document.getElementById('ward2').value = ward;
-            document.getElementById('housenumber2').value = housenumber;
+    //         // document.getElementById('city2').value = city;
+    //         // document.getElementById('district2').value = district;
+    //         // document.getElementById('ward2').value = ward;
+    //         document.getElementById('housenumber2').value = housenumber;
 
-            // citySelect2.dispatchEvent(new Event('change'));
-            // districtSelect2.dispatchEvent(new Event('change'));
+    //         // citySelect2.dispatchEvent(new Event('change'));
+    //         // districtSelect2.dispatchEvent(new Event('change'));
 
 
-        } else {
-            console.error('Dữ liệu không hợp lệ.');
-            console.log(data);
-            console.log(data.Diachi);
-        }
-    })
-    .catch(error => console.error('Lỗi khi tải địa chỉ hiện tại:', error));
-}
+    //     } else {
+    //         console.error('Dữ liệu không hợp lệ.');
+    //         console.log(data);
+    //         console.log(data.Diachi);
+    //     }
+    // })
+    // .catch(error => console.error('Lỗi khi tải địa chỉ hiện tại:', error));
+    // }
 
     // Load cities
     fetch("yameshop/getCity.php")

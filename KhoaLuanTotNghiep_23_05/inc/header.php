@@ -232,11 +232,11 @@
 													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="register.php"><i class="fa-solid fa-registered"></i> Đăng ký</a></li>
 												<?php else:?>
 													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"><i class="fa-solid fa-heart"></i> Chào bạn: nhân viên </a></li>
-													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="">  <i class="fa-solid fa-circle-info"></i> Thay đổi thông tin</a></li>
+													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="thongtincanhan.php">  <i class="fa-solid fa-circle-info"></i> Thay đổi thông tin</a></li>
 													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
 												<?php endif ?>
 											<?php else:?>
-												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="">  <i class="fa-solid fa-circle-info"></i> Thay đổi thông tin</a></li>
+												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="thongtincanhan.php">  <i class="fa-solid fa-circle-info"></i> Thay đổi thông tin</a></li>
 												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
 											<?php endif ?>
 										</ul>

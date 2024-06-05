@@ -235,6 +235,27 @@
 			}
 
 		}
+		public function CapNhapThongTinCaNhan($IDNguoiDung,$TenNguoiDung,$DiaChi,$SDT,$Email,$MatKhau){
+
+			$TenNguoiDung = $this->fm->validation($TenNguoiDung);
+			$TenNguoiDung = mysqli_real_escape_string($this->db->link, $TenNguoiDung);
+			$DiaChi = mysqli_real_escape_string($this->db->link, $DiaChi);
+			$SDT = mysqli_real_escape_string($this->db->link, $SDT);
+			$Email = mysqli_real_escape_string($this->db->link, $Email);
+			$MatKhau = mysqli_real_escape_string($this->db->link, $MatKhau);
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+				$query = "UPDATE thongtinnguoidung SET TenNguoiDung = '$TenNguoiDung',DiaChi = '$DiaChi',SDT = '$SDT',Email = '$Email',MatKhau = '$MatKhau' WHERE IDNguoiDung = '$IDNguoiDung'";
+				$result = $this->db->update($query);
+				if($result){
+					$alert = "<span class='success'>Cập nhập thông tin thành công</span>";
+					return $alert;
+				}else{
+					$alert = "<span class='error'>Cập nhập thông tin thành công Thất Bại</span>";
+					return $alert;
+				}
+			
+
+		}
 		public function update_brand1($TenNguoiDung,$DiaChi,$SDT,$Email,$MatKhau,$id){
 
 			$TenNguoiDung = $this->fm->validation($TenNguoiDung);
