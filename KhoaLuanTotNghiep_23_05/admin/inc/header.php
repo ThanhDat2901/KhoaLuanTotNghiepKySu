@@ -229,7 +229,7 @@ body {
             <ul class="nav main">
                 <li class="ic-dashboard"><a href="index.php"><span>Các Chức Năng</span></a> </li>
 				<li class="ic-typography"><a href="changepassword.php"><span><i class="fas fa-key"></i> Đổi Mật Khẩu</span></a></li>
-				<li class="ic-grid-tables"><a href="inbox.php"><span>Hóa Đơn</span></a></li>
+				<li class="ic-grid-tables"><a href="thongke.php"><span>Thống Kê Doanh Thu</span></a></li>
                 <li class="ic-charts"><a href="../products.php"><span>Trang Bán Hàng</span></a></li>
 
 

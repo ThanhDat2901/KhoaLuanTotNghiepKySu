@@ -42,7 +42,7 @@
                         <td><?php echo $result['SDT'] ?></td>
                         <td><?php echo $result['Email'] ?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
-                        <td><a href="hoadonshowdetail.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
+                        <td><a href="hoadonshowdetailnv.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
                     </tr>
                     <?php
                 }

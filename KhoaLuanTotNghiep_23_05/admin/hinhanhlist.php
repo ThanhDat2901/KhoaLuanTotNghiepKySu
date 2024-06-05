@@ -24,7 +24,7 @@
 						<tr>
 							<th>Số Thứ Tự</th>
 							<th>Tên Sản Phẩm</th>
-							<th>Link Hinh Anh</th>
+							<th>Hình Ảnh</th>
 							<th>Thao Tác</th>
 						</tr>
 					</thead>

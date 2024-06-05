@@ -35,7 +35,7 @@
 					$alert = "<span class='error'>Size này đã tồn tại</span>";
 					return $alert;
 				}else{
-				$query = "INSERT INTO `size`(TenSize) VALUES('$TenSize')";
+				$query = "INSERT INTO `size`(TenSize,isDel) VALUES('$TenSize','0')";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";
@@ -68,7 +68,7 @@
 				$alert = "<span class='error'>Không thể để trống</span>";
 				return $alert;
 			}else{
-				$query = "UPDATE `size` SET TenSize = '$TenSize' WHERE IDSize = '$id'";
+				$query = "UPDATE `size` SET TenSize = '$TenSize',isDel = 0 WHERE IDSize = '$id'";
 				$result = $this->db->update($query);
 				if($result){
 					$alert = "<span class='success'>Thay đổi thành công</span>";

@@ -35,7 +35,7 @@
 					$alert = "<span class='error'>Loại sản phẩm này đã tồn tại</span>";
 					return $alert;
 				}else{
-				$query = "INSERT INTO loaisanpham(TenLoai) VALUES('$TenLoai')";
+				$query = "INSERT INTO loaisanpham(TenLoai,isDel) VALUES('$TenLoai','0')";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";
@@ -111,7 +111,7 @@
 				$alert = "<span class='error'>Không thể để trống</span>";
 				return $alert;
 			}else{
-				$query = "UPDATE loaisanpham SET TenLoai = '$TenLoai' WHERE IDLoai = '$id'";
+				$query = "UPDATE loaisanpham SET TenLoai = '$TenLoai', isDel = 0 WHERE IDLoai = '$id'";
 				$result = $this->db->update($query);
 				if($result){
 					$alert = "<span class='success'>Thay đổi thành công</span>";

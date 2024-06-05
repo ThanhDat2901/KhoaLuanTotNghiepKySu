@@ -1,20 +1,26 @@
 <?php include 'inc/header.php';?>
 <?php include 'inc/sidebar.php';?>
 <?php include '../classes/size.php' ?>
- <?php
+<?php
     $brand = new size();
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $TenSize = $_POST['TenSize'];
         
-        // Kiểm tra nếu chuỗi chứa ký tự đặc biệt
-        if (!preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $TenSize)) {
+        // Kiểm tra nếu chuỗi chỉ chứa chữ cái in hoa hoặc số
+        if (preg_match('/^[A-Z]+$/', $TenSize)) {
             $insertBrand = $brand->insert_brand($TenSize);
+        } elseif (preg_match('/^[0-9]+$/', $TenSize)) {
+            $sizeValue = intval($TenSize);
+            if ($sizeValue >= 30 && $sizeValue <= 50) {
+                $insertBrand = $brand->insert_brand($TenSize);
+            } else {
+                $insertBrand = "Tên Size phải là số từ 30 đến 50.";
+            }
         } else {
-            $insertBrand = "Tên Size không được chứa ký tự đặc biệt.";
+            $insertBrand = "Tên Size chỉ chứa chữ cái in hoa hoặc số.";
         }
     }
-?> 
-<?php  ?>
+?>
 <div class="grid_10">
     <div class="box round first grid">
         <h2>Thêm Size</h2>
@@ -39,7 +45,6 @@
                             <input id="saveButton" type="submit" name="submit" Value="Lưu" />
                         </td>
                     </tr>
-                    
                 </table>
             </form>
             <div id="errorDiv" style="color: red;"></div>
@@ -51,7 +56,8 @@
 <script>
     document.getElementById("sizeForm").onsubmit = function() {
         var tenSize = document.getElementById("tenSizeInput").value;
-        var regex = /[\'^£$%&*()}{@#~?><>,|=_+¬-]/;
+        var letterRegex = /^[A-Z]+$/;
+        var numberRegex = /^[0-9]+$/;
         var sizeValue = parseInt(tenSize); // Chuyển đổi giá trị nhập vào thành số nguyên
 
         // Kiểm tra xem chuỗi nhập vào có chỉ chứa khoảng trắng hay không
@@ -60,11 +66,14 @@
             return false;
         }
         
-        // Kiểm tra xem giá trị nhập vào có là số và nằm trong khoảng từ 30 đến 50 không
-        if (isNaN(sizeValue) || sizeValue < 30 || sizeValue > 50 || regex.test(tenSize)) {
-            document.getElementById("errorDiv").innerHTML = "Tên Size phải là số từ 30 đến 50 và không chứa ký tự đặc biệt.";
+        // Kiểm tra xem giá trị nhập vào có chỉ chứa chữ cái in hoa hoặc số
+        if (letterRegex.test(tenSize)) {
+            return true;
+        } else if (numberRegex.test(tenSize) && sizeValue >= 30 && sizeValue <= 50) {
+            return true;
+        } else {
+            document.getElementById("errorDiv").innerHTML = "Tên Size phải là chữ cái in hoa hoặc số từ 30 đến 50.";
             return false;
         }
-        return true;
     };
 </script>

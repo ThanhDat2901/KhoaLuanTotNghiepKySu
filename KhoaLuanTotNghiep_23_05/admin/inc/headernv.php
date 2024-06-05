@@ -195,7 +195,7 @@ body {
 				</div>
                 
                 <div class="floatleft middle" style="height:100px;margin-top: -80px;">
-                    <h1>Quản Lý Hệ Thống</h1>
+                    <h1>Quản Lý Đơn Hàng</h1>
                     <div class="theme-switch-wrapper" style="margin-left:77%">
                         <label class="theme-switch" for="checkbox">
                             <input type="checkbox" id="checkbox" />
@@ -227,9 +227,8 @@ body {
         
         <div class="grid_12">
             <ul class="nav main">
-                <li class="ic-dashboard"><a href="index.php"><span>Các Chức Năng</span></a> </li>
-				<li class="ic-typography"><a href="changepassword.php"><span><i class="fas fa-key"></i> Đổi Mật Khẩu</span></a></li>
-				<li class="ic-grid-tables"><a href="inbox.php"><span>Hóa Đơn</span></a></li>
+                <li class="ic-dashboard"><a><span>Các Chức Năng</span></a> </li>
+				<li class="ic-typography"><a href="changepasswordnv.php"><span><i class="fas fa-key"></i> Thay Đổi Mật Khẩu</span></a></li>
                 <li class="ic-charts"><a href="../products.php"><span>Trang Bán Hàng</span></a></li>
 
 

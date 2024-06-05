@@ -58,7 +58,7 @@
                              <label>Link Hình Ảnh</label>
                          </td>
                         <td>                           
-                            <input type="text" name="LinkHinh" placeholder="Link Hinh Anh..." class="medium" />
+                            <input type="text" name="LinkHinh" placeholder="Liên Kết Hình Ảnh..." class="medium" />
                         </td>
                     </tr>
                     <tr> 

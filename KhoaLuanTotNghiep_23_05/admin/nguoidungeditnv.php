@@ -27,7 +27,7 @@
 <?php  ?>
         <div class="grid_10">
             <div class="box round first grid">
-                <h2>Thay Đổi Thông Tin Nhân Viên</h2>
+                <h2>Thay Đổi Thông Tin Cá Nhân</h2>
                 
                <div class="block copyblock"> 
                  <?php

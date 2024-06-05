@@ -36,7 +36,7 @@
 					return $alert;
 				}
 				else{
-				$query = "INSERT INTO bosanpham(TenBo) VALUES('$TenBo')";
+				$query = "INSERT INTO bosanpham(TenBo,isDel) VALUES('$TenBo','0')";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";

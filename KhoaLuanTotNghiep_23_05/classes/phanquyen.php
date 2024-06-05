@@ -70,6 +70,7 @@
 			FROM phanquyen
 			JOIN thongtinnguoidung ON phanquyen.IDNguoiDung = thongtinnguoidung.IDNguoiDung
 			JOIN quyen ON phanquyen.IDQuyen = quyen.IDQuyen 
+			WHERE thongtinnguoidung.IDNguoiDung != 1
 			order by phanquyen.IDPhanQuyen desc";
 			$result = $this->db->select($query);
 			return $result;

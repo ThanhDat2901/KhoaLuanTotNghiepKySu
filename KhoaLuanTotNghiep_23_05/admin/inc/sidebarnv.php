@@ -56,9 +56,9 @@
                         <li><a href="thongkenv.php"><h style="color: blue;font-size:14px">Thống Kê Đơn Hàng</h></a> </li>                 
                     </ul>
                 </li>
-                <li><a class="menuitem"><i class="fas fa-shopping-bag"></i> Thông Tin Cá Nhân</a>
+                <li><a class="menuitem"><i class="far fa-address-card"></i> Thông Tin Cá Nhân</a>
                     <ul class="submenu">
-                        <li><a href="nguoidungeditnv.php"><h style="color: blue;font-size:14px">Thay Đổi Thông Tin</h></a> </li>                    
+                        <li><a href="nguoidungeditnv.php"><h style="color: red;font-size:14px">Thay Đổi Thông Tin</h></a> </li>                    
                     </ul>
                 </li>
                 

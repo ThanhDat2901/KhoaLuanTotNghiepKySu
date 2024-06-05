@@ -227,29 +227,65 @@
         $('input[type="checkbox"]').fancybutton();
         $('input[type="radio"]').fancybutton();
     });
-</script>
-<script>
+
                     
-                document.getElementById("mySelect").addEventListener("change", function() {
-                var GiaDau = parseFloat(document.getElementById("GiaDau").value);
-                
-                // Lấy giá trị của tùy chọn được chọn
-                var selectedOptionId = this.value;
+    document.getElementById("mySelect").addEventListener("change", function() {
+        var giaDauInput = document.getElementById("GiaDau");
+        var giaDauValue = parseFloat(giaDauInput.value);
+        
+        // Lấy giá trị của tùy chọn được chọn
+        var selectedOptionId = this.value;
+        
+        // Kiểm tra nếu `giaDauValue` là số hợp lệ
+        if (isNaN(giaDauValue)) {
+            alert("Vui lòng nhập giá ban đầu hợp lệ.");
+            return;
+        }
 
-                // Lấy phần trăm khuyến mãi từ giá trị đã chọn
-                var selectedOption = parseFloat(document.querySelector("option[value='" + selectedOptionId + "']").textContent);
-                console.log("Đã chọn: " + selectedOption);
+        // Lấy phần trăm khuyến mãi từ giá trị đã chọn
+        var selectedOptionText = this.options[this.selectedIndex].textContent;
+        var selectedOption = parseFloat(selectedOptionText);
+        
+        // Kiểm tra nếu `selectedOption` là số hợp lệ
+        if (isNaN(selectedOption)) {
+            alert("Vui lòng chọn phần trăm khuyến mãi hợp lệ.");
+            return;
+        }
+        
+        const giaCuoi = document.getElementById("GiaCuoi");
+        
+        // Tính toán giá cuối
+        const res = giaDauValue - (giaDauValue * selectedOption / 100);
+        giaCuoi.value = parseFloat(res.toFixed(0));
+    });
 
-                const giaCuoi =  document.getElementById("GiaCuoi");
-                console.log(giaCuoi);
-                
-                const res =  GiaDau - (GiaDau * selectedOption / 100);
-                giaCuoi.value = parseFloat(res.toFixed(1));
-            });
-            var giaDauInput = document.getElementById("GiaDau");
-                            var giaError = document.getElementById("giaError");
+    var giaDauInput = document.getElementById("GiaDau");
+    var giaError = document.getElementById("giaError");
 
-                            giaDauInput.addEventListener('input', validateForm);
+    giaDauInput.addEventListener('input', validateForm);
+
+    function validateForm() {
+        var giaDauValue = giaDauInput.value.trim();
+
+        // Kiểm tra nếu giá đầu không hợp lệ
+        if (!giaDauValue.match(/^[1-9]\d{0,3}(?:000)$/)) {
+            giaError.textContent = "Vui lòng nhập số từ 4 chữ số trở lên hoặc ký tự số đầu tiên khác 0 và không chứa ký tự đặc biệt.";
+            giaDauInput.focus();
+            disableOtherFields(true); // Vô hiệu hóa các trường khác
+            document.getElementById("mySelect").style.display = "none"; // Ẩn trường chọn khuyến mãi
+        } else {
+            giaError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+            disableOtherFields(false); // Bật các trường khác
+            document.getElementById("mySelect").style.display = "block"; // Hiển thị trường chọn khuyến mãi
+        }
+    }
+
+    function disableOtherFields(disabled) {
+        var otherFields = document.querySelectorAll('input:not(#GiaDau)');
+        otherFields.forEach(function(field) {
+            field.disabled = disabled;
+        });
+    }
 
                             function validateForm() {
                                 var giaDauValue = giaDauInput.value.trim();

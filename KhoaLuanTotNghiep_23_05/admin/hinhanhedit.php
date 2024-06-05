@@ -68,7 +68,7 @@
                         </td>
                         <td>
                             <img src="<?php echo $result1['LinkHinh'] ?>" width="90"><br>
-                            <input type="text" name="LinkHinh" placeholder="Link Hinh Anh..." class="medium" />
+                            <input type="text" name="LinkHinh" placeholder="Liên Kết Hình Ảnh..." class="medium" />
                         </td>
                     </tr>
                     <tr> 

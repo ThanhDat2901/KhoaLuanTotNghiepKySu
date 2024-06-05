@@ -38,7 +38,7 @@
 					$alert = "<span class='error'>Đã tồn tại khuyến mãi này</span>";
 					return $alert;
 				}else{
-				$query = "INSERT INTO chuongtrinhkhuyenmai(TenKhuyenMai,TienKhuyenMai,NgayBatDau,NgayKetThuc) VALUES('$TenKhuyenMai','$TienKhuyenMai','$NgayBatDau','$NgayKetThuc')";
+				$query = "INSERT INTO chuongtrinhkhuyenmai(TenKhuyenMai,TienKhuyenMai,NgayBatDau,NgayKetThuc,isDel) VALUES('$TenKhuyenMai','$TienKhuyenMai','$NgayBatDau','$NgayKetThuc',0)";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Thêm thành công</span>";
@@ -56,7 +56,7 @@
 			return $result;
 		}
 		public function show_brand(){
-			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 25 AND isDel != 1 order by IDKhuyenMai desc";
+			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 7 AND isDel != 1 order by IDKhuyenMai desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -79,7 +79,7 @@
 				$alert = "<span class='error'>Không thể để trống</span>";
 				return $alert;
 			}else{
-				$query = "UPDATE chuongtrinhkhuyenmai SET TenKhuyenMai = '$TenKhuyenMai',TienKhuyenMai = '$TienKhuyenMai',NgayBatDau  = '$NgayBatDau ',NgayKetThuc = '$NgayKetThuc' WHERE IDKhuyenMai = '$id'";
+				$query = "UPDATE chuongtrinhkhuyenmai SET TenKhuyenMai = '$TenKhuyenMai',TienKhuyenMai = '$TienKhuyenMai',NgayBatDau  = '$NgayBatDau',NgayKetThuc = '$NgayKetThuc',isDel = 0 WHERE IDKhuyenMai = '$id'";
 				$result = $this->db->update($query);
 				if($result){
 					$alert = "<span class='success'>Thay đổi thành công</span>";
