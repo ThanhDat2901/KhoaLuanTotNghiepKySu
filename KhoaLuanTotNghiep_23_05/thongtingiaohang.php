@@ -12,13 +12,14 @@ require 'classes/hinhanh.php';
 require 'classes/phanquyen.php';
 require 'classes/hoadon.php';
 require 'classes/chitiethoadon.php';
+require 'classes/giohang.php';
 $nguoidung = new nguoidung();
 $phanquyen = new phanquyen();
 $hoadon = new hoadon();
 $chitiethoadon = new chitiethoadon();
 $pr = new product();
 $ha = new hinhanh();
-
+$gh = new giohang();
 // if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //     if (isset($_POST['products']) && !empty($_POST['products'])) {
 //         $formData = $_POST['products'];
@@ -28,19 +29,114 @@ $ha = new hinhanh();
 //         // Xử lý khi không nhận được dữ liệu
 //     }
 // }
+$totalAmount =0;
 if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products'])) {
 
     $formData = $_SESSION['selected_products'];
+    function calculateTotal($cart, $pr)
+    {
+        $total = 0;
+        foreach ($cart as $itemParts) {
+            $item = explode(',', $itemParts); 
+            if (isset($item[0]) && !empty($item[0])) {
+            $product = $pr->getproductbyIdChiTietSanPham($item[0])->fetch_assoc();
+            $total += $product['GiaCuoi'] * $item[2];
+            }
+        }
+        return $total;
+    }
+    $totalAmount = calculateTotal($formData, $pr);
 } else {
     $formData="NULL";
-
+    $totalAmount =0;
 }
+
+
   $errorscity='';
   $errorsdistrict='';
   $errorsward='';
   $errorshousenumber='';
   $cleaned_guest_id='';
+  if($_SERVER["REQUEST_METHOD"]  == "POST"){
+  if(isset($_POST['ThemHoaDon'])){
 
+    if (!isset($_SESSION['login_detail'])) {
+        if (!isset($_SESSION['guest_id'])) {
+            $_SESSION['guest_id'] = uniqid('guest_', true);
+           
+        }
+    $md5_hash = md5($_SESSION['guest_id']);
+    $IDNguoiDung = crc32(substr($md5_hash, 0, 8)); 
+
+    } else {
+        $IDNguoiDung  = $_SESSION['user_id'];
+    }
+    $username = $_POST['userName'];
+    $userEmail = $_POST['userEmail'];
+    $Phone = $_POST['Phone'];
+    $NgayLap = date('Y-m-d H:i:s'); 
+    $city = $_POST['city'];
+    $district = $_POST['district'];
+    $ward = $_POST['ward'];
+    $housenumber = $_POST['housenumber'];
+    $txtNote = $_POST['txtNote'];
+    $bac = range(1, 25);
+    $trung = range(26, 44);
+    $nam = range(45, 63);
+    if (in_array((int)$city, $bac)) {
+        $shippingFee = 39000; 
+    } elseif (in_array((int)$city, $trung)) {
+        $shippingFee = 29000; 
+    } elseif (in_array((int)$city, $nam)) {
+        $shippingFee = 19000; 
+    } else {
+        $shippingFee = 0;
+    }
+    $totalAmount2 = calculateTotal($_SESSION['selected_products'], $pr);
+    $Thanhtien = $totalAmount2 + $shippingFee;
+
+
+    $cityName =$nguoidung->getNameAdressById('cities',$city); 
+    $districtName = $nguoidung->getNameAdressById('districts',$district); 
+    $wardName = $nguoidung->getNameAdressById('wards',$ward); 
+  
+
+        $fullAddress = $housenumber . ', ' . $wardName . ', ' . $districtName . ', ' . $cityName;
+
+        // $insertnguoidung = $nguoidung->insert_nguoidungGuest($IDNguoiDung);
+        // if (is_int($insertnguoidung)) {
+        //     // $insertphanquyen = $phanquyen->PhanQuyenNguoiDung(3,$insertnguoidung);
+        //     $inserthoadon = $hoadon->insert_HoaDonGuest(1,$username,$Phone,$userEmail,$fullAddress,$NgayLap,$txtNote,$Thanhtien);
+
+        //     session_unset();
+        //     session_destroy();
+        //       header('Location: thanhtoanthanhcong.php'); 
+        //     exit();
+        // } else {
+        //     $error = '$insertnguoidung;';
+        // }
+
+            // $insertphanquyen = $phanquyen->PhanQuyenNguoiDung(3,$insertnguoidung);
+        $inserthoadon = $hoadon->insert_HoaDonGuest($IDNguoiDung,$username,$Phone,$userEmail,$fullAddress,$NgayLap,$txtNote,$Thanhtien);
+        
+        // $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest();
+        if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products'])) {
+            foreach ($_SESSION['selected_products'] as $itemParts) {
+                $item = explode(',', $itemParts); 
+                $insertchitiethoadon = $chitiethoadon->insert_ChiTietHoaDonGuest($inserthoadon,$item[0],$item[2]);
+                $xoagiohang = $gh->XoaSanPhamKhoiGioHang($item[0],$IDNguoiDung);
+                if ($insertchitiethoadon !== true) {
+                }
+            }
+        }
+        // session_unset();
+        // session_destroy();
+        header('Location: thanhtoanthanhcong.php'); 
+        exit();
+
+
+    }   
+  }
 ?>
 
 <?php include 'inc/header.php' ;?>  
@@ -94,7 +190,7 @@ if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products
             const shippingFee = calculateShippingFee(selectedCityId);
 
             // Update shipping fee display
-            shippingFeeDisplay.innerHTML = "Phí giao hàng: " + numberWithCommas(shippingFee) + "đ";
+            shippingFeeDisplay.innerHTML = numberWithCommas(shippingFee) + " đ";
             
             console.log(shippingFee);
             updateGrandTotal(shippingFee);
@@ -155,22 +251,6 @@ if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products
             },
         });
     }
-    function confirmRemoval(itemId) {
-    Swal.fire({
-        title: 'Bạn có chắc chắn?',
-        text: "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('id' + itemId).submit();
-        }
-    });
-}
 </script>
 
 <div id="about" class="shop" style="margin-top:10vh">
@@ -232,24 +312,14 @@ if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products
                         <tr>
                             <td rowspan="2" style="width:100px;padding-left:0; padding-right:0;">
                                 <img class="img" src="<?=$product['HinhAnh']?>" style="width: 70px;height: 100px;" alt="#">
-                                <div>
-                                    <form action="remove_from_cart.php" id="id<?=$item[0]?>" method="POST">
-                                    <input type="hidden" name="id" value="<?=$item[0]?>">
-                                        <a href="#" class="btn btn-danger btn-sm" onclick="confirmRemoval(<?=$item[0]?>)"><i class="fa-solid fa-trash"></i> Xóa</a>
-                                    </form>
-                                </div>
                             </td>
                             <td style="padding-left:0; padding-right:0;">
                                 <p class="mb-1">
                                     <a href="detail.php?id=<?=$product['IDSanPham']?>" style="font-size:14px;text-decoration: none;color:black"><?=$product['TenSanPham']?>- <?=$product['TenMau']?>, <?=$product['TenSize']?></a>
                                 </p>
                                 <p class="mb-0">
-                                    <span> Số lượng:  
-                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item[0]?>,'decrease')" style="vertical-align: middle;">-</button>
-
-                                 
+                                    <span> Số lượng:               
                                     <span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$item[2]?></b></span>
-                                    <button class="btn btn-sm btn-outline-primary" onclick="changeQuantity(<?=$item[0]?>,'increase')" style="vertical-align: middle;">+</button>
                                     * <span class="text-black"><?=number_format($product['GiaCuoi'], 0, ',', '.')?>đ</span> </span>
                                 </p>
                             </td>
@@ -257,33 +327,33 @@ if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products
 
                         <tr>
                             <td style="padding-left:0; padding-right:0;">
-                                = <b><?=number_format($product['GiaCuoi'] * $item[2], 0, ',', '.')?> <span>đ</span></b>
+                                Tạm tính: <b><?=number_format($product['GiaCuoi'] * $item[2], 0, ',', '.')?> <span>đ</span></b>
                             </td>
                         </tr>
                         <?php endforeach; ?>
                         <tr>
                             <td class="text-right" style="padding-left:0; padding-right:0;">
-                                Giao hàng
+                                Phí vận chuyển
                             </td>
                             <td>
-                                <div id="shippingFeeDisplay" style="font-size:16px; color:#f00;">Phí giao hàng:</div>
+                                <div id="shippingFeeDisplay" style="font-size:16px; color:#f00;"></div>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right" style="padding-left:0; padding-right:0;">
                             Tổng:
                             </td>
-                            <!-- <td>
+                            <td>
 
                                 <div id="grandTotal" style="font-size:16px; color:#f00;" data-total="<?= $totalAmount?>"><b> <?=number_format($totalAmount, 0, ',', '.')?><span>đ</span></b></div>
-                            </td> -->
+                            </td>
                         </tr>
                     </tbody>
             </table>
         </div>
         <div class="col-sm-12 col-md-6" style="line-height: 2.5;">
             <h4 style="text-transform:uppercase;">Người mua/nhận hàng</h4>
-            <form action="" method="POST">
+            <form name="ThemHoaDon" action="" method="POST">
                 <input name="__RequestVerificationToken" type="hidden" value="VtXJhrH_4rfgzUc7l0eplSyx6Jz9KkPejoEODV2PPsdrcdt2xssxRJ3I-lkvYF5EiEQOFMizrOPD5-F2Kwjw6Aw5XbTXGdK1sL5nXmikEX01">
                 <div class="form-group">
                     <label for="userName">Họ và tên</label>
@@ -339,9 +409,9 @@ if (isset($_SESSION['selected_products']) && !empty($_SESSION['selected_products
                                                                      
                 <div class="form-group">
                     <label for="txtNote">Ghi chú</label>
-                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote"></textarea>
+                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote" required></textarea>
                 </div>
-                <button type="submit" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Đặt hàng</button>
+                <button type="submit" name="ThemHoaDon" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Đặt hàng</button>
             </form>
             
 
