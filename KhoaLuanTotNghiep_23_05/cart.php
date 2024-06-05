@@ -419,7 +419,24 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
                     <label for="txtNote">Ghi chú</label>
                     <textarea rows="2" class="form-control" id="txtNote" name="txtNote"></textarea>
                 </div>
-                <button type="submit" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px;" fdprocessedid="745y">Đặt hàng</button>
+                <div class="form-group">
+                    <div class="flex-fill mb-0">
+                        <label>Phương thức thanh toán</label>
+                        <div class="content-box" style="border: 1px solid #ccc; padding: 10px;">
+                            <div class="radio-wrapper content-box-row">
+                                <label class="radio-label" for="payment_method_id_941686">
+                                    <div class="radio-container" style="display: flex; justify-content: space-between; align-items: center;">
+                                      <span> <i class="fa-solid fa-circle-dot" style="color: #338dbc;"></i></span>
+                                        <img class="main-img" style="margin-left: 10px;" src="https://hstatic.net/0/0/global/design/seller/image/payment/cod.svg?v=6">
+                                        <span class="radio-label-primary" style="margin-left: 10px;">Thanh toán khi giao hàng (COD)</span>
+                                        <span class="quick-tagline hidden"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="js-btnPlaceOrder btn btn-info fw" style="width:100%; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" fdprocessedid="745y">Đặt hàng</button>
             </form>
             
 

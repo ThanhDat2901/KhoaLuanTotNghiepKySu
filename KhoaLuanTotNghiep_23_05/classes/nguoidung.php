@@ -202,6 +202,13 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function ShowThongTinNguoiDungById($id){
+			$query = "SELECT thongtinnguoidung.*
+			FROM thongtinnguoidung
+            WHERE thongtinnguoidung.IDNguoiDung = '$id'";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function update_brand($TenNguoiDung,$DiaChi,$SDT,$Email,$MatKhau,$id){
 
 			$TenNguoiDung = $this->fm->validation($TenNguoiDung);
