@@ -1,15 +1,16 @@
-<?php include 'inc/header.php';?>
-<?php include 'inc/sidebar.php';?>
+<?php include 'inc/headernv.php';?>
+<?php include 'inc/sidebarnv.php';?>
 <?php include '../classes/nguoidung.php' ?>
 <?php include '../classes/quyen.php' ?>
 <?php include '../classes/phanquyen.php' ?>
 <?php
    
-    if(!isset($_GET['brandid']) || $_GET['brandid']==NULL){
-       echo "<script>window.location ='brandlist.php'</script>";
-    }else{
-         $id = $_GET['brandid']; 
-    }
+    // if(!isset($_GET['brandid']) || $_GET['brandid']==NULL){
+    //    echo "<script>window.location ='brandlist.php'</script>";
+    // }else{
+    //      $id = $_GET['brandid']; 
+    // }
+     $id =  $_SESSION['quanly_id'];
      $brand = new nguoidung();
      $phanquyen = new phanquyen();
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -35,7 +36,7 @@
                 }
                 ?>
                 <?php
-                    $get_brand_name = $brand->getbrandbyId($id);
+                    $get_brand_name = $brand->ShowThongTinNguoiDungById($id);
                     if($get_brand_name){
                         while($result = $get_brand_name->fetch_assoc()){
                        
@@ -68,6 +69,14 @@
                             <td>
                                 <input style="width: 300px;" type="text" value="<?php echo htmlspecialchars($result['SDT'], ENT_QUOTES, 'UTF-8'); ?>" name="SDT" id="phoneInput" placeholder="Nhập số điện thoại..." class="medium" />
                                 <div id="phoneError" style="display: none; color: red;">Số điện thoại không hợp lệ.</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Địa Chỉ</label>
+                            </td>
+                            <td>
+                                <input style="width: 300px;" type="text" value="<?php echo $result['DiaChi'] ?>" name="DiaChi" placeholder="Thay đổi địa chỉ..." class="medium" />
                             </td>
                         </tr>
                         <tr>

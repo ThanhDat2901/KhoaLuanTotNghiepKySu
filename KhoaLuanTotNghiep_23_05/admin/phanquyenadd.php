@@ -33,7 +33,7 @@
                                     <option>--------Chọn Người Dùng-------</option>
                                     <?php
                                     $cat = new nguoidung();
-                                    $catlist = $cat->show_nguoidung_by_name2();
+                                    $catlist = $cat->show_nguoidung_by_name();
 
                                     if($catlist){
                                         while($result = $catlist->fetch_assoc()){

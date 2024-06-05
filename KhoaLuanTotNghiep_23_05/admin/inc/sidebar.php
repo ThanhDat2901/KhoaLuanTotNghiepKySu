@@ -64,7 +64,7 @@
                 <li><a class="menuitem"><i class="fas fa-users"></i> Nhân Viên</a>
                     <ul class="submenu">
                         <li><a href="nguoidungadd.php"><h style="color: red;font-size:14px">Thêm tài khoản</h></a> </li>
-                        <li><a href="nguoidunglist.php"><h style="color: blue;font-size:14px">Danh sách tài khoản</h></a> </li>
+                        <!-- <li><a href="nguoidunglist.php"><h style="color: blue;font-size:14px">Danh sách tài khoản</h></a> </li> -->
                         <li><a href="resetpass.php"><h style="color: green;font-size:14px">Đặt lại mật khẩu</h></a> </li>
                     </ul>
                 </li>

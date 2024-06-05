@@ -8,12 +8,11 @@
     $phanquyen = new phanquyen();
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $TenNguoiDung = $_POST['TenNguoiDung'];
-        $DiaChi = $_POST['DiaChi'];
         $SDT = $_POST['SDT'];
         $Email = $_POST['Email'];
         $MatKhau = $_POST['MatKhau'] ??'';
         $IDQuyen = $_POST['IDQuyen'] ?? '';
-        $insertBrand = $brand->insert_brand1($TenNguoiDung,$DiaChi,$SDT,$Email,'$1111');
+        $insertBrand = $brand->insert_brand1($TenNguoiDung,'Nhân Viên Tự Cung Cấp',$SDT,$Email,'$1111');
         $inserted_id = $brand->getInsertedID();
         $insertphanquyen = $phanquyen->PhanQuyenNguoiDung($IDQuyen,$inserted_id);
     }
@@ -39,13 +38,7 @@
                             <div id="usernameError" style="display: none; color: red;">Tên người dùng không được chứa ký tự đặc biệt.</div>
                         </td>
                         </tr>
-                        <td>
-                            <label>Địa Chỉ</label>
-                            </td>
-                            <td>
-                                 <input style="width:300px" type="text" name="DiaChi" id="addressInput" placeholder="Nhập địa chỉ..." class="medium"  />
-                                
-                            </td>
+    
                         <tr>
                         <td>
                             <label>Số Điện Thoại</label>
@@ -70,30 +63,7 @@
                                 <div id="error" style="color: red;"></div>
                             </td>
                         </tr>
-                        <tr>
-                        <td>
-                            <label>Quyền</label>
-                        </td>
-                        <td >
-                            <select style="width: 310px;" id="select" name="IDQuyen">
-                                <option >--------Chọn Quyền Của Tài Khoản--------</option>
-                                <?php
-                                $cat = new quyen();
-                                $catlist = $cat->show_brand();
-
-                                if($catlist){
-                                    while($result = $catlist->fetch_assoc()){
-                                ?>
-
-                                <option value="<?php echo $result['IDQuyen'] ?>"><?php echo $result['TenQuyen'] ?></option>
-
-                                <?php
-                                    }
-                                }
-                            ?>
-                            </select>
-                        </td>
-                    </tr>
+                        
                         
                 
 						<tr> 

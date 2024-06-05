@@ -124,7 +124,7 @@
 					return $alert;
 				}else{
 				$query = "INSERT INTO thongtinnguoidung(TenNguoiDung,DiaChi,SDT,Email,MatKhau)
-				 VALUES('$TenNguoiDung','$DiaChi','$SDT','$Email','$MatKhau')";
+				 VALUES('$TenNguoiDung','Nhân Viên Tự Cung Cấp','$SDT','$Email','$MatKhau')";
 				$result = $this->db->insert($query);
 				if($result){
 					$alert = "<span class='success'>Đăng kí thành công</span>";
@@ -174,14 +174,14 @@
 		public function show_nguoidung(){
 			$query = "SELECT thongtinnguoidung.*,quyen.IDQuyen as QIDQuyen, quyen.TenQuyen
 			FROM thongtinnguoidung,quyen,phanquyen
-            WHERE thongtinnguoidung.IDNguoiDung = phanquyen.IDNguoiDung 
+            WHERE thongtinnguoidung.IDNguoiDung != 1 AND thongtinnguoidung.IDNguoiDung = phanquyen.IDNguoiDung 
             AND quyen.IDQuyen = phanquyen.IDQuyen
             order by thongtinnguoidung.IDNguoiDung desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
 		public function show_nguoidung_by_name(){
-			$query = "SELECT * FROM thongtinnguoidung order by IDNguoiDung desc";
+			$query = "SELECT * FROM thongtinnguoidung Where IDNguoiDung != 1 order by IDNguoiDung desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -189,7 +189,7 @@
 			$query = "SELECT thongtinnguoidung.* 
 			FROM thongtinnguoidung 
 			LEFT JOIN phanquyen ON thongtinnguoidung.IDNguoiDung = phanquyen.IDNguoiDung 
-			WHERE phanquyen.IDNguoiDung IS NULL 
+			WHERE IDNguoiDung != 1 AND phanquyen.IDNguoiDung IS NULL 
 			ORDER BY thongtinnguoidung.IDNguoiDung DESC";
 			$result = $this->db->select($query);
 			return $result;
@@ -205,7 +205,7 @@
 		public function ShowThongTinNguoiDungById($id){
 			$query = "SELECT thongtinnguoidung.*
 			FROM thongtinnguoidung
-            WHERE thongtinnguoidung.IDNguoiDung = '$id'";
+            WHERE IDNguoiDung != 1 AND thongtinnguoidung.IDNguoiDung = '$id'";
 			$result = $this->db->select($query);
 			return $result;
 		}

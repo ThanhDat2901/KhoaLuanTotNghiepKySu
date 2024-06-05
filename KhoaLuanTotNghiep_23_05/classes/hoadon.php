@@ -32,7 +32,7 @@
             $ThanhTien = mysqli_real_escape_string($this->db->link, $ThanhTien);
 			
 				$query = "INSERT INTO hoadon(IDNguoiDung,TenNguoiDung,SDT,Email,DiaChi,NgayLap,GhiChu,ThanhTien,TrangThai,isDel)
-				 VALUES('$IDNguoiDung','$TenNguoiDung','$SDT','$Email','$DiaChi','$NgayLap','$GhiChu','$ThanhTien',0,0)";
+				 VALUES('$IDNguoiDung','$TenNguoiDung','$SDT','$Email','$DiaChi','$NgayLap','$GhiChu','$ThanhTien',1,0)";
 				$result = $this->db->insert($query);
 				if($result){
 					$inserted_id = mysqli_insert_id($this->db->link);

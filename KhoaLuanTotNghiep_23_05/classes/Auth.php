@@ -62,7 +62,7 @@ class Auth
                     $_SESSION['login_quanly'] = $HoTen;
                     $_SESSION['quanly'] = $HoTen;
                     $_SESSION['quanly_id'] = $IDNguoiDung;
-                    header('location: quanly/index.php');
+                    header('location: admin/nhanvien.php');
                 } else {
                     $_SESSION['login_detail'] = $HoTen;
                     $_SESSION['name'] = $HoTen;
