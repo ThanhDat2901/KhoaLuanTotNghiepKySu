@@ -220,6 +220,12 @@ body {
                 <div class="clear">
                 </div>
             </div>
+            <div class="floatleft logo" style="position: fixed; bottom: 0; right: 0; padding: 20px;">
+                <a href="https://www.ciciai.com/chat/10562024978436" style="display: inline-block;">
+                    <img style="width:40px;height:40px;border-radius: 50%;" src="img/yamelogo2.png" alt="Tư Vấn Khách Hàng" />
+                    <span style="color:white;" class="chat-text">Tư Vấn</span>
+                </a>    
+            </div>
             
         </div>
         <div class="clear">
