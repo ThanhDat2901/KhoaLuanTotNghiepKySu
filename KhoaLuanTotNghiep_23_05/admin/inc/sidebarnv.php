@@ -61,6 +61,11 @@
                         <li><a href="nguoidungeditnv.php"><h style="color: red;font-size:14px">Thay Đổi Thông Tin</h></a> </li>                    
                     </ul>
                 </li>
+                <li><a class="menuitem"><i class="far fa-comment-alt"></i> Đánh Giá</a>
+                    <ul class="submenu">
+                        <li><a href="commentlist.php"><h style="color: red;font-size:14px">Danh Sách Đánh Giá</h></a> </li>                    
+                    </ul>
+                </li>
                 
             </ul>
         </div>
