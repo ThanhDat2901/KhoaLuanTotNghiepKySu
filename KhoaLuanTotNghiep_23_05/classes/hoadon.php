@@ -43,6 +43,11 @@
 				}
 
 		}
+		public function show_TrangThai(){
+			$query = "SELECT * FROM trangthai ";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function show_HoaDon(){
 			$query = "SELECT * FROM hoadon order by IDHoaDon desc";
 			$result = $this->db->select($query);

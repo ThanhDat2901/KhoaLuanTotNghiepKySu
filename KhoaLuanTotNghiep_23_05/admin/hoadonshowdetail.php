@@ -51,7 +51,22 @@
                         <?php if($result['TrangThai']==1): ?>
                             <td><button style="border-radius: 5px;" class="send-email-btn" data-email="<?php echo $result['IdHoaDonFake']; ?>">Xác Nhận Đơn Hàng</button></td>
                         <?php else: ?>
-                            <td><button style="border-radius: 5px;">Đã Xác Nhận Đơn Hàng</button></td>
+                            <td>
+                                <select style="width: 250px;" name="IDTrangThai">
+                                    <?php
+                                    $cat = new hoadon();
+                                    $catlist = $cat->show_TrangThai();
+
+                                    if($catlist){
+                                        while($result = $catlist->fetch_assoc()){
+                                    ?>
+                                        <option value="<?php echo $result['IDTrangThai'] ?>"><?php echo $result['TenTrangThai'] ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </td>
                         <?php endif ?>
                        
                     </tr>
