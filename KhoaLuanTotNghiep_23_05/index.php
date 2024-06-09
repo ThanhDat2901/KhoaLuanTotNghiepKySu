@@ -141,7 +141,8 @@
 
         <div class="container text-center mt-4">
             <div class="col-12">
-            <p style="text-align: center;"><a href="login.php"><img src="https://cmsv2.yame.vn/uploads/d6cb86a4-e987-4900-8a6b-171fd682540e/dang_nhap_the_vip.png" alt="Đăng nhập" width="120" height="120"></a><a href="contact.php" target="_blank" rel="noopener"><img src="https://cmsv2.yame.vn/uploads/4162eac6-0100-49c4-834e-0f3f58e06717/dia_chi_cua_hang.png" alt="Hệ thống cửa hàng" width="120" height="120"></a></p>
+            <p style="text-align: center;"><a href="login.php"><img src="https://cmsv2.yame.vn/uploads/d6cb86a4-e987-4900-8a6b-171fd682540e/dang_nhap_the_vip.png" alt="Đăng nhập" width="120" height="120"></a>
+            <a href="contact.php"><img src="https://cmsv2.yame.vn/uploads/4162eac6-0100-49c4-834e-0f3f58e06717/dia_chi_cua_hang.png" alt="Hệ thống cửa hàng" width="120" height="120"></a></p>
             </div>
         </div> 
         <div class="container text-center mt-4">
@@ -211,13 +212,27 @@
                         <?= $shortenedName ?>
                     </p>
                                         <!-- <p class="card-text" style="font-size: 18px;"><?=  number_format($product['GiaCuoi'], 0, ',','.') ?><sup>đ</sup></p> -->
-                                        <div>
+                                        <!-- <div>
                                             <span style="font-size: 18px; color: black; text-decoration: line-through;">
                                                 <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
                                             </span>
                                             <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
                                                 <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
                                             </span>
+                                        </div> -->
+                                        <div>
+                                            <?php if ($product['GiaCuoi'] < $product['GiaDau']): ?>
+                                                <span style="font-size: 18px; color: black; text-decoration: line-through;">
+                                                    <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                                </span>
+                                                <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
+                                                    <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="card-text" style="font-size: 18px; color: black;">
+                                                    <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                        
                                 </div>

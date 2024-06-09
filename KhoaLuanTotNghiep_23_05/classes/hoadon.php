@@ -53,6 +53,39 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function DanhSachHoaDonByIDNguoiDung($IDNguoiDung){
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+			$query = "SELECT * FROM hoadon,trangthai where hoadon.TrangThai = trangthai.IDTrangThai and IDNguoiDung = '$IDNguoiDung'";
+			$result = $this->db->select($query);
+			return $result;
+		}
+		public function KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,$IDTrangThai){
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+			$IDTrangThai = mysqli_real_escape_string($this->db->link, $IDTrangThai);
+			$query = "SELECT * FROM hoadon,trangthai where hoadon.TrangThai = trangthai.IDTrangThai and IDNguoiDung = '$IDNguoiDung' and hoadon.TrangThai = '$IDTrangThai'";
+			$result = $this->db->select($query);
+			return $result;
+		}
+		public function TrangThaiDonHang($IDNguoiDung,$IDTrangThai,$IDHoaDon){
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+            $IDTrangThai = mysqli_real_escape_string($this->db->link, $IDTrangThai);
+			$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+			$query = "SELECT chitiethoadon.*,thongtinnguoidung.*,chitietsanpham.*,sanpham.*,TrangThai.*,hoadon.*,mausac.*,size.*,chitiethoadon.SoLuong AS SoluongInCTHD 
+			FROM hoadon,chitiethoadon,thongtinnguoidung,chitietsanpham,sanpham,TrangThai,mausac,size 
+			WHERE size.IDSize = chitietsanpham.IDSize 
+			and sanpham.IDMau = mausac.IDMau 
+			AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
+			and hoadon.IDNguoiDung = thongtinnguoidung.IDNguoiDung 
+			and chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
+			and chitietsanpham.IDSanPham = sanpham.IDSanPham 
+			and hoadon.TrangThai = TrangThai.IDTrangThai 
+			and TrangThai.IDTrangThai='$IDTrangThai' 
+			and  thongtinnguoidung.IDNguoiDung = '$IDNguoiDung'
+			and hoadon.IDHoaDon='$IDHoaDon'
+			";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function show_HoaDonDetail($id){
 			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake
 					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
@@ -61,6 +94,18 @@
 					  AND chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
 					  AND hoadon.IDHoaDon = '$id' 
 					  ORDER BY hoadon.IDHoaDon DESC";
+			$result = $this->db->select($query);
+			return $result;
+		}
+		public function show_SanPhamTrongHoaDon($id){
+			$query = "SELECT sanpham.IDSanPham as idsp,sanpham.*
+					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
+					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
+					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
+					  AND chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
+					  AND hoadon.IDHoaDon = '$id' 
+					  ORDER BY hoadon.IDHoaDon DESC
+					  LIMIT 1";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -92,5 +137,18 @@
 					return "Cập nhật thất bại";
 				}
 			}	
+			public function HuyDonHang($IDHoaDon,$LyDoHuy)
+			{
+				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+				$LyDoHuy = mysqli_real_escape_string($this->db->link, $LyDoHuy);
+				$sql = "UPDATE hoadon SET TrangThai = 7, LyDoHuy='$LyDoHuy' WHERE IDHoaDon = '$IDHoaDon'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 	}
 ?>

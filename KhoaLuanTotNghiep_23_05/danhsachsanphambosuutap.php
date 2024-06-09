@@ -95,7 +95,7 @@
                                 <li><a class="dropdown-item" href="">Quần Dài</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle"  style="color: black;" h href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Màu Sắc
                             </a>
@@ -103,7 +103,7 @@
                                 <li><a class="dropdown-item" href="">BLACK</a></li>
                                 <li><a class="dropdown-item" href="">WHITE</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -142,13 +142,27 @@
                         <?= $shortenedName ?>
                         </p>
                             <!-- <p class="card-text" style="font-size: 18px;"><?=  number_format($product['GiaCuoi'], 0, ',','.') ?><sup>đ</sup></p> -->
-                            <div>
+                            <!-- <div>
                                 <span style="font-size: 18px; color: black; text-decoration: line-through;">
                                     <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
                                 </span>
                                 <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
                                     <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
                                 </span>
+                            </div> -->
+                            <div>
+                                <?php if ($product['GiaCuoi'] < $product['GiaDau']): ?>
+                                    <span style="font-size: 18px; color: black; text-decoration: line-through;">
+                                        <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                    <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
+                                        <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="card-text" style="font-size: 18px; color: black;">
+                                        <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
                         
                         </div>

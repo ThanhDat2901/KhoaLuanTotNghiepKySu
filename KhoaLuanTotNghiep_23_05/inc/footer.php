@@ -75,31 +75,31 @@
                             <i class="fas fa-envelope me-3 text-secondary"></i> EMAIL:YaMe@gmail.com
                         </p>
                         <div>
-                            <a href="#" class="me-4 link-secondary">
+                            <a href="https://www.facebook.com/www.YaMe.vn" class="me-4 link-secondary">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" class="me-4 link-secondary">
+                            <a href="https://www.youtube.com/@YaMeShopOfficial" class="me-4 link-secondary">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" class="me-4 link-secondary">
+                            <!-- <a href="#" class="me-4 link-secondary">
                                 <i class="fab fa-google"></i>
-                            </a>
-                            <a href="#" class="me-4 link-secondary">
+                            </a> -->
+                            <a href="https://zalo.me/3838945656499556082" class="me-4 link-secondary">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="#" class="me-4 link-secondary">
+                            <!-- <a href="#" class="me-4 link-secondary">
                                 <i class="fab fa-linkedin"></i>
                             </a>
                             <a href="#" class="me-4 link-secondary">
                                 <i class="fab fa-github"></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </div>
             </div>
         </section>
         <div class="text-center p-4" style="background-color: #FFFFFF;">
-            © 2022 Copyright:
+            © 2024 Copyright:
             <a class="text-reset fw-bold" href="#">YaMe.Vn</a>
         </div>
         <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>

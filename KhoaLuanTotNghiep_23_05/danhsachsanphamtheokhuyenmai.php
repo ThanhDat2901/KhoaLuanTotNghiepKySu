@@ -3,7 +3,7 @@
 
 include 'inc/header.php' ;?>  
 <?php 
-    $loaisanpham2 = new loai();
+    $khuyenmai = new km();
     $id = isset($_GET['id']) ? $_GET['id'] : null;
     if (!$id) {
         die("id không hợp lệ.");
@@ -14,17 +14,17 @@ include 'inc/header.php' ;?>
     $offset = ($page - 1) * $perPage;
     $limit = $perPage;
 
-    $data2 = $loaisanpham2->getAllLoaiSanPhamPhanTrang($id,$limit, $offset);
+    $data2 = $khuyenmai->getAllSanPhamKhuyenMaiPhanTrang($id,$limit, $offset);
     $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
     if ($sort === 'asc') {
-        $data = $loaisanpham2->getLoaiSanPhamByPriceAsc($id,$limit, $offset);
+        $data = $khuyenmai->getSanPhamKhuyenMaiByPriceAsc($id,$limit, $offset);
     } elseif ($sort === 'desc') {
-        $data = $loaisanpham2->getLoaiSanPhamByPriceDesc($id,$limit, $offset);
+        $data = $khuyenmai->getSanPhamKhuyenMaiByPriceDesc($id,$limit, $offset);
     } else {
-        $data = $loaisanpham2->getAllLoaiSanPhamPhanTrang($id,$limit, $offset);
+        $data = $khuyenmai->getAllSanPhamKhuyenMaiPhanTrang($id,$limit, $offset);
     }
 
-    $totalProducts = $loaisanpham2->countAllLoaiSanPham($id);
+    $totalProducts = $khuyenmai->countAllSanPhamKhuyenMai($id);
     $totalPages = ceil($totalProducts / $perPage);
 ?>
 
@@ -42,7 +42,7 @@ include 'inc/header.php' ;?>
                         $row = mysqli_fetch_assoc($data2);
                         if ($row) {
                     ?>
-                <strong class="text-black">Loại <?= $row['TenLoai'] ?></strong>
+                <strong class="text-black">Loại <?= $row['TenKhuyenMai'] ?></strong>
                 <?php 
                     } else {
                         echo "No data found!";
@@ -67,9 +67,9 @@ include 'inc/header.php' ;?>
                                     $row = mysqli_fetch_assoc($data2);
                                     if ($row) {
                                 ?>
-                                <li><a class="dropdown-item" href="?sort=normal&id=<?=$row['IDLoai']?>">Bỏ lọc</a></li>
-                                <li><a class="dropdown-item" href="?sort=asc&id=<?=$row['IDLoai']?>">Giá tăng dần</a></li>
-                                <li><a class="dropdown-item" href="?sort=desc&id=<?=$row['IDLoai']?>">Giá giảm dần</a></li>
+                                <li><a class="dropdown-item" href="?sort=normal&id=<?=$row['IDKhuyenMai']?>">Bỏ lọc</a></li>
+                                <li><a class="dropdown-item" href="?sort=asc&id=<?=$row['IDKhuyenMai']?>">Giá tăng dần</a></li>
+                                <li><a class="dropdown-item" href="?sort=desc&id=<?=$row['IDKhuyenMai']?>">Giá giảm dần</a></li>
                                 <?php 
                                         } else {
                                             echo "No data found!";

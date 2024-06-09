@@ -6,9 +6,11 @@ require 'init.php' ;
 require 'classes/product.php';
 require 'classes/giohang.php';
 require 'classes/hinhanh.php';
+require 'classes/comment.php';
     $pr = new product();
     $gh = new giohang();
     $ha = new hinhanh();
+    $cm = new comment();
      // Lấy thông tin sản phẩm từ URL
      $id = isset($_GET['id']) ? $_GET['id'] : null;
      if (!$id) {
@@ -20,7 +22,7 @@ require 'classes/hinhanh.php';
      $product = $product_by_id->fetch_assoc();
 
      $result_size = $pr->getSizeById($id);
-
+     $comment = $cm->show_commentSanPham($id);
 
 
 
@@ -106,6 +108,18 @@ else{
 <?php include 'inc/header.php' ;?>    
 
 <style>
+            .custom-btn {
+            margin-right: 0.5rem; /* Khoảng cách giữa các button */
+            border: 1px solid #ccc; /* Border xám */
+            background-color: #fff; /* Nền trắng */
+            color: #000; /* Chữ đen */
+            font-size: 1.0rem; /* Tăng kích thước chữ */
+            padding: 0.75rem 2.25rem; /* Tăng kích thước nút */
+        }
+
+        .custom-btn:hover {
+            background-color: #f8f9fa; /* Thêm hiệu ứng hover nếu muốn */
+        }
     .image-zoom-container {
         position: relative;
         display: inline-block;
@@ -386,6 +400,111 @@ else{
         <?php endif; ?>
         </div>
 
+        <!-- <div class="row" style="margin-top: 10vh;">
+        <?php if (!empty($comment)): ?>
+        <?php foreach($comment  as  $commentitem ):?> 
+                <div>
+
+                </div>
+            <?php endforeach ;?>      
+        <?php endif; ?>
+        </div> -->
+        <div class="row" style="margin-top: 10vh; border: 1px; border-color: inherit;">
+        <div class="col-md-12" style="margin: 20px;">
+            <h2>ĐÁNH GIÁ SẢN PHẨM</h2>
+        </div>  
+        <div class="col-md-3">
+            <div class="d-flex align-items-center flex-column">
+                <?php  $average_rating = 4.8;  ?>
+                <h3 class="mr-2"> <?=$average_rating ?> trên 5 </h3>
+                <div class="rating">
+                    <!-- Hiển thị số sao trung bình (ví dụ: 4.8 trên 5 dấu sao) -->
+                    <?php
+                // Giả sử số điểm đánh giá trung bình là 4.8
+                    $full_stars = floor($average_rating); // Số dấu sao đầy
+                    $half_star = $average_rating - $full_stars; // Kiểm tra nếu có nửa dấu sao
+                    $empty_stars = 5 - ceil($average_rating); // Số dấu sao trống
+
+                    // Hiển thị dấu sao đầy
+                    for ($i = 0; $i < $full_stars; $i++) {
+                        echo '<span style="color: #ee4d2d;" class="fa fa-star checked"></span>';
+                    }
+
+                    // Kiểm tra và hiển thị dấu sao nửa
+                    if ($half_star > 0) {
+                        echo '<span style="color: #ee4d2d;" class="fa fa-star-half-alt checked"></span>';
+                    }
+
+                    // Hiển thị dấu sao trống
+                    for ($i = 0; $i < $empty_stars; $i++) {
+                        echo '<span style="color: #ee4d2d;" class="fa fa-star"></span>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+
+    <!-- Navbar chứa các nút button -->
+    <div class="col-md-9">
+    <nav class=" navbar-expand-lg navbar-light">
+        <div id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button class="btn custom-btn mr-2">Tất cả</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn custom-btn mr-2">5 Sao</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn custom-btn mr-2">4 Sao</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn custom-btn mr-2">3 Sao</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn custom-btn mr-2">2 Sao</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn custom-btn">1 Sao</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+    <?php if (!empty($comment)): ?>
+        <?php foreach($comment as $commentitem): ?> 
+            <div class="col-md-12" style="margin-top: 5vh;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <!-- Hiển thị ảnh đại diện của người đánh giá -->
+                                <img src="https://tse4.mm.bing.net/th?id=OIP.ggX8e6U3YzyhPvp8qGZtQwHaHa&pid=Api&P=0&h=180" style="width: 50px;height: 50px;" alt="Avatar" class="avatar">
+                            </div>
+                            <div class="col-md-10">
+                                <h5 class="card-title"><?php echo $commentitem['TenNguoiDung']; ?></h5>
+                                <div class="rating">
+                                    <?php for ($i = 0; $i < $commentitem['Rate']; $i++): ?>
+                                        <span class="fa fa-star checked" style="color: #ee4d2d;"></span>
+                                    <?php endfor; ?>
+                                    <?php for ($i = $commentitem['Rate']; $i < 5; $i++): ?>
+                                        <span class="fa fa-star" style="color: #ee4d2d;"></span>
+                                    <?php endfor; ?>
+                                </div>
+                                <p class="card-text"><small class="text-muted"><?php echo $commentitem['ThoiGian']; ?></small></p>
+                                <p class="card-text" style="color: rgba(0, 0, 0, 0.4);">Phân loại hàng: <span style="color: black;"><?php echo $commentitem['TenMau']; ?> </span> </p>
+                                <p class="card-text"><?php echo $commentitem['NoiDung']; ?></p>
+
+                                <!-- Hiển thị ngày đánh giá -->
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>      
+    <?php endif; ?>
+</div>
     </div>
 
 

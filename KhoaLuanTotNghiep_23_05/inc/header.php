@@ -94,12 +94,15 @@
 	require_once 'init.php';
     require 'classes/bosuutap.php';
 	require 'classes/loai.php';
+	require 'classes/km.php';
 	require_once 'classes/giohang.php';
 	$gh2 = new giohang();
     $bosuutap = new category();
 	$loaisanpham = new loai();
+	$loaikhuyenmai = new km();
     $databosuutap= $bosuutap->DanhSachBoSuuTap();
 	$dataloaisanpham = $loaisanpham->DanhSachLoaiSanPham();
+	$datakhuyenmai = $loaikhuyenmai->DanhSachKhuyenMaiConHanSD();
 ?>
 
 <body style="overflow-x:hidden; background-color: #FFFFFF;">
@@ -127,12 +130,9 @@
 									<li class="nav-item dropdown"  style="margin-left: 10px;">
 										<a class="nav-link dropdown-toggle" href="#" id="sale-cap-toc-dropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SALE CẤP TỐC</a>
 										<ul class="dropdown-menu" aria-labelledby="sale-cap-toc-dropdown">
-											<li><a class="dropdown-item white-text" href="/shop/ao-thun-don-gian-sale?sort=1">Áo Thun Sale 50%</a></li>
-											<li><a class="dropdown-item white-text" href="/shop/ao-polo-djon-gian-sale?sort=1">Áo Polo Sale 50%</a></li>
-											<li><a class="dropdown-item white-text" href="/shop/so-mi-don-gian-sale?sort=1">Áo Sơ Mi Sale</a></li>
-											<li><a class="dropdown-item white-text" href="/shop/ao-khoac-djon-gian-sale?sort=1">Áo Khoác Sale</a></li>
-											<li><a class="dropdown-item white-text" href="/shop/quan-dai-djon-gian-sale?sort=1">Quần Dài Sale</a></li>
-											<li><a class="dropdown-item white-text" href="/shop/quan-short-djon-gian-sale?sort=1">Quần Short Sale</a></li>
+										<?php foreach($datakhuyenmai as  $khuyenmaiitem ):?> 
+											<li><a class="dropdown-item white-text" href="danhsachsanphamtheokhuyenmai.php?id=<?=$khuyenmaiitem['IDKhuyenMai']?>"><?php echo $khuyenmaiitem['TenKhuyenMai'] ?></a></li>
+										<?php endforeach ;?>
 										</ul>
 									</li>
 									<li class="nav-item dropdown"  style="margin-left: 10px;">
@@ -140,12 +140,12 @@
 										<i class="fa-solid fa-bars"></i>
 										</a>
 										<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" >
-										<li><a class="dropdown-item white-text" href="danhsachsanpham.php">Hàng Mới</a></li>
-										<?php foreach($dataloaisanpham as  $loaisanphamitem ):?> 
-										<li><a class="dropdown-item white-text" href="danhsachsanphamtheoloai.php?id=<?=$loaisanphamitem['IDLoai']?>"><?php echo $loaisanphamitem['TenLoai'] ?></a></li>
-										<?php endforeach ;?>
+											<li><a class="dropdown-item white-text" href="danhsachsanpham.php">Hàng Mới</a></li>
+											<?php foreach($dataloaisanpham as  $loaisanphamitem ):?> 
+											<li><a class="dropdown-item white-text" href="danhsachsanphamtheoloai.php?id=<?=$loaisanphamitem['IDLoai']?>"><?php echo $loaisanphamitem['TenLoai'] ?></a></li>
+											<?php endforeach ;?>
 																																																												 -->
-											</ul>
+										</ul>
 									</li>
 										<li class="nav-item"  style="margin-left: 10px;">
 											<!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -236,8 +236,9 @@
 													<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
 												<?php endif ?>
 											<?php else:?>
-												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="thongtincanhan.php">  <i class="fa-solid fa-circle-info"></i> Thay đổi thông tin</a></li>
-												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
+												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="thongtincanhan.php">  Tài khoản của tôi</a></li>
+												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="donmua.php">  Đơn mua</a></li>
+												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"> Đăng xuất</a></li>
 											<?php endif ?>
 										</ul>
 									</li>

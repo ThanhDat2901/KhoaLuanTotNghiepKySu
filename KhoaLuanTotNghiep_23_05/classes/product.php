@@ -75,7 +75,44 @@
 			$count = $row[0]; 
 			return $count;
 		}
-
+public function getAllLoaiSanPhamByID($id)
+		{
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai
+			 WHERE loaisanpham.IDLoai= '$id' AND sanpham.isDel=0  ORDER BY sanpham.IDSanPham DESC ";
+			$result = $this->db->select($sql);
+			return $result;
+		}
+		public function getAllLoaiSanPhamPhanTrang($id,$limit, $offset)
+		{
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai
+			WHERE loaisanpham.IDLoai= '$id' AND sanpham.isDel=0  ORDER BY sanpham.IDSanPham DESC LIMIT $limit OFFSET $offset";
+			$result = $this->db->select($sql);
+			return $result;
+		}
+		public  function getLoaiSanPhamByPriceAsc($id,$limit, $offset) 
+		{
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai
+			WHERE loaisanpham.IDLoai= '$id' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi ASC LIMIT $limit OFFSET $offset";
+			$result = $this->db->select($sql);
+			return $result;
+		}
+		
+		public  function getLoaiSanPhamByPriceDesc($id,$limit, $offset) 
+		{
+			$sql = "SELECT * FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai
+			WHERE loaisanpham.IDLoai= '$id' AND sanpham.isDel=0  ORDER BY sanpham.GiaCuoi DESC LIMIT $limit OFFSET $offset";
+			$result = $this->db->select($sql);
+			return $result;
+		}
+		public function countAllLoaiSanPham($id)
+		{
+			$sql = "SELECT COUNT(*) FROM sanpham INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai
+			WHERE loaisanpham.IDLoai= '$id' AND sanpham.isDel=0";
+			$result = $this->db->select($sql);
+			$row = $result->fetch_row(); 
+			$count = $row[0]; 
+			return $count;
+		}
 		/* SEARCH*/
 		public  function getAllSanPhamSearch($search, $limit, $offset){
  
@@ -162,7 +199,7 @@
 		public function insert_product($data,$files){
 			
 			$TenSanPham = mysqli_real_escape_string($this->db->link, $data['TenSanPham']);
-			$ThongTin = mysqli_real_escape_string($this->db->link, $data['ThongTin']);
+			$ThongTin = mysqli_real_escape_string($this->db->link, html_entity_decode($data['ThongTin'], ENT_QUOTES, 'UTF-8'));
 			$GiaDau = mysqli_real_escape_string($this->db->link, $data['GiaDau']);
 			// $GiaCuoi = mysqli_real_escape_string($this->db->link, $data['GiaCuoi']);
 			
@@ -304,7 +341,7 @@
 		}
 		public function update_product($data,$files,$id){
 			$TenSanPham = mysqli_real_escape_string($this->db->link, $data['TenSanPham']);
-			$ThongTin = mysqli_real_escape_string($this->db->link, $data['ThongTin']);
+			$ThongTin = mysqli_real_escape_string($this->db->link, html_entity_decode($data['ThongTin'], ENT_QUOTES, 'UTF-8'));
 			$GiaDau = mysqli_real_escape_string($this->db->link, $data['GiaDau']);
 			// $GiaCuoi = mysqli_real_escape_string($this->db->link, $data['GiaCuoi']);
 			

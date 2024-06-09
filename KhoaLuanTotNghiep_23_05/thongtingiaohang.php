@@ -641,7 +641,7 @@ $detailnguoidung = $thongtinnguoidung->fetch_assoc();
                     <input type="radio" class="form-check-input" id="enterNewAddress" name="addressOption" value="enterNewAddress" checked>
                     <label class="form-check-label" for="enterNewAddress">Nhập lại địa chỉ mới</label>
                 </div>
-            </div>
+            </div>  
 
         <div class=" new-address-form" style="line-height: 2.5;">
             <h4 style="text-transform:uppercase;">Địa chỉ mới</h4>

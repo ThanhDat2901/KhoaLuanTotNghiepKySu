@@ -176,7 +176,7 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
             const shippingFee = calculateShippingFee(selectedCityId);
 
             // Update shipping fee display
-            shippingFeeDisplay.innerHTML = "Phí giao hàng: " + numberWithCommas(shippingFee) + "đ";
+            shippingFeeDisplay.innerHTML = numberWithCommas(shippingFee) + "đ";
             
             console.log(shippingFee);
             updateGrandTotal(shippingFee);
@@ -335,16 +335,16 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
 
                         <tr>
                             <td style="padding-left:0; padding-right:0;">
-                                = <b><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?> <span>đ</span></b>
+                            Tạm tính: <b><?=number_format($product['GiaCuoi'] * $item['SoLuong'], 0, ',', '.')?> <span>đ</span></b>
                             </td>
                         </tr>
                         <?php endforeach; ?>
                         <tr>
                             <td class="text-right" style="padding-left:0; padding-right:0;">
-                                Giao hàng
+                            Phí vận chuyển
                             </td>
                             <td>
-                                <div id="shippingFeeDisplay" style="font-size:16px; color:#f00;">Phí giao hàng:</div>
+                                <div id="shippingFeeDisplay" style="font-size:16px; color:#f00;"></div>
                             </td>
                         </tr>
                         <tr>

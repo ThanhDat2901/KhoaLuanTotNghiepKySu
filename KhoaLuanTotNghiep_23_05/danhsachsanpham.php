@@ -9,7 +9,7 @@
 
     $MenuTrangChu = $menu->getMenuTrangChu();
 
-    $perPage = 8;
+    $perPage = 12;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $perPage;
     $limit = $perPage;
@@ -31,7 +31,7 @@
 <?php include 'inc/header.php' ;?>  
 
 <div class="" style="width:100%;align-items: center;justify-content: center;text-align: center; background-color: #FFFFFF ">
-<p style="margin-top: 30px; margin-bottom: -10px; font-size: 25px; font-weight: 600">
+<!-- <p style="margin-top: 30px; margin-bottom: -10px; font-size: 25px; font-weight: 600">
         SẢN PHẨM
     </p>
     <nav class="navbar navbar-expand-lg navbar-light"style=" border-bottom: 1px solid gray">
@@ -48,31 +48,63 @@
                             <li><a class="dropdown-item" href="?sort=desc">Giá giảm dần</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"  style="color: black;" h href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Loại
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:#FFFFFF ;">
-                            <li><a class="dropdown-item" href="">Áo Thun</a></li>
-                            <li><a class="dropdown-item" href="">Áo Sơ Mi</a></li>
-                            <li><a class="dropdown-item" href="">Quần Short</a></li>
-                            <li><a class="dropdown-item" href="">Quần Dài</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"  style="color: black;" h href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Màu Sắc
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:#FFFFFF ;">
-                            <li><a class="dropdown-item" href="">BLACK</a></li>
-                            <li><a class="dropdown-item" href="">WHITE</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> -->
     <div class="container text-center mt-4">
+    <div class="row" style="margin-top: 10vh;">
+        <div class="col-sm-12 " style="background-color: #e9ecef;">
+            <div class="breadcrumb" style="margin-top: 10px;">
+                <a href="index.php" style="color: black;"><i class="icon fa fa-home"></i></a>
+                <span class="mx-2 mb-0">/</span>
+                <?php 
+                    if (!empty($data)) {
+                        $row = mysqli_fetch_assoc($data);
+                        if ($row) {
+                    ?>
+                <strong class="text-black">Hàng mới</strong>
+                <?php 
+                    } else {
+                        echo "No data found!";
+                    }
+                }
+                ?>  
+                </div>
+        </div>
+
+    <div class="col-sm-12" style="margin-bottom: 3vh;margin-top: 2vh;">
+        <nav class="navbar navbar-expand-sm navbar-light"style=" border: 1px solid gray">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" style="color: black;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Lọc giá
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color:#FFFFFF ;">
+                                <?php 
+                                if (!empty($data)) {
+                                    $row = mysqli_fetch_assoc($data);
+                                    if ($row) {
+                                ?>
+                                <li><a class="dropdown-item" href="?sort=normal">Bỏ lọc</a></li>
+                                <li><a class="dropdown-item" href="?sort=asc">Giá tăng dần</a></li>
+                                <li><a class="dropdown-item" href="?sort=desc">Giá giảm dần</a></li>
+                                <?php 
+                                        } else {
+                                            echo "No data found!";
+                                        }
+                                    }
+                                    ?>  
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    </div>  
         <div class="row row-cols-4 " style="margin-left:30px">
         <?php foreach($data as  $product ):?>    
                 <div class="col" style=" margin-top:20px">  
@@ -89,15 +121,29 @@
                         <?= $shortenedName ?>
                         </p>
                             <!-- <p class="card-text" style="font-size: 18px;"><?=  number_format($product['GiaCuoi'], 0, ',','.') ?><sup>đ</sup></p> -->
-                            <div>
+                            <!-- <div>
                                 <span style="font-size: 18px; color: black; text-decoration: line-through;">
                                     <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
                                 </span>
                                 <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
                                     <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
                                 </span>
+                            </div> -->
+                            <div>
+                                <?php if ($product['GiaCuoi'] < $product['GiaDau']): ?>
+                                    <span style="font-size: 18px; color: black; text-decoration: line-through;">
+                                        <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                    <span class="card-text" style="font-size: 18px; color: red; margin-left: 10px;">
+                                        <?= number_format(substr($product['GiaCuoi'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="card-text" style="font-size: 18px; color: black;">
+                                        <?= number_format(substr($product['GiaDau'], 0, -3), 0, ',', '.') ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
-                        
+                                                    
                         </div>
                         </div>
                     </a>                    
