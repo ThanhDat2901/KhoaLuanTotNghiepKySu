@@ -7,49 +7,76 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 
-require '../classes/hoadon.php';
-$brand = new hoadon();
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $idHoaDon = isset($_GET['email']) ? $_GET['email'] : 1;
+// Kết nối cơ sở dữ liệu MySQL
+$servername = "localhost";
+$username = "root"; // Thay thế bằng tên người dùng cơ sở dữ liệu của bạn
+$password = ""; // Thay thế bằng mật khẩu của cơ sở dữ liệu của bạn
+$dbname = "yameshop"; // Thay thế bằng tên của cơ sở dữ liệu của bạn
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Kiểm tra kết nối
+if ($conn->connect_error) {
+    die("Kết nối cơ sở dữ liệu thất bại: " . $conn->connect_error);
 }
 
-try {
-    $mail = new PHPMailer(true);
-    $emailData = $db->showHoaDon();
+// Khởi tạo biến response
+$response = array('message' => '');
 
-    if ($emailData) {
-        $userEmail = $emailData['Email'];
-        // Cấu hình máy chủ
-        $mail->SMTPDebug = 0;                      // Bật thông báo debug
-        $mail->isSMTP();                           // Sử dụng SMTP
-        $mail->Host       = 'smtp.example.com';    // Địa chỉ SMTP server
-        $mail->SMTPAuth   = true;                  // Bật xác thực SMTP
-        $mail->Username   = $userEmail;            // Sử dụng email lấy từ cơ sở dữ liệu
-        $mail->Password   = 'iugldephvsjgtcca';    // Mật khẩu SMTP
-        $mail->SMTPSecure = 'tls';                 // Mã hóa TLS
-        $mail->Port       = 587;                   // Cổng TCP
+// Kiểm tra xem request có phải là POST không
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Lấy dữ liệu gửi từ AJAX
+    $action = $_POST['action'];
 
-        // Người nhận
-        $mail->setFrom('vnyameshop@gmail.com', 'Mailer');
-        $mail->addAddress('vnyameshop@gmail.com', 'YameShop');     // Thêm người nhận
+    // Nếu action là 'doi_tra_hang', thực hiện gửi email
+    if ($action == 'doi_tra_hang') {
+        $mail = new PHPMailer(true);
+        try {
+            //Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'vnyameshop@gmail.com';
+            $mail->Password   = 'iugldephvsjgtcca';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
 
-        // Nội dung email
-        $mail->isHTML(true);                        // Định dạng email là HTML
-        $mail->Subject = 'Yêu Cầu Đổi Trả';
-        $mail->Body    = "Yêu cầu đổi trả từ email: <b>$userEmail</b>";
-        // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            //Recipients
+            $mail->setFrom('vnyameshop@gmail.com', 'Admin');
+            $mail->addAddress('vnyameshop@gmail.com', 'YameShop');
 
-        $mail->send();
-        $response['status'] = 'success';
-        $response['message'] = 'Yêu cầu đổi trả đã được gửi.';
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = '=?UTF-8?B?' . base64_encode('Yêu cầu đổi trả từ người dùng') . '?=';
+
+            // Truy vấn dữ liệu từ bảng hoadon
+            $sql = "SELECT * FROM hoadon";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $email = $row['Email']; // Thay 'email' bằng tên cột chứa địa chỉ email trong bảng hoadon
+                $mail->Body    = "Yêu cầu đổi trả từ email: <b>$email</b>";
+            } else {
+                $mail->Body    = "Không có thông tin đơn hàng nào.";
+            }
+
+            // Gửi email
+            $mail->send();
+            $response['message'] = 'Email đã được gửi đi';
+        } catch (Exception $e) {
+            $response['message'] = "Không thể gửi email. Lỗi Mailer: {$mail->ErrorInfo}";
+        }
     } else {
-        $response['message'] = "Không tìm thấy email trong cơ sở dữ liệu.";
+        $response['message'] = 'Hành động không hợp lệ';
     }
-} catch (Exception $e) {
-    $response['message'] = "Không thể gửi email. Lỗi: {$mail->ErrorInfo}";
-} catch (PDOException $e) {
-    $response['message'] = "Lỗi cơ sở dữ liệu: " . $e->getMessage();
+} else {
+    $response['message'] = 'Yêu cầu không hợp lệ';
 }
 
+// Đóng kết nối cơ sở dữ liệu
+$conn->close();
+
+// Trả về phản hồi dưới dạng JSON
 echo json_encode($response);
 ?>

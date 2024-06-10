@@ -9,24 +9,17 @@ $comment = new comment();
 // $chitiethoadon = new chitiethoadon();
 if (isset($_SESSION['login_detail'])) {
 $IDNguoiDung  = $_SESSION['user_id'];
+}
+
 $danhsachhoadonchoxacnhan = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung);
 $danhsachhoadonchoxacnhan2 = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung);
 $kiemtrachoxacnhan = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,1);
-$kiemtradaxacnhan = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,2);
 $kiemtrachuanbihang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,3);
 $kiemtradanggiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,5);
 $kiemtradagiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,6);
 $kiemtradahuy= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,7);
-$kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
 $kiemtradoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,9);
-}
-else{
-    session_unset();
-    session_destroy();
-}
-
-
-
+$kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
 // $danhsachhoadonchoxacnhan = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung,1);
 ?>
 
@@ -235,11 +228,10 @@ else{
                 });
                 // Hiển thị phần tử có ID tương ứng
                 document.querySelector('.' + contentId).style.display = 'block';
-                console.log(contentId);
             } 
            
     });
-            function showPopup(message, duration) {
+    function showPopup(message, duration) {
                 var popup = document.getElementById('popup');
                 var popupMessage = document.getElementById('popupMessage');
                 
@@ -268,11 +260,14 @@ else{
                 })
                 .then(response => response.text())
                 .then(data => {
-                    showPopup('Đơn hàng đã được hủy thành công', 1500);
+                    console.log(data);
+                    console.log(response);
+                    showPopup('Đơn hàng đã được hủy thành công', 2000);
+                    // alert('Đơn hàng đã được hủy thành công');
                     closeCancelPopup();
                     setTimeout(function() {
-                        location.reload(); 
-                    }, 1600);
+                        location.reload(); // Refresh page to update the order list
+                    }, 2500);
                     // location.reload(); 
                 })
                 .catch(error => console.error('Error:', error));
@@ -400,11 +395,8 @@ else{
                                                     <a class="nav-link" href="javascript:;" data-content-id="form-da-huy-hang" style="color: black;">Đã hủy</a>
                                                 </li>
                                                 <li class="nav-item" style="margin-left: 10px;">
-                                                    <a class="nav-link" href="javascript:;" data-content-id="form-doi-tra-hang" style="color: black;">Đổi/Trả hàng</a>
-                                                </li>
-                                                <li class="nav-item" style="margin-left: 10px;">
-                                                    <button class="nav-link" onclick="sendRequest()" style="color: black; border: none; background: none; cursor: pointer;">Gửi yêu cầu đổi trả</button>
-                                                </li>
+        <a class="nav-link" href="javascript:;" id="doi-tra-hang" style="color: black;">Đổi/Trả hàng</a>
+    </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -417,15 +409,14 @@ else{
                             
                             <div class="col " style="margin-top: 5vh;">
                                 <div class=" form-xac-nhan" style="line-height: 2.5" >
-                                  
-                                    <?php if(!empty($kiemtrachoxacnhan) || !empty($kiemtradaxacnhan)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==1): ?>
-                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
-                                                <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                        <h4>Đơn hàng đang chờ xác nhận</h4>
-                                                    </div>
-                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                            <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                    <h4>Đơn hàng đang chờ xác nhận</h4>
+                                                </div>
+                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -481,7 +472,7 @@ else{
                                                                 <button type="button" onclick="closeCancelPopup()">Đóng</button>
                                                             </form>
                                                         </div>
-                                                </div>
+                                            </div>
                                             <?php endif ?>
                                             <?php if($datatemp['TrangThai']==2): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -516,12 +507,39 @@ else{
                                                         <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                         </div> 
+                                                        <!-- <div>
+                                                        
+                                                            <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopup(<?=$datatemp['IDHoaDon']?>)">Hủy đơn hàng</button>
+                                                        </div>  -->
+                                                        <div id="cancelPopup">
+                                                            <h3>Lý do hủy</h3>
+                                                            <form id="cancelForm">
+                                                                <input type="hidden" id="IDHoaDon" name="IDHoaDon">
+                                                                <h5>Nếu bạn xác nhận hủy, toàn bộ đơn hàng sẽ được hủy. Chọn lý do hủy phù hợp nhất với bạn nhé!</h5>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoHuy" value="Tôi muốn cập nhập địa chỉ/sdt nhận hàng"> Tôi muốn cập nhập địa chỉ/sdt nhận hàng
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoHuy" value="Tôi muốn thay đổi sản phẩm(kích thước, màu sắc, số lượng...)"> Tôi muốn thay đổi sản phẩm(kích thước, màu sắc, số lượng...) 
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoHuy" value="Tôi tìm thấy chỗ mua khác tốt hơn"> Tôi tìm thấy chỗ mua khác tốt hơn
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoHuy" value="Tôi không có nhu cầu mua nữa"> Tôi không có nhu cầu mua nữa
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoHuy" value="Tôi không tìm thấy lý do hủy phù hợp"> Tôi không tìm thấy lý do hủy phù hợp
+                                                                </label>
+                                                                <button type="button" onclick="submitCancel()">Xác nhận hủy</button>
+                                                                <button type="button" onclick="closeCancelPopup()">Đóng</button>
+                                                            </form>
+                                                        </div>
                                                 </div>
                                             <?php endif ?>
                                         <?php endforeach; ?>
                                     <?php endif ?>
-                                    <?php if(empty($kiemtrachoxacnhan) && empty($kiemtradaxacnhan) ):?>
-
+                                    <?php if(empty($kiemtrachoxacnhan)):?>
                                         <div class="" style="height: 500px;display: flex; flex-direction: column; justify-content: center; align-items: center;">
                                             <div class="" style="margin-bottom: 20px;">
                                                 <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b964.png" alt="">
@@ -539,14 +557,14 @@ else{
                                 </div>
 
                                 <div class=" form-chuan-bi" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachuanbihang)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==3): ?>
-                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
                                                 <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
                                                     <h4>Đơn hàng đang được chuẩn bị</h4>
                                                 </div>
-                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -575,7 +593,7 @@ else{
                                                         <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                         </div> 
-                                                </div>
+                                            </div>
                                             <?php endif ?>
                                         
                                         <?php endforeach; ?>
@@ -596,7 +614,7 @@ else{
                                 </div>
 
                                 <div class=" form-giao-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtradanggiaohang)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==4): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -691,7 +709,7 @@ else{
                                     <span id="popupMessage"></span>
                                 </div>
                                 <div class=" form-da-giao-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtradagiaohang)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==6): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -790,14 +808,14 @@ else{
                                 </div>
 
                                 <div class=" form-da-huy-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtradahuy)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==7): ?>
-                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
-                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                        <h4>Đã hủy</h4>
-                                                    </div>
-                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                    <h4>Đã hủy</h4>
+                                                </div>
+                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -827,7 +845,7 @@ else{
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                             <div style="font-size:18px;"><b> Lý do hủy: <?=$datatemp['LyDoHuy']?></b></div>
                                                         </div> 
-                                                </div>
+                                            </div>
                                             <?php endif ?>
                                         
                                         <?php endforeach; ?>
@@ -848,7 +866,7 @@ else{
                                 </div>
 
                                 <div class=" form-doi-tra-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtradoihang) && !empty($kiemtratrahang)):?>
+                                    <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==8): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -1022,20 +1040,22 @@ else{
 
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-function sendRequest() {
-    $.ajax({
-        url: 'senemailtrahang.php',
-        method: 'POST',
-        success: function(response) {
-            const result = JSON.parse(response);
-            alert(result.message);
-        },
-        error: function() {
-            alert('Có lỗi xảy ra khi gửi yêu cầu.');
-        }
+$(document).ready(function(){
+    $('#doi-tra-hang').click(function(){
+        $.ajax({
+            url: 'senemailtrahang.php', // Đường dẫn tới tệp PHP xử lý gửi email
+            type: 'POST',
+            dataType: 'json',
+            data: { action: 'doi_tra_hang' }, // Dữ liệu gửi đi (nếu cần)
+            success: function(response){
+                alert(response.message);
+            },
+            error: function(xhr, status, error){
+                console.error(xhr.responseText);
+            }
+        });
     });
-}
+});
 </script>
 <?php include 'inc/footer.php';?>    
