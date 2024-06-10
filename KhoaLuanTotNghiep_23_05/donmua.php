@@ -712,11 +712,11 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                     <?php if(!empty($kiemtrachoxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==6): ?>
-                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
-                                                <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                    <h4>Hoàn Thành</h4>
-                                                </div>
-                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Hoàn Thành</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -747,10 +747,19 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                         </div> 
                                                         <?php if($kiemtra !=1): ?>
-                                                            <div>                                   
-                                                            <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
-                                                                -->
+                                                            <div >                                   
                                                                 <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
+                                                                
+                                                                    <?php
+                                                                    $ngayLap = strtotime($datatemp['NgayLap']);
+                                                                    $ngayHienTai = time();
+                                                                    $baNgaySau = strtotime('+3 days', $ngayLap);
+
+                                                                    $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
+                                                                    ?>
+                                                                <?php if ($choPhepTraHang): ?>    
+                                                                    <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;">Trả hàng</button>
+                                                                <?php endif; ?>
                                                             </div>
                                                         <?php else: ?>
                                                             <div style="text-align: left;color: #26aa99;">
@@ -781,7 +790,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                             </form>
                                                         </div> 
 
-                                            </div>
+                                                </div>
                                             <?php endif ?>
                                         
                                         <?php endforeach; ?>
