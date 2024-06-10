@@ -9,17 +9,24 @@ $comment = new comment();
 // $chitiethoadon = new chitiethoadon();
 if (isset($_SESSION['login_detail'])) {
 $IDNguoiDung  = $_SESSION['user_id'];
-}
-
 $danhsachhoadonchoxacnhan = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung);
 $danhsachhoadonchoxacnhan2 = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung);
 $kiemtrachoxacnhan = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,1);
+$kiemtradaxacnhan = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,2);
 $kiemtrachuanbihang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,3);
 $kiemtradanggiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,5);
 $kiemtradagiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,6);
 $kiemtradahuy= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,7);
-$kiemtradoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,9);
 $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
+$kiemtradoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,9);
+}
+else{
+    session_unset();
+    session_destroy();
+}
+
+
+
 // $danhsachhoadonchoxacnhan = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung,1);
 ?>
 
@@ -228,10 +235,11 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                 });
                 // Hiển thị phần tử có ID tương ứng
                 document.querySelector('.' + contentId).style.display = 'block';
+                console.log(contentId);
             } 
            
     });
-    function showPopup(message, duration) {
+            function showPopup(message, duration) {
                 var popup = document.getElementById('popup');
                 var popupMessage = document.getElementById('popupMessage');
                 
@@ -260,14 +268,11 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                 })
                 .then(response => response.text())
                 .then(data => {
-                    console.log(data);
-                    console.log(response);
-                    showPopup('Đơn hàng đã được hủy thành công', 2000);
-                    // alert('Đơn hàng đã được hủy thành công');
+                    showPopup('Đơn hàng đã được hủy thành công', 1500);
                     closeCancelPopup();
                     setTimeout(function() {
-                        location.reload(); // Refresh page to update the order list
-                    }, 2500);
+                        location.reload(); 
+                    }, 1600);
                     // location.reload(); 
                 })
                 .catch(error => console.error('Error:', error));
@@ -412,14 +417,15 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                             
                             <div class="col " style="margin-top: 5vh;">
                                 <div class=" form-xac-nhan" style="line-height: 2.5" >
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                  
+                                    <?php if(!empty($kiemtrachoxacnhan) || !empty($kiemtradaxacnhan)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==1): ?>
-                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
-                                            <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                    <h4>Đơn hàng đang chờ xác nhận</h4>
-                                                </div>
-                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Đơn hàng đang chờ xác nhận</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -475,7 +481,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                                 <button type="button" onclick="closeCancelPopup()">Đóng</button>
                                                             </form>
                                                         </div>
-                                            </div>
+                                                </div>
                                             <?php endif ?>
                                             <?php if($datatemp['TrangThai']==2): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -510,39 +516,12 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                         <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                         </div> 
-                                                        <!-- <div>
-                                                        
-                                                            <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopup(<?=$datatemp['IDHoaDon']?>)">Hủy đơn hàng</button>
-                                                        </div>  -->
-                                                        <div id="cancelPopup">
-                                                            <h3>Lý do hủy</h3>
-                                                            <form id="cancelForm">
-                                                                <input type="hidden" id="IDHoaDon" name="IDHoaDon">
-                                                                <h5>Nếu bạn xác nhận hủy, toàn bộ đơn hàng sẽ được hủy. Chọn lý do hủy phù hợp nhất với bạn nhé!</h5>
-                                                                <label>
-                                                                    <input type="radio" name="LyDoHuy" value="Tôi muốn cập nhập địa chỉ/sdt nhận hàng"> Tôi muốn cập nhập địa chỉ/sdt nhận hàng
-                                                                </label>
-                                                                <label>
-                                                                    <input type="radio" name="LyDoHuy" value="Tôi muốn thay đổi sản phẩm(kích thước, màu sắc, số lượng...)"> Tôi muốn thay đổi sản phẩm(kích thước, màu sắc, số lượng...) 
-                                                                </label>
-                                                                <label>
-                                                                    <input type="radio" name="LyDoHuy" value="Tôi tìm thấy chỗ mua khác tốt hơn"> Tôi tìm thấy chỗ mua khác tốt hơn
-                                                                </label>
-                                                                <label>
-                                                                    <input type="radio" name="LyDoHuy" value="Tôi không có nhu cầu mua nữa"> Tôi không có nhu cầu mua nữa
-                                                                </label>
-                                                                <label>
-                                                                    <input type="radio" name="LyDoHuy" value="Tôi không tìm thấy lý do hủy phù hợp"> Tôi không tìm thấy lý do hủy phù hợp
-                                                                </label>
-                                                                <button type="button" onclick="submitCancel()">Xác nhận hủy</button>
-                                                                <button type="button" onclick="closeCancelPopup()">Đóng</button>
-                                                            </form>
-                                                        </div>
                                                 </div>
                                             <?php endif ?>
                                         <?php endforeach; ?>
                                     <?php endif ?>
-                                    <?php if(empty($kiemtrachoxacnhan)):?>
+                                    <?php if(empty($kiemtrachoxacnhan) && empty($kiemtradaxacnhan) ):?>
+
                                         <div class="" style="height: 500px;display: flex; flex-direction: column; justify-content: center; align-items: center;">
                                             <div class="" style="margin-bottom: 20px;">
                                                 <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b964.png" alt="">
@@ -560,14 +539,14 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                 </div>
 
                                 <div class=" form-chuan-bi" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                    <?php if(!empty($kiemtrachuanbihang)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==3): ?>
-                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
                                                 <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
                                                     <h4>Đơn hàng đang được chuẩn bị</h4>
                                                 </div>
-                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -596,7 +575,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                         <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                         </div> 
-                                            </div>
+                                                </div>
                                             <?php endif ?>
                                         
                                         <?php endforeach; ?>
@@ -617,7 +596,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                 </div>
 
                                 <div class=" form-giao-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                    <?php if(!empty($kiemtradanggiaohang)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==4): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -712,7 +691,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                     <span id="popupMessage"></span>
                                 </div>
                                 <div class=" form-da-giao-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                    <?php if(!empty($kiemtradagiaohang)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==6): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -811,14 +790,14 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                 </div>
 
                                 <div class=" form-da-huy-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                    <?php if(!empty($kiemtradahuy)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==7): ?>
-                                            <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
-                                                <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                    <h4>Đã hủy</h4>
-                                                </div>
-                                            <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Đã hủy</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
                                                 <table class="  ">
                                                             <tbody class="" style="text-align: left;">
@@ -848,7 +827,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                             <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
                                                             <div style="font-size:18px;"><b> Lý do hủy: <?=$datatemp['LyDoHuy']?></b></div>
                                                         </div> 
-                                            </div>
+                                                </div>
                                             <?php endif ?>
                                         
                                         <?php endforeach; ?>
@@ -869,7 +848,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                 </div>
 
                                 <div class=" form-doi-tra-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtrachoxacnhan)):?>
+                                    <?php if(!empty($kiemtradoihang) && !empty($kiemtratrahang)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==8): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">

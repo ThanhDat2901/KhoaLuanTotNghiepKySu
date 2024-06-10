@@ -78,6 +78,7 @@ class Auth
 }  
     public static  function logout(){
         if(isset($_SESSION['login_detail'])){
+            session_destroy();
             unset($_SESSION['login_detail']);
             header('location: index.php');
         }

@@ -3,6 +3,7 @@
 require 'init.php';
 require 'classes/hoadon.php';
 $hoadon = new hoadon();
+if(isset($_SESSION['login_detail'])){
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $IDHoaDon = $_POST['IDHoaDon'];
     $LyDoHuy = $_POST['LyDoHuy'];
@@ -18,5 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // }
     header("Location: donmua.php");
     exit;
+}
 }
 ?>
