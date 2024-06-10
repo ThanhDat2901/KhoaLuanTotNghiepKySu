@@ -429,7 +429,8 @@ include 'inc/header.php'?>
                     var usernameInput = document.getElementById("usernameInput");
                     var usernameError = document.getElementById("usernameError");
                     var username = usernameInput.value;
-                    var specialCharRegex = /[^a-zA-Z0-9\sÀ-ÖØ-öø-ÿĀ-ž]/;
+                    // var specialCharRegex = /[^a-zA-Z0-9\sÀ-ÖØ-öø-ÿĀ-ž]/;
+                    var specialCharRegex = /[^a-zA-Z0-9\sÀ-ỹ]/;
                     if (specialCharRegex.test(username)) {
                         // Kiểm tra có ký tự số hoặc ký tự đặc biệt hoặc số từ 1 đến 9 trong tên người dùng hay không
                         usernameError.style.display = "block";

@@ -3,10 +3,10 @@
 <?php include '../classes/hoadon.php' ?>
 <!-- <?php
     $brand = new hoadon();
-     if(isset($_GET['delid'])){
-        $id = $_GET['delid']; 
-        $delbrand = $brand->del_brand($id);
-    }
+    //  if(isset($_GET['delid'])){
+    //     $id = $_GET['delid']; 
+    //     $delbrand = $brand->del_brand($id);
+    // }
 ?> -->
 <div class="grid_10">
     <div class="box round first grid">
@@ -24,6 +24,7 @@
                         <th>Tên Người Dùng</th>
                         <th>Số Điện Thoại</th>
                         <th>Email</th>
+                        <th>Ngày Lập</th>
                         <th>Tổng Tiền</th>
                         <th>Xem Chi Tiết</th>
                     </tr>
@@ -41,6 +42,9 @@
                         <td><?php echo $result['TenNguoiDung'] ?></td>
                         <td><?php echo $result['SDT'] ?></td>
                         <td><?php echo $result['Email'] ?></td>
+                        <?php $datetime = $result['NgayLap'];
+                            $date = new DateTime($datetime); ?>
+                        <td><?php echo $date->format('d-m-Y H:i:s');?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
                         <td><a href="hoadonshowdetail.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
                     </tr>
