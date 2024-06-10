@@ -12,11 +12,12 @@ $brand = new hoadon();
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $idHoaDon = isset($_GET['email']) ? $_GET['email'] : 1;
 }
-$mail = new PHPMailer(true);
+
 
 
 
 try {
+    $mail = new PHPMailer(true);
     // Cấu hình gửi email
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com';

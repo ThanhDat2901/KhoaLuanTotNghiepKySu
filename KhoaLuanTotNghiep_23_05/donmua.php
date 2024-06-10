@@ -394,8 +394,11 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                 <li class="nav-item"style="margin-left: 10px;">
                                                     <a class="nav-link" href="javascript:;" data-content-id="form-da-huy-hang" style="color: black;">Đã hủy</a>
                                                 </li>
-                                                <li class="nav-item"style="margin-left: 10px;">
+                                                <li class="nav-item" style="margin-left: 10px;">
                                                     <a class="nav-link" href="javascript:;" data-content-id="form-doi-tra-hang" style="color: black;">Đổi/Trả hàng</a>
+                                                </li>
+                                                <li class="nav-item" style="margin-left: 10px;">
+                                                    <button class="nav-link" onclick="sendRequest()" style="color: black; border: none; background: none; cursor: pointer;">Gửi yêu cầu đổi trả</button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1040,4 +1043,20 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
 
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function sendRequest() {
+    $.ajax({
+        url: 'senemailtrahang.php',
+        method: 'POST',
+        success: function(response) {
+            const result = JSON.parse(response);
+            alert(result.message);
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi gửi yêu cầu.');
+        }
+    });
+}
+</script>
 <?php include 'inc/footer.php';?>    
