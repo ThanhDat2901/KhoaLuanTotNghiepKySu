@@ -16,9 +16,10 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $TenNguoiDung = $_POST['TenNguoiDung'];
         $SDT = $_POST['SDT'];
+        $DiaChi = $_POST['DiaChi'];
         $Email = $_POST['Email'];
         $MatKhau = $_POST['MatKhau'];
-        $updateBrand = $brand->update_brand1($TenNguoiDung,'Nhân Viên Tự Cung Cấp',$SDT,$Email,$MatKhau,$id);
+        $updateBrand = $brand->update_brand1($TenNguoiDung,$DiaChi,$SDT,$Email,$MatKhau,$id);
         
         // $update_phanquyen = $phanquyen ->update_PhanQuyen($IDQuyen,$id);
     }

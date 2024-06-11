@@ -157,7 +157,7 @@
 
 		}
 		public function del_brand($id){
-			$query = "DELETE FROM chitietbosuutap where IDChiTiet = '$id'";
+			$query = "UPDATE chitietbosuutap SET isDel = 1 where IDChiTiet = '$id'";
 			$result = $this->db->delete($query);
 			if($result){
 				$alert = "<span class='success'>Xóa thành công</span>";

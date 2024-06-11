@@ -15,7 +15,7 @@
 <?php  ?>
         <div class="grid_10">
             <div class="box round first grid">
-                <h2>Thêm Quyền Cho Tài Khoản</h2>
+                <h2>Phân Quyền Cho Tài Khoản</h2>
                <div class="block copyblock"> 
                 <?php
                 if(isset($insertBrand)){
