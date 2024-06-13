@@ -6,13 +6,13 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
-
+require 'classes/hoadon.php';
 // Kết nối cơ sở dữ liệu MySQL
 $servername = "localhost";
 $username = "root"; // Thay thế bằng tên người dùng cơ sở dữ liệu của bạn
 $password = ""; // Thay thế bằng mật khẩu của cơ sở dữ liệu của bạn
-$dbname = "yameshop"; // Thay thế bằng tên của cơ sở dữ liệu của bạn
-
+$dbname = "dbyameshop"; // Thay thế bằng tên của cơ sở dữ liệu của bạn
+$hoadon = new hoadon();
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Kiểm tra kết nối
@@ -61,10 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $mail->Body    = "Không có thông tin đơn hàng nào.";
             }
-
+            $Capnhaptrangthai = $hoadon->CapNhatTrangthai($idHoaDon,8);
             // Gửi email
             $mail->send();
             $response['message'] = 'Email đã được gửi đi';
+
         } catch (Exception $e) {
             $response['message'] = "Không thể gửi email. Lỗi Mailer: {$mail->ErrorInfo}";
         }
