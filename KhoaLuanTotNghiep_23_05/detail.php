@@ -22,7 +22,14 @@ require 'classes/comment.php';
      $product = $product_by_id->fetch_assoc();
 
      $result_size = $pr->getSizeById($id);
+
+     $perPage = 1;
+     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+     $offset = ($page - 1) * $perPage;
+     $limit = $perPage;
+
      $comment = $cm->show_commentSanPham($id);
+
 
 
 
@@ -190,6 +197,34 @@ else{
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     var formElements = document.querySelectorAll('form');
+
+    const buttons = document.querySelectorAll('.btn.custom-btn');
+        const comments = document.querySelectorAll('.col-md-12');
+        const noCommentsDiv = document.getElementById('no-comments');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                let hasComments = false;
+                comments.forEach(comment => {
+                    if (rating === 'all') {
+                        comment.style.display = 'block';
+                        hasComments = true;
+                    } else {
+                        if (comment.classList.contains('rating-' + rating)) {
+                            comment.style.display = 'block';
+                            hasComments = true;
+                        } else {
+                            comment.style.display = 'none';
+                        }
+                    }
+                });
+                if (!hasComments) {
+                    noCommentsDiv.style.display = 'block';
+                } else {
+                    noCommentsDiv.style.display = 'none';
+                }
+            });
+        });
 
     formElements.forEach(function(form) {
         form.addEventListener('submit', function(event) {
@@ -400,42 +435,45 @@ else{
         <?php endif; ?>
         </div>
 
-        <!-- <div class="row" style="margin-top: 10vh;">
-        <?php if (!empty($comment)): ?>
-        <?php foreach($comment  as  $commentitem ):?> 
-                <div>
 
-                </div>
-            <?php endforeach ;?>      
+        <?php if (!empty($comment)): ?>
+            <?php     
+                $total_rating = 0;
+                $num_ratings = $comment->num_rows; 
+                ?>
+        <?php foreach($comment  as  $commentitem2 ):?> 
+                <?php  
+                   $total_rating += $commentitem2['Rate'];
+                    
+                    
+                    ?>
+            <?php endforeach ;?>    
+            <?php $average_rating = $total_rating / $num_ratings; ?>  
         <?php endif; ?>
-        </div> -->
+
         <div class="row" style="margin-top: 10vh; border: 1px; border-color: inherit;">
-        <div class="col-md-12" style="margin: 20px;">
-            <h2>ĐÁNH GIÁ SẢN PHẨM</h2>
-        </div>  
+
+        <!-- <div class="col-md-12" style="margin: 20px;">
+            
+        </div>   -->
         <div class="col-md-3">
             <div class="d-flex align-items-center flex-column">
-                <?php  $average_rating = 4.8;  ?>
+            <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
                 <h3 class="mr-2"> <?=$average_rating ?> trên 5 </h3>
                 <div class="rating">
-                    <!-- Hiển thị số sao trung bình (ví dụ: 4.8 trên 5 dấu sao) -->
                     <?php
-                // Giả sử số điểm đánh giá trung bình là 4.8
-                    $full_stars = floor($average_rating); // Số dấu sao đầy
-                    $half_star = $average_rating - $full_stars; // Kiểm tra nếu có nửa dấu sao
-                    $empty_stars = 5 - ceil($average_rating); // Số dấu sao trống
+                    $full_stars = floor($average_rating); 
+                    $half_star = $average_rating - $full_stars; 
+                    $empty_stars = 5 - ceil($average_rating); 
 
-                    // Hiển thị dấu sao đầy
+                    
                     for ($i = 0; $i < $full_stars; $i++) {
                         echo '<span style="color: #ee4d2d;" class="fa fa-star checked"></span>';
                     }
-
-                    // Kiểm tra và hiển thị dấu sao nửa
                     if ($half_star > 0) {
                         echo '<span style="color: #ee4d2d;" class="fa fa-star-half-alt checked"></span>';
                     }
 
-                    // Hiển thị dấu sao trống
                     for ($i = 0; $i < $empty_stars; $i++) {
                         echo '<span style="color: #ee4d2d;" class="fa fa-star"></span>';
                     }
@@ -450,30 +488,38 @@ else{
         <div id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <button class="btn custom-btn mr-2">Tất cả</button>
+                    <?php  $tatca = $cm->countAllCommentByID($id); ?>
+                    <button class="btn custom-btn mr-2" data-rating="all">Tất cả (<?=$tatca?>)</button>
+                    <!-- <a class="nav-link" href="javascript:;" data-content-id="tat-ca" style="color: black;">Tất cả</a> -->
                 </li>
                 <li class="nav-item">
-                    <button class="btn custom-btn mr-2">5 Sao</button>
+                    <?php  $namsao = $cm->countAllCommentByIDAndRate($id,5); ?>
+                    <button class="btn custom-btn mr-2" data-rating="5">5 Sao (<?=$namsao?>)</button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn custom-btn mr-2">4 Sao</button>
+                <?php  $bonsao = $cm->countAllCommentByIDAndRate($id,4); ?>
+                    <button class="btn custom-btn mr-2" data-rating="4">4 Sao (<?=$bonsao?>)</button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn custom-btn mr-2">3 Sao</button>
+                <?php  $basao = $cm->countAllCommentByIDAndRate($id,3); ?>
+                    <button class="btn custom-btn mr-2" data-rating="3">3 Sao (<?=$basao?>)</button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn custom-btn mr-2">2 Sao</button>
+                <?php  $haisao = $cm->countAllCommentByIDAndRate($id,2); ?>
+                    <button class="btn custom-btn mr-2" data-rating="2">2 Sao (<?=$haisao?>)</button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn custom-btn">1 Sao</button>
+                <?php  $motsao = $cm->countAllCommentByIDAndRate($id,1); ?>
+                    <button class="btn custom-btn" data-rating="1">1 Sao (<?=$motsao?>)</button>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+<div id="comment-section">
     <?php if (!empty($comment)): ?>
         <?php foreach($comment as $commentitem): ?> 
-            <div class="col-md-12" style="margin-top: 5vh;">
+            <div class="col-md-12  rating-<?php echo $commentitem['Rate']; ?>" style="margin-top: 5vh;">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -488,7 +534,7 @@ else{
                                         <span class="fa fa-star checked" style="color: #ee4d2d;"></span>
                                     <?php endfor; ?>
                                     <?php for ($i = $commentitem['Rate']; $i < 5; $i++): ?>
-                                        <span class="fa fa-star" style="color: #ee4d2d;"></span>
+                                        <span class="fa fa-star" style="color: gray;"></span>
                                     <?php endfor; ?>
                                 </div>
                                 <p class="card-text"><small class="text-muted"><?php echo $commentitem['ThoiGian']; ?></small></p>
@@ -501,14 +547,22 @@ else{
                         </div>
                     </div>
                 </div>
+
             </div>
-        <?php endforeach; ?>      
+            
+        <?php endforeach; ?>  
     <?php endif; ?>
+    <div id="no-comments" style="display: none;">
+        <h4>Chưa có đánh giá cho loại này.</h4>
+    </div>
+    </div>    
 </div>
+
     </div>
 
 
 </div>
+
 
 <?php  require 'inc/footer.php'?>
 

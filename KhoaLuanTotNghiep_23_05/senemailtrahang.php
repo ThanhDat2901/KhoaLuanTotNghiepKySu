@@ -27,9 +27,10 @@ $response = array('message' => '');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Lấy dữ liệu gửi từ AJAX
     $action = $_POST['action'];
-
+    $idHoaDon = $_POST['idHoaDon'];
     // Nếu action là 'doi_tra_hang', thực hiện gửi email
     if ($action == 'doi_tra_hang') {
+       
         $mail = new PHPMailer(true);
         try {
             //Server settings
@@ -50,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Subject = '=?UTF-8?B?' . base64_encode('Yêu cầu đổi trả từ người dùng') . '?=';
 
             // Truy vấn dữ liệu từ bảng hoadon
-            $sql = "SELECT * FROM hoadon";
+            $sql = "SELECT * FROM hoadon where IDHoaDon = '$idHoaDon'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {

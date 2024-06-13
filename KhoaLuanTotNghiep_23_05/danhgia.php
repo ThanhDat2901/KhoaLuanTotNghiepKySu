@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $IDSanPham = $product['idsp'];
     
     $ThoiGian = date('Y-m-d H:i:s'); 
-    $insertDanhGia = $comment->ThemDanhGia($IDNguoiDung,$IDSanPham,$Rate,$NoiDung,$ThoiGian);
+    $insertDanhGia = $comment->ThemDanhGia($IDNguoiDung,$IDSanPham,$Rate,$NoiDung,$ThoiGian,$IDHoaDon);
 
     header("Location: donmua.php");
     exit;
