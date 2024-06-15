@@ -21,8 +21,16 @@ $kiemtradanggiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,
 
 $kiemtradagiaohang = $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,6);
 $kiemtradahuy= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,7);
-$kiemtradoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,9);
+
 $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
+$kiemtradoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,9);
+$kiemtraxacnhantrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,10);
+$kiemtraxacnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,11);
+$kiemtradonvivanchuyendoitra= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,12);
+$kiemtradatrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,13);
+$kiemtradadoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,14);
+$kiemtrakhongchapnhantrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,15);
+$kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,16);
 // $danhsachhoadonchoxacnhan = $hoadon->DanhSachHoaDonByIDNguoiDung($IDNguoiDung,1);
 ?>
 
@@ -103,6 +111,74 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
         background-color: #5a6268;
     }
 
+
+ /* TRẢ HÀNG */
+ #cancelPopupTraHang {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 500px; 
+        z-index: 1000;
+    }
+
+    #cancelPopupTraHang h3 {
+        margin-top: 0;
+        text-align: center;
+    }
+    #cancelPopupTraHang h5 {
+        text-align: center;
+        background-color: #d0ebff; 
+        padding: 10px; 
+        border-radius: 5px; 
+    }
+
+    #cancelPopupTraHang p {
+        text-align: center;
+    }
+
+    #cancelFormTraHang {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #cancelFormTraHang label {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    #cancelFormTraHang input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    #cancelFormTraHang button {
+        margin: 10px 0;
+        padding: 10px;
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    #cancelFormTraHang button:hover {
+        background-color: #0056b3;
+    }
+
+    #cancelFormTraHang button[type="button"]:last-of-type {
+        background-color: #6c757d;
+    }
+
+    #cancelFormTraHang button[type="button"]:last-of-type:hover {
+        background-color: #5a6268;
+    }
     /*danhgia*/
     #cancelPopupDanhGia {
         display: none;
@@ -244,7 +320,8 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                 setTimeout(function() {
                     popup.style.display = 'none';
                 }, duration);
-                }      
+                } 
+
             function showCancelPopup(IDHoaDon) {
                 document.getElementById('IDHoaDon').value = IDHoaDon;
                 document.getElementById('cancelPopup').style.display = 'block';
@@ -266,16 +343,52 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                     console.log(data);
                     console.log(response);
                     showPopup('Đơn hàng đã được hủy thành công', 2000);
-                    // alert('Đơn hàng đã được hủy thành công');
                     closeCancelPopup();
                     setTimeout(function() {
-                        location.reload(); // Refresh page to update the order list
+                        location.reload(); 
                     }, 2500);
                     // location.reload(); 
                 })
                 .catch(error => console.error('Error:', error));
             }
 
+
+            /* TRẢ HÀNG */
+            function showCancelPopupTraHang(IDHoaDonTraHang) {
+                document.getElementById('IDHoaDonTraHang').value = IDHoaDonTraHang;
+                document.getElementById('cancelPopupTraHang').style.display = 'block';
+            }
+
+            function closeCancelPopupTraHang() {
+                document.getElementById('cancelPopupTraHang').style.display = 'none';
+            }
+
+            function submitCancelTraHang() {
+                var formData = new FormData(document.getElementById('cancelFormTraHang'));
+                formData.append('action', 'doi_tra_hang');
+                fetch('senemailtrahang.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) 
+                .then(data => {
+                    console.log(data); 
+                    if (data.message) {
+                        showPopup(data.message, 3000); 
+                        closeCancelPopupTraHang();
+                        setTimeout(function() {
+                            location.reload(); 
+                        }, 3500);
+                    } else {
+                        console.error('Unexpected response format:', data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+
+
+            /*--------------------------------------------- */
             function showCancelPopupDanhGia(IDHoaDonDanhGia) {
                 document.getElementById('IDHoaDonDanhGia').value = IDHoaDonDanhGia;
                 document.getElementById('cancelPopupDanhGia').style.display = 'block';
@@ -287,31 +400,29 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
             }
 
             // function submitCancelDanhGia() {
-            //     var rate = parseFloat(document.querySelector('input[name="rating2"]:checked').value);
-            //     var formData = new FormData(document.getElementById('cancelFormDanhGia'));
-            //     formData.append('Rate', rate);
-            //     fetch('danhgia.php', {
-            //         method: 'POST',
-            //         body: formData
-            //     })
-            //     .then(response => response.text())
-            //     .then(data => {
-            //         console.log(data);
-            //         // showPopup('Đơn hàng đã được hủy thành công', 2000);
-            //         alert('Đơn hàng đã được đánh gía');
-            //         closeCancelPopupDanhGia();
-            //         setTimeout(function() {
-            //             location.reload(); // Refresh page to update the order list
-            //         }, 2500);
-            //         // location.reload(); 
-            //     })
-            //     .catch(error => console.error('Error:', error));
+                //     var rate = parseFloat(document.querySelector('input[name="rating2"]:checked').value);
+                //     var formData = new FormData(document.getElementById('cancelFormDanhGia'));
+                //     formData.append('Rate', rate);
+                //     fetch('danhgia.php', {
+                //         method: 'POST',
+                //         body: formData
+                //     })
+                //     .then(response => response.text())
+                //     .then(data => {
+                //         console.log(data);
+                //         // showPopup('Đơn hàng đã được hủy thành công', 2000);
+                //         alert('Đơn hàng đã được đánh gía');
+                //         closeCancelPopupDanhGia();
+                //         setTimeout(function() {
+                //             location.reload(); // Refresh page to update the order list
+                //         }, 2500);
+                //         // location.reload(); 
+                //     })
+                //     .catch(error => console.error('Error:', error));
             // }
             function submitCancelDanhGia() {
                 const stars = document.querySelectorAll('.star');
                 let ratingValue = 0;
-
-                // Duyệt qua từng thẻ img để tìm thẻ được chọn
                 stars.forEach(star => {
                     if (star.getAttribute('src') === './images/ngoisaovang.png') {
                         ratingValue = parseInt(star.getAttribute('data-value'));
@@ -336,7 +447,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                     showPopup('Đơn hàng đã được đánh giá', 2000);
                     closeCancelPopupDanhGia();
                     setTimeout(function() {
-                        location.reload(); // Làm mới trang để cập nhật danh sách đơn hàng
+                        location.reload(); 
                     }, 2500);
                 })
                 .catch(error => console.error('Error:', error));
@@ -345,7 +456,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
             function clearRating() {
                 const stars = document.querySelectorAll('.star');
                 stars.forEach(star => {
-                    star.src = './images/ngoisao.png'; // Đổi hình ảnh thành màu xám
+                    star.src = './images/ngoisao.png'; 
                 });
             }
 </script>
@@ -691,7 +802,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                     <span id="popupMessage"></span>
                                 </div>
                                 <div class=" form-da-giao-hang" style="line-height: 2.5;display: none;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <?php if(!empty($kiemtradagiaohang)):?>
+                                    <?php if(!empty($kiemtradagiaohang) || !empty($kiemtrakhongchapnhantrahang) || !empty($kiemtrakhongchapnhandoihang)):?>
                                         <?php foreach ($danhsachhoadonchoxacnhan as $datatemp): ?>
                                             <?php if($datatemp['TrangThai']==6): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
@@ -744,8 +855,9 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                                     $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
                                                                     ?>
                                                                 <?php if ($choPhepTraHang): ?>  
-                                                                    <button class="js-btnPlaceOrder btn btn-info fw doi-tra-hang"  id="<?=$datatemp['IDHoaDon']?>" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;">Trả hàng</button>
+                                                                    <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupTraHang(<?=$datatemp['IDHoaDon']?>)" >Trả hàng</button>
                                                                 <?php endif; ?>
+                                                                <!-- id="<?=$datatemp['IDHoaDon']?>" -->
                                                             </div>
                                                         <?php else: ?>
                                                             <div style="text-align: left;color: #26aa99;">
@@ -775,13 +887,157 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                                                 <button type="button" onclick="closeCancelPopupDanhGia()">Đóng</button>
                                                             </form>
                                                         </div> 
+                                                    <div id="cancelPopupTraHang">
+                                                            <h3>Lý do Trả</h3>
+                                                            <form id="cancelFormTraHang">
+                                                                <input type="hidden" id="IDHoaDonTraHang" name="IDHoaDonTraHang">
+                                                                <h5>Chọn lý do</h5>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Thiếu hàng"> Thiếu hàng
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Người bán gửi sai hàng"> Người bán gửi sai hàng
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Hàng lỗi"> Hàng lỗi
+                                                                </label>
+
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Khác với mô tả"> Khác với mô tả
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Hàng giả, nhái"> Hàng giả, nhái
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" name="LyDoTra" value="Hàng nguyên vẹn nhưng không còn nhu cầu"> Hàng nguyên vẹn nhưng không còn nhu cầu
+                                                                </label>
+                                                                <button type="button" onclick="submitCancelTraHang()">Xác nhận trả h</button>
+                                                                <button type="button" onclick="closeCancelPopupTraHang()">Đóng</button>
+                                                            </form>
+                                                    </div>
 
                                                 </div>
                                             <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==14): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Đổi hàng thành công</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==15): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Không chập nhận trả hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==16): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Không chấp nhận đổi hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
                                         <?php endforeach; ?>
                                     <?php endif ?>   
-                                    <?php if(empty($kiemtradagiaohang)):?>
+                                    <?php if(empty($kiemtradagiaohang) && empty($kiemtrakhongchapnhantrahang) && empty($kiemtrakhongchapnhandoihang)):?>
                                         <div class="" style="height: 500px;display: flex; flex-direction: column; justify-content: center; align-items: center;">
                                             <div class="" style="margin-bottom: 20px;">
                                                 <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b964.png" alt="">
@@ -857,7 +1113,7 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                             <?php if($datatemp['TrangThai']==8): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
                                                     <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                        <h4>Trả hàng</h4>
+                                                        <h4>Chờ xác nhận Trả hàng</h4>
                                                     </div>
                                                 <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
@@ -896,7 +1152,280 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
                                             <?php if($datatemp['TrangThai']==9): ?>
                                                 <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
                                                     <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
-                                                        <h4>Đổi hàng</h4>
+                                                        <h4> Chờ xác nhận Đổi hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==10): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Đã xác nhận yêu cầu Trả hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==11): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4> Đã xác nhận yêu cầu Đổi hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==12): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4> Đơn vị vận chuyển đang đến nhận hàng đổi/trả</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==13): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Trả hàng thành công</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==14): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Đổi hàng thành công</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==15): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Không chập nhận trả hàng</h4>
+                                                    </div>
+                                                <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
+                                        
+                                                <table class="  ">
+                                                            <tbody class="" style="text-align: left;">
+                                                            <?php foreach ($datatemp2 as $data): ?>
+                                                                <tr>
+                                                                    <td style="padding: 20px;"> 
+                                                                        <img class="img" src="<?=$data['HinhAnh']?>" style="width: 100px;height: 120px;" alt="#">
+                                                                    </td>
+                                                                    <td >
+                                                                        <p class="mb-1">
+                                                                            <a href="detail.php?id=<?=$data['IDSanPham']?>" style="font-size:17px;text-decoration: none;color:black"><?=$data['TenSanPham']?></a>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                        <span style="font-size: 16px;"> Phân loại hàng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['TenMau']?>, <?=$data['TenSize']?></b></span> </span>
+                                                                        </p>
+                                                                        <p class="mb-0">
+                                                                            <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
+                                                                        </p>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        
+                                                        </table>
+    
+                                                        <div style="text-align: left;color: black;border-top: 1px solid black;border-color: inherit;">
+                                                            <div style="font-size:20px; color:#f00;"><b> Thành Tiền: <?=number_format($datatemp['ThanhTien'], 0, ',', '.')?><span>đ</span></b></div>
+                                                        </div> 
+
+
+                                                </div>
+                                            <?php endif ?>
+                                            <?php if($datatemp['TrangThai']==16): ?>
+                                                <div style="line-height: 2.5; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0, 0, 0, 0.1); margin-bottom: 15px;padding: 10px;">
+                                                    <div style="text-align: right;color: #26aa99;border-bottom: 1px solid black;border-color: inherit;">
+                                                        <h4>Không chấp nhận đổi hàng</h4>
                                                     </div>
                                                 <?php $datatemp2 = $hoadon->TrangThaiDonHang($IDNguoiDung,$datatemp['TrangThai'],$datatemp['IDHoaDon']); ?>
                                         
@@ -961,24 +1490,24 @@ $kiemtratrahang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNguoiDung,8);
     </div>
 </div>
 <script>
-$(document).ready(function(){
-    $('.doi-tra-hang').click(function(){
-        var idHoaDon2 = this.id;
-        console.log(idHoaDon2);
-        $.ajax({
-            url: 'senemailtrahang.php', // Đường dẫn tới tệp PHP xử lý gửi email
-            type: 'POST',
-            dataType: 'json',
-            data: { action: 'doi_tra_hang',idHoaDon: idHoaDon2 }, // Dữ liệu gửi đi (nếu cần)
-            success: function(response){
-                alert(response.message);
-            },
-            error: function(xhr, status, error){
-                console.error(xhr.responseText);
-            }
-        });
-    });
-});
+// $(document).ready(function(){
+//     $('.doi-tra-hang').click(function(){
+//         var idHoaDon2 = this.id;
+//         console.log(idHoaDon2);
+//         $.ajax({
+//             url: 'senemailtrahang.php', // Đường dẫn tới tệp PHP xử lý gửi email
+//             type: 'POST',
+//             dataType: 'json',
+//             data: { action: 'doi_tra_hang',idHoaDon: idHoaDon2 }, // Dữ liệu gửi đi (nếu cần)
+//             success: function(response){
+//                 alert(response.message);
+//             },
+//             error: function(xhr, status, error){
+//                 console.error(xhr.responseText);
+//             }
+//         });
+//     });
+// });
 
 
 // $(document).ready(function(){

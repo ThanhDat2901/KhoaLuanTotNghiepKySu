@@ -40,10 +40,10 @@
                     <tr>
                         <th>Số Thứ Tự</th>
                         <th>Tên Người Dùng</th>
-                        <th>Tên Sản Phẩm</th>
+                        <th style="max-width: 300px;">Tên Sản Phẩm</th>
                         <th>Số Sao</th>
                         <th>Nội Dung</th>
-                        <th>Đánh Giá</th>
+                        <th>Thời gian</th>
                         <th>Thao Tác</th>
                     </tr>
                 </thead>
@@ -60,8 +60,15 @@
                         <td><?php echo $result['TenNguoiDung'] ?></td>
                         <td><?php echo $result['TenSanPham'] ?></td>
                         <td class="star-rating"><?php echo displayStars($result['Rate']); ?></td>
-                        <td><?php echo $result['NoiDung'] ?></td>
-                        <td><?php echo $result['DanhGia'] ?></td>
+                            <td><?php echo $result['NoiDung'] ?></td>
+                            <?php
+                                // Lấy thời gian từ cơ sở dữ liệu
+                                $thoiGian = $result['ThoiGian'];
+
+                                // Định dạng lại thời gian từ chuỗi
+                                $thoiGianDaDinhDang = date('d/m/Y H:i:s', strtotime($thoiGian));
+                            ?>
+                        <td><?php echo $thoiGianDaDinhDang?></td>
                         <td><a onclick="return confirm('bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDComment'] ?>">Xóa</a></td>
                     </tr>
                     <?php

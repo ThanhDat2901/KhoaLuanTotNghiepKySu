@@ -5,7 +5,8 @@
     $brand = new hoadon();
      if(isset($_GET['delid'])){
         $id = $_GET['delid']; 
-        $delbrand = $brand->del_brand($id);
+        // $delbrand = $brand->del_brand($id);
+        $delbrand = '';
     }
 ?> -->
 <div class="grid_10">
@@ -25,6 +26,7 @@
                         <th>Số Điện Thoại</th>
                         <th>Email</th>
                         <th>Tổng Tiền</th>
+                        <th>Trạng Thái</th>
                         <th>Xem Chi Tiết</th>
                     </tr>
                 </thead>
@@ -42,6 +44,7 @@
                         <td><?php echo $result['SDT'] ?></td>
                         <td><?php echo $result['Email'] ?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
+                        <td><?php echo $result['TenTrangThai'] ?></td>
                         <td><a href="hoadonshowdetailnv.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
                     </tr>
                     <?php

@@ -49,7 +49,7 @@
 			return $result;
 		}
 		public function show_HoaDon(){
-			$query = "SELECT * FROM hoadon order by IDHoaDon desc";
+			$query = "SELECT * FROM hoadon,TrangThai WHERE hoadon.TrangThai = TrangThai.IDTrangThai order by IDHoaDon desc";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -115,18 +115,21 @@
 			return $result;
 		}
 		public function tongTienTheoNgay() {
-			$query = "SELECT NgayLap, SUM(ThanhTien) as TongTien
-			FROM hoadon GROUP BY NgayLap";
+			$query = "SELECT DATE_FORMAT(NgayLap, '%Y-%m-%d') AS NgayLap,
+				SUM(ThanhTien) AS TongTien
+					FROM hoadon
+					WHERE isdel = 0 AND (trangthai = 6 OR trangthai = 14) 
+					GROUP BY DATE_FORMAT(NgayLap, '%Y-%m-%d');";
 			return $this->db->select($query);
 			}
 
 		public function tongTienTheoThang() {
-				$query = "SELECT DATE_FORMAT(NgayLap, '%Y-%m') as Thang, SUM(ThanhTien) as TongTien FROM hoadon GROUP BY Thang";
+				$query = "SELECT DATE_FORMAT(NgayLap, '%Y-%m') as Thang, SUM(ThanhTien) as TongTien FROM hoadon where isdel=0 AND (trangthai = 6 OR trangthai = 14)  GROUP BY Thang";
 				return $this->db->select($query);
 			}
 			
 		public function tongTienTheoNam() {
-				$query = "SELECT YEAR(NgayLap) as Nam, SUM(ThanhTien) as TongTien FROM hoadon GROUP BY Nam";
+				$query = "SELECT YEAR(NgayLap) as Nam, SUM(ThanhTien) as TongTien FROM hoadon where isdel=0 AND (trangthai = 6 OR trangthai = 14)  GROUP BY Nam";
 				return $this->db->select($query);
 			}
 			public function CapNhatTrangthaiHoaDon($IDHoaDon)
@@ -154,7 +157,21 @@
 				} else {
 					return "Cập nhật thất bại";
 				}
-			}		
+			}
+			public function CapNhatTrangthaiTraHang($IDHoaDon,$IDTrangThai,$LyDoTra)
+			{
+				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+				$IDTrangThai = mysqli_real_escape_string($this->db->link, $IDTrangThai);
+				$LyDoTra = mysqli_real_escape_string($this->db->link, $LyDoTra);
+				$sql = "UPDATE hoadon SET TrangThai = '$IDTrangThai', LyDoTra = '$LyDoTra' WHERE IDHoaDon = '$IDHoaDon'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return "Cập nhật thành công";
+				} else {
+					return "Cập nhật thất bại";
+				}
+			}			
 			public function HuyDonHang($IDHoaDon,$LyDoHuy)
 			{
 				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);

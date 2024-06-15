@@ -26,6 +26,7 @@
                         <th>Email</th>
                         <th>Ngày Lập</th>
                         <th>Tổng Tiền</th>
+                        <th>Trạng thái</th>
                         <th>Xem Chi Tiết</th>
                     </tr>
                 </thead>
@@ -46,6 +47,7 @@
                             $date = new DateTime($datetime); ?>
                         <td><?php echo $date->format('d-m-Y H:i:s');?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
+                        <td><?php echo $result['TenTrangThai'] ?></td>
                         <td><a href="hoadonshowdetail.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
                     </tr>
                     <?php
