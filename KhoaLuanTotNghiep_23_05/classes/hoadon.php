@@ -92,7 +92,7 @@
 			return $result;
 		}
 		public function show_HoaDonDetail($id){
-			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake
+			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake,chitietsanpham.*
 					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
 					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
 					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 

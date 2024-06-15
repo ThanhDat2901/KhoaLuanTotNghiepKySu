@@ -141,6 +141,29 @@
 			}
 
 		}
+		public function update_chitietsanphamtrahang($IDSize,$IDSanPham,$SoLuong,$id){
+			$IDSize = $this->fm->validation($IDSize);
+			$IDSize = mysqli_real_escape_string($this->db->link, $IDSize);
+			$IDSanPham = mysqli_real_escape_string($this->db->link, $IDSanPham);
+			$SoLuong = mysqli_real_escape_string($this->db->link, $SoLuong);
+			$id = mysqli_real_escape_string($this->db->link, $id);
+
+			if(empty($IDSanPham)){
+				$alert = "<span class='error'>Không được để trống</span>";
+				return $alert;
+			}else{
+				$query = "UPDATE chitietsanpham SET SoLuong = SoLuong + '$SoLuong'  WHERE IDChiTiet = '$id'";
+				$result = $this->db->update($query);
+				if($result){
+					$alert = "<span class='success'>Thay đổi thành công</span>";
+					return $alert;
+				}else{
+					$alert = "<span class='error'>Thay đổi thất bại</span>";
+					return $alert;
+				}
+			}
+
+		}
 		public function del_brand($id){
 			$query = "DELETE FROM chitietsanpham where IDChiTiet = '$id'";
 			$result = $this->db->delete($query);

@@ -911,7 +911,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                 <label>
                                                                     <input type="radio" name="LyDoTra" value="Hàng nguyên vẹn nhưng không còn nhu cầu"> Hàng nguyên vẹn nhưng không còn nhu cầu
                                                                 </label>
-                                                                <button type="button" onclick="submitCancelTraHang()">Xác nhận trả h</button>
+                                                                <button type="button" onclick="submitCancelTraHang()">Xác nhận trả hàng</button>
                                                                 <button type="button" onclick="closeCancelPopupTraHang()">Đóng</button>
                                                             </form>
                                                     </div>

@@ -1,7 +1,9 @@
 <?php include 'inc/header.php';?>
 <?php include 'inc/sidebar.php';?>
 <?php include '../classes/hoadon.php' ?>
+<?php include '../classes/chitietsanpham.php' ?>
 <?php
+$ctsp = new chitietsanpham();
     $brand = new hoadon();
     if(isset($_GET['id'])){
         $id = $_GET['id']; 
@@ -50,10 +52,16 @@
                         <td><?php echo $result['GhiChu'] ?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
                         
-                       
+                       <?php var_dump($result['IDSize']) ?>
+                       <?php var_dump($result['IDSanPham']) ?>
+                       <?php var_dump($result['SoLuongMua']) ?>
+                       <?php var_dump($result['IDChiTiet']) ?>
                     </tr>
                     <?php
                                  $lastResult = $result;
+                                //  if($lastResult['TrangThai']==13){
+                                //     $updatectsp = $ctsp->update_chitietsanphamtrahang($result['IDSize'],$result['IDSanPham'],$result['SoLuongMua'],$result['IDChiTiet']);
+                                //  }
                 }
                     }
                     ?>
