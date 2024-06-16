@@ -973,7 +973,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                     <div id="cancelPopupDanhGia">
                                                             <h3>Đánh giá sản phẩm</h3>
                                                             <form id="cancelFormDanhGia">
-                                                                <input type="text" id="IDHoaDonDanhGia" name="IDHoaDonDanhGia">
+                                                                <input type="hidden" id="IDHoaDonDanhGia" name="IDHoaDonDanhGia">
                                                             
                                                                 <label>
                                                                     Chất lượng sản phẩm:

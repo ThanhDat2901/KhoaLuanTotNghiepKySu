@@ -60,7 +60,7 @@
 		}
 		public function DanhSachHoaDonByIDNguoiDung($IDNguoiDung){
 			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
-			$query = "SELECT * FROM hoadon,trangthai where hoadon.TrangThai = trangthai.IDTrangThai and IDNguoiDung = '$IDNguoiDung'";
+			$query = "SELECT * FROM hoadon,trangthai where hoadon.TrangThai = trangthai.IDTrangThai and IDNguoiDung = '$IDNguoiDung' ORDER BY hoadon.IDHoaDon DESC";
 			$result = $this->db->select($query);
 			return $result;
 		}
@@ -87,6 +87,7 @@
 			and TrangThai.IDTrangThai='$IDTrangThai' 
 			and  thongtinnguoidung.IDNguoiDung = '$IDNguoiDung'
 			and hoadon.IDHoaDon='$IDHoaDon'
+			ORDER BY hoadon.IDHoaDon DESC
 			";
 			$result = $this->db->select($query);
 			return $result;
