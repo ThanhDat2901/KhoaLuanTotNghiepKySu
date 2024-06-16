@@ -7,7 +7,6 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 require 'classes/hoadon.php';
-
 $servername = "localhost";
 $username = "root"; 
 $password = ""; 
@@ -27,8 +26,8 @@ $response = array('message' => '');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Lấy dữ liệu gửi từ AJAX
     $action = $_POST['action'];
-    $idHoaDon = $_POST['IDHoaDonTraHang'];
-    $LyDoTra = $_POST['LyDoTra'];
+    $idHoaDon = $_POST['IDHoaDonDoiHang'];
+    $LyDoDoi = $_POST['LyDoDoi'];
     // Nếu action là 'doi_tra_hang', thực hiện gửi email
     if ($action == 'doi_tra_hang') {
        
@@ -49,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             //Content
             $mail->isHTML(true);
-            $mail->Subject = '=?UTF-8?B?' . base64_encode('Yêu cầu trả hàng từ người dùng') . '?=';
+            $mail->Subject = '=?UTF-8?B?' . base64_encode('Yêu cầu đổi hàng từ người dùng') . '?=';
 
             // Truy vấn dữ liệu từ bảng hoadon
             $sql = "SELECT * FROM hoadon where IDHoaDon = '$idHoaDon'";
@@ -106,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                 $mailContent = '
-                    <p style="color: black;">Yêu cầu trả hàng từ email: <b>'.$email.'</b></p>
+                    <p style="color: black;">Yêu cầu đổi hàng từ email: <b>'.$email.'</b></p>
                     ' . $orderInfo . '
                     ' . $productInfo . '
                     <p style="color: black;"><strong>Yêu cầu xử lý</strong></p>';
@@ -116,10 +115,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $mail->Body    = "Không có thông tin đơn hàng nào.";
             }
-            $Capnhaptrangthai = $hoadon->CapNhatTrangthaiTraHang($idHoaDon,8,$LyDoTra);
+            $Capnhaptrangthai = $hoadon->CapNhatTrangthaiDoiHang($idHoaDon,9,$LyDoDoi);
             // Gửi email
             $mail->send();
-            $response['message'] = 'Đã gửi yêu cầu trả hàng';
+            $response['message'] = 'Đã gửi yêu cầu đổi hàng';
 
         } catch (Exception $e) {
             $response['message'] = "Không thể gửi email. Lỗi Mailer: {$mail->ErrorInfo}";

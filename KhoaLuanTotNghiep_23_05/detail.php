@@ -435,7 +435,7 @@ else{
         <?php endif; ?>
         </div>
 
-
+            <?php $average_rating = null;  ?>
         <?php if (!empty($comment)): ?>
             <?php     
                 $total_rating = 0;
@@ -448,7 +448,8 @@ else{
                     
                     ?>
             <?php endforeach ;?>    
-            <?php $average_rating = $total_rating / $num_ratings; ?>  
+            <?php $average_rating = $total_rating / $num_ratings; 
+            $average_rating = number_format($average_rating, 1);?>  
         <?php endif; ?>
 
         <div class="row" style="margin-top: 10vh; border: 1px; border-color: inherit;">
@@ -459,26 +460,33 @@ else{
         <div class="col-md-3">
             <div class="d-flex align-items-center flex-column">
             <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
+            <?php if ($average_rating !== null): ?>
                 <h3 class="mr-2"> <?=$average_rating ?> trên 5 </h3>
                 <div class="rating">
                     <?php
-                    $full_stars = floor($average_rating); 
-                    $half_star = $average_rating - $full_stars; 
-                    $empty_stars = 5 - ceil($average_rating); 
-
                     
-                    for ($i = 0; $i < $full_stars; $i++) {
-                        echo '<span style="color: #ee4d2d;" class="fa fa-star checked"></span>';
-                    }
-                    if ($half_star > 0) {
-                        echo '<span style="color: #ee4d2d;" class="fa fa-star-half-alt checked"></span>';
-                    }
+            $full_stars = floor($average_rating); 
+            $fraction = $average_rating - $full_stars;
+            $half_star = $fraction >= 0.25 && $fraction <= 0.75 ? 1 : 0;
+            $empty_stars = 5 - $full_stars - $half_star; 
 
-                    for ($i = 0; $i < $empty_stars; $i++) {
-                        echo '<span style="color: #ee4d2d;" class="fa fa-star"></span>';
-                    }
+            // Display full stars
+            for ($i = 0; $i < $full_stars; $i++) {
+                echo '<span style="color: #ee4d2d;" class="fa fa-star checked"></span>';
+            }
+            // Display half star if there is a fractional part
+            if ($fraction > 0 && $half_star) {
+                echo '<span style="color: #ee4d2d;" class="fa fa-star-half-alt checked"></span>';
+            }
+            // Display empty stars
+            for ($i = 0; $i < $empty_stars; $i++) {
+                echo '<span style="color: gray;" class="fa fa-star"></span>'; // Gray color for empty stars
+            }
                     ?>
                 </div>
+                <?php else: ?>
+                <p>Chưa có đánh giá.</p>
+            <?php endif; ?>
             </div>
         </div>
 

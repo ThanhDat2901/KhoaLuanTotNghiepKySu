@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>Số Thứ Tự</th>
+                        <th>Mã Hóa Đơn</th>
                         <th>Tên Người Dùng</th>
                         <th>Số Điện Thoại</th>
                         <th>Email</th>
@@ -40,6 +41,7 @@
                 ?>
                     <tr class="odd gradeX">
                         <td><?php echo $i; ?></td>
+                        <td><?php echo $result['IDHoaDon'] ?></td>
                         <td><?php echo $result['TenNguoiDung'] ?></td>
                         <td><?php echo $result['SDT'] ?></td>
                         <td><?php echo $result['Email'] ?></td>
@@ -47,7 +49,16 @@
                             $date = new DateTime($datetime); ?>
                         <td><?php echo $date->format('d-m-Y H:i:s');?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
-                        <td><?php echo $result['TenTrangThai'] ?></td>
+
+                        <?php if($result['TrangThai']==8): ?>
+                        <td style="color: red;"><?php echo $result['TenTrangThai'] ?></td>
+                        <?php elseif($result['TrangThai']==9): ?>
+                        <td  style="color: red;"><?php echo $result['TenTrangThai'] ?></td>
+
+                        <?php else: ?>
+                            <td><?php echo $result['TenTrangThai'] ?></td> 
+                        <?php endif; ?>
+
                         <td><a href="hoadonshowdetail.php?id=<?php echo $result['IDHoaDon']; ?>"><button style="border-radius: 5px;">Chi Tiết Hóa Đơn</button></a></td>
                     </tr>
                     <?php

@@ -171,6 +171,20 @@
 				} else {
 					return "Cập nhật thất bại";
 				}
+			}
+			public function CapNhatTrangthaiDoiHang($IDHoaDon,$IDTrangThai,$LyDoDoi)
+			{
+				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+				$IDTrangThai = mysqli_real_escape_string($this->db->link, $IDTrangThai);
+				$LyDoDoi = mysqli_real_escape_string($this->db->link, $LyDoDoi);
+				$sql = "UPDATE hoadon SET TrangThai = '$IDTrangThai', LyDoDoi = '$LyDoDoi' WHERE IDHoaDon = '$IDHoaDon'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return "Cập nhật thành công";
+				} else {
+					return "Cập nhật thất bại";
+				}
 			}			
 			public function HuyDonHang($IDHoaDon,$LyDoHuy)
 			{

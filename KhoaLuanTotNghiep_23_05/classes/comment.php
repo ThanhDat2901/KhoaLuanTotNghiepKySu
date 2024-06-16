@@ -69,6 +69,24 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function show_commentSanPhamByIdNguoiDung($IDNguoiDung){
+			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
+			$query = "	SELECT comment.*,thongtinnguoidung.TenNguoiDung, sanpham.TenSanPham,mausac.TenMau,sanpham.*
+						FROM 
+							comment 
+						INNER JOIN 
+							thongtinnguoidung ON comment.IDNguoiDung = thongtinnguoidung.IDNguoiDung 
+						INNER JOIN 
+							sanpham ON comment.IDSanPham = sanpham.IDSanPham 
+						INNER JOIN 
+							mausac ON sanpham.IDMau  = mausac.IDMau  
+						WHERE 
+							comment.isDel != 1  and comment.IDNguoiDung='$IDNguoiDung'
+						ORDER BY 
+							comment.IDComment DESC";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function show_commentSanPhamPhanTrang($IDSanPham,$limit, $offset){
 			$IDSanPham = mysqli_real_escape_string($this->db->link, $IDSanPham);
 			$query = "	SELECT comment.*,thongtinnguoidung.TenNguoiDung, sanpham.TenSanPham,mausac.TenMau
@@ -106,6 +124,16 @@
 			$count = $row[0]; 
 			return $count;
 		}
+		public function countAllCommentNguoiDungByID($IDSanPham )
+		{
+			$IDSanPham = mysqli_real_escape_string($this->db->link,$IDSanPham);
+			$sql = "SELECT COUNT(*) FROM comment WHERE comment.isDel=0 and IDSanPham='$IDSanPham' ";
+			$result = $this->db->select($sql);
+			$row = $result->fetch_row(); 
+			$count = $row[0]; 
+			return $count;
+		}
+		
 		public function countAllCommentByIDAndRate($IDSanPham,$Rate)
 		{
 			$IDSanPham = mysqli_real_escape_string($this->db->link,$IDSanPham);
@@ -151,7 +179,7 @@
 				and  hoadon.IDHoaDon='$IDHoaDon' 
 				and comment.IDSanPham = '$IDSanPham' 
 				And comment.IDNguoiDung ='$IDNguoiDung' 
-				and trangthai='6'";
+				 AND (trangthai = 6 OR trangthai = 14 OR trangthai = 15 OR trangthai = 16)   ";
 				$result = $this->db->select($sql);
 				if ($result && mysqli_num_rows($result) > 0) {
 					return 1;  

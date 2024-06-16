@@ -238,6 +238,7 @@
 											<?php else:?>
 												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="thongtincanhan.php">  Tài khoản của tôi</a></li>
 												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="donmua.php">  Đơn mua</a></li>
+												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="lichsudanhgia.php">  Đánh giá</a></li>
 												<li><a style="text-decoration:none;color: black;" class="dropdown-item" href="logout.php"> Đăng xuất</a></li>
 											<?php endif ?>
 										</ul>
