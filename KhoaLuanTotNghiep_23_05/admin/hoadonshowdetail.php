@@ -51,11 +51,6 @@ $ctsp = new chitietsanpham();
                         <td><?php echo $result['NgayLap'] ?></td>
                         <td><?php echo $result['GhiChu'] ?></td>
                         <td><?php echo number_format($result['ThanhTien'], 0, ',', '.') ?> VND</td>
-                        
-                       <?php var_dump($result['IDSize']) ?>
-                       <?php var_dump($result['IDSanPham']) ?>
-                       <?php var_dump($result['SoLuongMua']) ?>
-                       <?php var_dump($result['IDChiTiet']) ?>
                     </tr>
                     <?php
                                  $lastResult = $result;

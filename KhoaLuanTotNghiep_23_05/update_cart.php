@@ -74,18 +74,19 @@ else
         $cartIndex = array_search($IDChiTiet, array_column($_SESSION['cart'], 'IDChiTiet'));
     
         if ($action === 'increase') {
+            $soluongtronggiohang = $_SESSION['cart'][$cartIndex]['SoLuong'];
+            $availableQuantity = $pr->getAvailableQuantity($IDChiTiet); 
             // Increase the quantity
-            if ($cartIndex !== false) {
+            if ($cartIndex !== false && $soluongtronggiohang < $availableQuantity) {
                 $_SESSION['cart'][$cartIndex]['SoLuong']++;
-            } else {
-                // If the product is not in the cart, add it
-                $_SESSION['cart'][] = array(
-                    'IDChiTiet' => $IDChiTiet,
-                    'SoLuong' => 1
-                );
-            }
+            } 
+            // else {
+            //     $_SESSION['cart'][] = array(
+            //         'IDChiTiet' => $IDChiTiet,
+            //         'SoLuong' => 1
+            //     );
+            // }
         } elseif ($action === 'decrease') {
-            // Decrease the quantity
             if ($cartIndex !== false && $_SESSION['cart'][$cartIndex]['SoLuong'] > 1) {
                 $_SESSION['cart'][$cartIndex]['SoLuong']--;
             }

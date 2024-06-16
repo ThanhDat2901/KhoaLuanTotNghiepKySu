@@ -19,7 +19,7 @@
 			$this->fm = new Format();
 		}
 		public function DanhSachBoSuuTap(){
-			$query = "SELECT * FROM bosuutap order by IDBoSuuTap desc";
+			$query = "SELECT * FROM bosuutap where isdel=0 order by IDBoSuuTap desc";
 			$result = $this->db->select($query);
 			return $result;
 		}

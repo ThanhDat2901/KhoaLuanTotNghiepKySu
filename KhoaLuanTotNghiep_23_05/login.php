@@ -51,7 +51,7 @@
                         <?php echo $success_message; ?>
                     </h5>
 
-                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Đăng nhặp</h5>
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Đăng nhập</h5>
                   <div class=" mb-4">
                   <label for="email" class="form-label">Email</label>
                     <input type="email"  placeholder="Nhập Email" class="form-control form-control-lg" name ="email"/>
