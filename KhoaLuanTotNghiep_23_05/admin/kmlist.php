@@ -48,7 +48,11 @@
 							<td style="color: <?php echo ($end_date_timestamp < strtotime($current_date)) ? 'red' : 'inherit'; ?>"><?php echo $result['TienKhuyenMai'] ?>%</td>
 							<td style="color: <?php echo ($end_date_timestamp < strtotime($current_date)) ? 'red' : 'inherit'; ?>"><?php echo $result['NgayBatDau'] ?></td>
 							<td style="color: <?php echo ($end_date_timestamp < strtotime($current_date)) ? 'red' : 'inherit'; ?>"><?php echo $result['NgayKetThuc'] ?></td>
+							<?php if($result['TienKhuyenMai']==0):?>
+								<td></td>
+							<?php else:?>
 							<td><a href="kmedit.php?brandid=<?php echo $result['IDKhuyenMai'] ?>">Thay Đổi</a> || <a onclick = "return confirm('Bạn có muốn xóa ?')" href="?delid=<?php echo $result['IDKhuyenMai'] ?>">Xóa</a></td>
+							<?php endif ?>
 						</tr>
 						<?php
 					}

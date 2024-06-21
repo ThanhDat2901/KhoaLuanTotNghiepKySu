@@ -311,7 +311,7 @@ public function getAllLoaiSanPhamByID($id)
 			return $result;
 		}
 		public function show_product(){
-			$query = "SELECT sanpham.*, loaisanpham.TenLoai, chuongtrinhkhuyenmai.TenKhuyenMai, mausac.MaMau
+			$query = "SELECT sanpham.*, loaisanpham.TenLoai, chuongtrinhkhuyenmai.TenKhuyenMai, mausac.MaMau, sanpham.IDSanPham as spid
 			FROM sanpham 
 			INNER JOIN loaisanpham ON sanpham.IDLoai = loaisanpham.IDLoai 
 			INNER JOIN chuongtrinhkhuyenmai ON sanpham.IDKhuyenMai = chuongtrinhkhuyenmai.IDKhuyenMai 
@@ -431,6 +431,24 @@ public function getAllLoaiSanPhamByID($id)
 			}
 
 		}
+		public function CapNhapTienKhuyenMai($IDSanPham)
+		{
+			$IDSanPham  = mysqli_real_escape_string($this->db->link, $IDSanPham);
+			$sql = "UPDATE sanpham SET GiaCuoi = GiaDau,IDKhuyenMai = 25 WHERE IDSanPham  = '$IDSanPham'";
+			$update_cart = $this->db->update($sql);
+
+			if ($update_cart) {
+				return "Cập nhật thành công";
+			} else {
+				return "Cập nhật thất bại";
+			}
+		}
+		public function SelectSanPhamKhuyenMai($IDSanPham){
+			$IDSanPham  = mysqli_real_escape_string($this->db->link, $IDSanPham);
+			$query = "SELECT * FROM sanpham,chuongtrinhkhuyenmai WHERE sanpham.IDKhuyenMai = chuongtrinhkhuyenmai.IDKhuyenMai AND sanpham.IDSanPham ='$IDSanPham'";
+			$result = $this->db->select($query);
+			return $result;
+		} 
 		public function del_product($id){
 			$query = "UPDATE sanpham SET isDel = 1 where IDSanPham = '$id'";
 			$result = $this->db->delete($query);

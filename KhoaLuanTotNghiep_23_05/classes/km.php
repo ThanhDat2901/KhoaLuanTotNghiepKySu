@@ -60,6 +60,11 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function show_NgayKhuyenMai(){
+			$query = "SELECT * FROM chuongtrinhkhuyenmai  WHERE IDKhuyenMai != 7 AND isDel != 1 order by IDKhuyenMai desc";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function getbrandbyId($id){
 			$query = "SELECT * FROM chuongtrinhkhuyenmai where IDKhuyenMai = '$id'";
 			$result = $this->db->select($query);

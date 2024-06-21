@@ -14,6 +14,10 @@
         $id = $_GET['productid']; 
         $delpro = $pd->del_product($id);
     }
+
+	
+
+
 ?>
 <div class="grid_10">
     <div class="box round first grid">
@@ -51,6 +55,21 @@
 						$i++;
 				?>
 				<tr class="odd gradeX">
+
+					<?php 
+					$spngayHienTai = date('Y-m-d');
+					$sanphamnew = $pd->SelectSanPhamKhuyenMai($result['spid']); 
+					$resultspnew = $sanphamnew->fetch_assoc();
+					$spngayBatDau = $resultspnew['NgayBatDau'];
+					$spngayKetThuc = $resultspnew['NgayKetThuc'];
+					if ($spngayHienTai > $spngayKetThuc) {
+
+						$capnhapkhuyenmai = $pd->CapNhapTienKhuyenMai($result['spid']);
+					}
+
+					
+					
+					?>
 					<td><?php echo $i ?></td>
 					<td><?php echo $fm->textShorten($result['TenSanPham'], 20) ?></td>
 					<td><?php echo $fm->textShorten($result['ThongTin'], 40) ?></td>
@@ -69,6 +88,8 @@
 						}
 					?></td>
 					<td><a href="productedit.php?productid=<?php echo $result['IDSanPham'] ?>">Thay Đổi</a> || <a href="?productid=<?php echo $result['IDSanPham'] ?>">Xóa</a></td>
+				
+				
 				</tr>
 				<?php
 					}

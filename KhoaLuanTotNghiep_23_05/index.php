@@ -9,6 +9,10 @@
 
     $MenuTrangChu = $menu->getMenuTrangChu();
 
+
+
+    
+    
     // $dataBoSuuTapSpeed = $pr->getChiTietBoSuuTapById('11');
 ?>
 <?php include 'inc/header.php' ;?>  

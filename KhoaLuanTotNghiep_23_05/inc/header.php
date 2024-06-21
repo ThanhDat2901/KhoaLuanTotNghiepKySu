@@ -96,6 +96,7 @@
 	require 'classes/loai.php';
 	require 'classes/km.php';
 	require_once 'classes/giohang.php';
+	require_once 'classes/product.php';
 	$gh2 = new giohang();
     $bosuutap = new category();
 	$loaisanpham = new loai();
@@ -103,6 +104,19 @@
     $databosuutap= $bosuutap->DanhSachBoSuuTap();
 	$dataloaisanpham = $loaisanpham->DanhSachLoaiSanPham();
 	$datakhuyenmai = $loaikhuyenmai->DanhSachKhuyenMaiConHanSD();
+	$prheader = new product();
+
+
+	$pdlist = $prheader->show_product();
+    $resultpdlist = $pdlist->fetch_assoc();
+    $spngayHienTai = date('Y-m-d');
+    $sanphamnew = $prheader->SelectSanPhamKhuyenMai($resultpdlist['spid']); 
+    $resultspnew = $sanphamnew->fetch_assoc();
+    $spngayBatDau = $resultspnew['NgayBatDau'];
+    $spngayKetThuc = $resultspnew['NgayKetThuc'];
+    if ($spngayHienTai > $spngayKetThuc) {
+        $capnhapkhuyenmai = $prheader->CapNhapTienKhuyenMai($resultpdlist['spid']);
+    }
 ?>
 
 <body style="overflow-x:hidden; background-color: #FFFFFF;">
