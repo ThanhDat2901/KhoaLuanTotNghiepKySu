@@ -84,7 +84,7 @@
                                     ?>  
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle"  style="color: black;" h href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Loại
                             </a>
@@ -94,7 +94,7 @@
                                 <li><a class="dropdown-item" href="">Quần Short</a></li>
                                 <li><a class="dropdown-item" href="">Quần Dài</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle"  style="color: black;" h href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Màu Sắc

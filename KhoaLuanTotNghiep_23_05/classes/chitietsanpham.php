@@ -164,6 +164,22 @@
 			}
 
 		}
+
+		public function update_chitietsoluongsanpham($IDChiTiet,$SoLuong){
+			
+			$IDChiTiet = mysqli_real_escape_string($this->db->link, $IDChiTiet);
+			$SoLuong = mysqli_real_escape_string($this->db->link, $SoLuong);
+				$query = "UPDATE chitietsanpham SET SoLuong = SoLuong + '$SoLuong'  WHERE IDChiTiet = '$IDChiTiet'";
+				$result = $this->db->update($query);
+				if($result){
+					$alert = "<span class='success'>Thay đổi thành công</span>";
+					return $alert;
+				}else{
+					$alert = "<span class='error'>Thay đổi thất bại</span>";
+					return $alert;
+				}
+
+		}
 		public function del_brand($id){
 			$query = "DELETE FROM chitietsanpham where IDChiTiet = '$id'";
 			$result = $this->db->delete($query);

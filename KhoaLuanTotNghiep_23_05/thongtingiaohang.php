@@ -701,7 +701,7 @@ $detailnguoidung = $thongtinnguoidung->fetch_assoc();
                                                                      
                 <div class="form-group">
                     <label for="txtNote">Ghi chú</label>
-                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote" required></textarea>
+                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote" ></textarea>
                 </div>
                 <div class="form-group">
                     <div class="flex-fill mb-0">
@@ -786,7 +786,7 @@ $detailnguoidung = $thongtinnguoidung->fetch_assoc();
                                                                      
                 <div class="form-group">
                     <label for="txtNote">Ghi chú</label>
-                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote" required></textarea>
+                    <textarea rows="2" class="form-control" id="txtNote" name="txtNote" ></textarea>
                 </div>
                 <div class="form-group">
                     <div class="flex-fill mb-0">

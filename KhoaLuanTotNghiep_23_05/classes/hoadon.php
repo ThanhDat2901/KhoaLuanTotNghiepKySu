@@ -159,6 +159,19 @@
 					return "Cập nhật thất bại";
 				}
 			}
+			public function CapNhatNgayGiao($IDHoaDon,$NgayGiao)
+			{
+				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+				$NgayGiao = mysqli_real_escape_string($this->db->link, $NgayGiao);
+				$sql = "UPDATE hoadon SET NgayGiao = '$NgayGiao' WHERE IDHoaDon = '$IDHoaDon'";
+				$update_cart = $this->db->update($sql);
+
+				if ($update_cart) {
+					return "Cập nhật thành công";
+				} else {
+					return "Cập nhật thất bại";
+				}
+			}
 			public function CapNhatTrangthaiTraHang($IDHoaDon,$IDTrangThai,$LyDoTra)
 			{
 				$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);

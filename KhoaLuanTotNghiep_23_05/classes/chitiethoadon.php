@@ -40,6 +40,13 @@
 				}
 
 		}
+		public function show_ChiTietHoaDon_ByIdHoaDon($IDHoaDon){
+			$IDHoaDon = $this->fm->validation($IDHoaDon);
+			$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
+			$query = "SELECT chitiethoadon.* FROM `chitiethoadon`,hoadon WHERE chitiethoadon.IDHoaDon = hoadon.IDHoaDon and hoadon.IDHoaDon =$IDHoaDon";
+			$result = $this->db->select($query);
+			return $result;
+		}
 
 	}
 ?>

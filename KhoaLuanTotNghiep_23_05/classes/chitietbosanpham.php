@@ -63,6 +63,25 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
+
+		public function show_chitietBoSanPhamByID($IDSanPham){
+			$IDSanPham = mysqli_real_escape_string($this->db->link, $IDSanPham);
+			$query = "SELECT sanpham.*
+				FROM chitietbo
+				LEFT JOIN bosanpham ON chitietbo.IDBo = bosanpham.IDBo
+				LEFT JOIN sanpham ON chitietbo.IDSanPham = sanpham.IDSanPham
+				WHERE bosanpham.isDel != 1 
+				AND bosanpham.IDBo = (
+					SELECT bosanpham.IDBo
+					FROM chitietbo
+					LEFT JOIN bosanpham ON chitietbo.IDBo = bosanpham.IDBo
+					WHERE chitietbo.IDSanPham = '$IDSanPham'
+				)
+				AND sanpham.IDSanPham != '$IDSanPham'
+				ORDER BY chitietbo.IDChiTiet DESC;";
+			$result = $this->db->select($query);
+			return $result;
+		}
 		public function getbrandbyId($id){
 			$query = "SELECT IDChiTiet, TenBo, sanpham.TenSanPham,chitietbo.IDBo as CTIDBo, chitietbo.IDSanPham as CTIDSanPham
 			FROM chitietbo

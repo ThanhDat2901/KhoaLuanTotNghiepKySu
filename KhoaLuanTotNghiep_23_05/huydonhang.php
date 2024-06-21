@@ -2,21 +2,21 @@
 // cancel_order.php
 require 'init.php';
 require 'classes/hoadon.php';
+require 'classes/chitiethoadon.php';
+require 'classes/chitietsanpham.php';
 $hoadon = new hoadon();
+$cthd = new chitiethoadon();
+$ctsp = new chitietsanpham();
 if(isset($_SESSION['login_detail'])){
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $IDHoaDon = $_POST['IDHoaDon'];
     $LyDoHuy = $_POST['LyDoHuy'];
-    // Thực hiện cập nhật trạng thái đơn hàng trong cơ sở dữ liệu
 
     $huydonhang= $hoadon->HuyDonHang($IDHoaDon,$LyDoHuy);
-    // if ($huydonhang) {
-    //     // echo "Đơn hàng đã được hủy thành công";
-    //     header("Location: donmua.php");
-    //     exit; 
-    // } else {
-    //     echo "Lỗi: ";
-    // }
+    $datacthd = $cthd->show_ChiTietHoaDon_ByIdHoaDon($IDHoaDon);
+    foreach ($datacthd as $item) {
+        $updatesoluong = $ctsp->update_chitietsoluongsanpham($item['IDChiTiet'], $item['SoLuong']);
+    }
     header("Location: donmua.php");
     exit;
 }

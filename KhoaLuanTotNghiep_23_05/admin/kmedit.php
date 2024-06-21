@@ -79,7 +79,7 @@
                     </tr>
 					<tr> 
                         <td>
-                            <input  id="save-button" disabled type="submit" name="submit" Value="Lưu" />
+                            <input  id="save-button"  type="submit" name="submit" Value="Lưu" />
                         </td>
                     </tr>
                 </table>
@@ -103,10 +103,10 @@
         if (isNaN(input) || input < 1 || input > 99) {
             errorMessage.textContent = "Nhập số từ 1 đến 99.";
             errorMessage.style.display = "block";
-            document.getElementById("save-button").disabled = true; // Vô hiệu hóa nút lưu
+            // document.getElementById("save-button").disabled = true; 
         } else {
             errorMessage.style.display = "none";
-            document.getElementById("save-button").disabled = false; // Kích hoạt lại nút lưu
+            document.getElementById("save-button").disabled = false; 
         }
     });
 

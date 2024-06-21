@@ -409,12 +409,11 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                 .then(response => response.text())
                 .then(data => {
                     console.log(data);
-                    console.log(response);
-                    showPopup('Đơn hàng đã được hủy thành công', 2000);
+                    showPopup('Đơn hàng đã được hủy thành công', 3000);
                     closeCancelPopup();
                     setTimeout(function() {
                         location.reload(); 
-                    }, 2500);
+                    }, 3500);
                     // location.reload(); 
                 })
                 .catch(error => console.error('Error:', error));
@@ -953,17 +952,20 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                 <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
                                                                 
                                                                     <?php
-                                                                    $ngayLap = strtotime($datatemp['NgayLap']);
-                                                                    $ngayHienTai = time();
-                                                                    $baNgaySau = strtotime('+3 days', $ngayLap);
+                                                                        $ngayGiao = strtotime($datatemp['NgayGiao']);
+                                                                        $ngayHienTai = time();
+                                                                        $baNgaySau = strtotime('+3 days', $ngayGiao);
 
-                                                                    $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
+                                                                        if ($ngayHienTai <= $baNgaySau) {
+                                                                            $choPhepTraHang = true; 
+                                                                        } else {
+                                                                            $choPhepTraHang = false; 
+                                                                        }
                                                                     ?>
                                                                 <?php if ($choPhepTraHang): ?>  
                                                                     <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupTraHang(<?=$datatemp['IDHoaDon']?>)" >Trả hàng</button>
                                                                     <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupDoiHang(<?=$datatemp['IDHoaDon']?>)" >Đổi hàng</button>
                                                                     <?php endif; ?>
-                                                                <!-- id="<?=$datatemp['IDHoaDon']?>" -->
                                                             </div>
                                                         <?php else: ?>
                                                             <div style="text-align: left;color: #26aa99;">
@@ -1094,13 +1096,17 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           <div >                                   
                                                               <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
                                                               
-                                                                  <?php
-                                                                  $ngayLap = strtotime($datatemp['NgayLap']);
-                                                                  $ngayHienTai = time();
-                                                                  $baNgaySau = strtotime('+3 days', $ngayLap);
+                                                              <?php
+                                                                        $ngayGiao = strtotime($datatemp['NgayGiao']);
+                                                                        $ngayHienTai = time();
+                                                                        $baNgaySau = strtotime('+3 days', $ngayGiao);
 
-                                                                  $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
-                                                                  ?>
+                                                                        if ($ngayHienTai <= $baNgaySau) {
+                                                                            $choPhepTraHang = true; 
+                                                                        } else {
+                                                                            $choPhepTraHang = false; 
+                                                                        }
+                                                                    ?>
                                                               <?php if ($choPhepTraHang): ?>  
                                                                   <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupTraHang(<?=$datatemp['IDHoaDon']?>)" >Trả hàng</button>
                                                                   <!-- <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupDoiHang(<?=$datatemp['IDHoaDon']?>)" >Đổi hàng</button> -->
@@ -1157,13 +1163,17 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           <div >                                   
                                                               <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
                                                               
-                                                                  <?php
-                                                                  $ngayLap = strtotime($datatemp['NgayLap']);
-                                                                  $ngayHienTai = time();
-                                                                  $baNgaySau = strtotime('+3 days', $ngayLap);
+                                                              <?php
+                                                                        $ngayGiao = strtotime($datatemp['NgayGiao']);
+                                                                        $ngayHienTai = time();
+                                                                        $baNgaySau = strtotime('+3 days', $ngayGiao);
 
-                                                                  $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
-                                                                  ?>
+                                                                        if ($ngayHienTai <= $baNgaySau) {
+                                                                            $choPhepTraHang = true; 
+                                                                        } else {
+                                                                            $choPhepTraHang = false; 
+                                                                        }
+                                                                    ?>
                                                               <?php if ($choPhepTraHang): ?>  
                                                                   <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupTraHang(<?=$datatemp['IDHoaDon']?>)" >Trả hàng</button>
                                                                   <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupDoiHang(<?=$datatemp['IDHoaDon']?>)" >Đổi hàng</button>
@@ -1220,13 +1230,17 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           <div >                                   
                                                               <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
                                                               
-                                                                  <?php
-                                                                  $ngayLap = strtotime($datatemp['NgayLap']);
-                                                                  $ngayHienTai = time();
-                                                                  $baNgaySau = strtotime('+3 days', $ngayLap);
+                                                              <?php
+                                                                        $ngayGiao = strtotime($datatemp['NgayGiao']);
+                                                                        $ngayHienTai = time();
+                                                                        $baNgaySau = strtotime('+3 days', $ngayGiao);
 
-                                                                  $choPhepTraHang = ($ngayHienTai <= $baNgaySau);
-                                                                  ?>
+                                                                        if ($ngayHienTai <= $baNgaySau) {
+                                                                            $choPhepTraHang = true; 
+                                                                        } else {
+                                                                            $choPhepTraHang = false; 
+                                                                        }
+                                                                    ?>
                                                               <?php if ($choPhepTraHang): ?>  
                                                                   <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupTraHang(<?=$datatemp['IDHoaDon']?>)" >Trả hàng</button>
                                                                   <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupDoiHang(<?=$datatemp['IDHoaDon']?>)" >Đổi hàng</button>
@@ -1237,6 +1251,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           <div style="text-align: left;color: #26aa99;">
                                                                   <h4>Đã đánh giá</h4>
                                                               </div>
+                                                              
                                                       <?php endif ?> 
 
                                                 </div>

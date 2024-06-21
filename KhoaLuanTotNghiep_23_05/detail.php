@@ -7,10 +7,12 @@ require 'classes/product.php';
 require 'classes/giohang.php';
 require 'classes/hinhanh.php';
 require 'classes/comment.php';
+require 'classes/chitietbosanpham.php';
     $pr = new product();
     $gh = new giohang();
     $ha = new hinhanh();
     $cm = new comment();
+    $ctbsp = new chitietbosanpham();
      // Lấy thông tin sản phẩm từ URL
      $id = isset($_GET['id']) ? $_GET['id'] : null;
      if (!$id) {
@@ -29,7 +31,7 @@ require 'classes/comment.php';
      $limit = $perPage;
 
      $comment = $cm->show_commentSanPham($id);
-
+     $datactbsp = $ctbsp->show_chitietBoSanPhamByID($id);
 
 
 
@@ -226,34 +228,37 @@ else{
             });
         });
 
-    formElements.forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+        formElements.forEach(function(form) {
+        var submitButton = form.querySelector('.specialButton');
+        if (submitButton) {
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault();
 
-            var xhr = new XMLHttpRequest();
-            var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                var formData = new FormData(form);
 
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 400) {
-                    var notificationPopup = document.getElementById('notificationPopup');
-                    notificationPopup.style.display = 'block';
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 400) {
+                        var notificationPopup = document.getElementById('notificationPopup');
+                        notificationPopup.style.display = 'block';
 
-                    setTimeout(function() {
-                        notificationPopup.style.display = 'none';
-                    }, 3000); 
+                        setTimeout(function() {
+                            notificationPopup.style.display = 'none';
+                        }, 3000); 
 
-                } else {
+                    } else {
+                        console.error('Request failed');
+                    }
+                };
+
+                xhr.onerror = function() {
                     console.error('Request failed');
-                }
-            };
+                };
 
-            xhr.onerror = function() {
-                console.error('Request failed');
-            };
-
-            xhr.open('POST', '', true);
-            xhr.send(formData);
-        });
+                xhr.open('POST', '', true);
+                xhr.send(formData);
+            });
+        }
     });
 
 
@@ -386,7 +391,7 @@ else{
                         <?php if (!empty($result_size)): ?>
                             <?php foreach($result_size as $datasize): ?>   
                                 <?php if ($datasize['SoLuong'] > 0): ?> 
-                                <form action="" method="post">
+                                <form action="" method="post" class="purchase-form">
                                 <input type="hidden" name="IDChiTiet" id="IDChiTiet" value="<?=$datasize['IDChiTiet'] ?>" />
                                 <input type="hidden" name="SoLuong" value="1">
                                     <table class="table table-xl table-hover" style="table-layout: fixed;">
@@ -395,7 +400,7 @@ else{
                                                 <td><?=$datasize['TenSize'] ?></td>
                                                 <td> <span style="font-weight: bold;"> <?=$datasize['SoLuong'] ?></span> Cửa Hàng còn</td>
                                                 <td>
-                                                    <button type="submit" id="specialButton" style="text-decoration:none;color:red; background: none; border: none;">
+                                                    <button type="submit" class="specialButton" id="specialButton" style="text-decoration:none;color:red; background: none; border: none;">
                                                         <i class="fa-solid fa-plus"></i>Chọn mua
                                                     </button>
                                                 </td>
@@ -409,6 +414,22 @@ else{
                             <h4 style="color: red;">Sản phẩm đã hết hàng</h4>
                         <?php endif; ?>
                         </div>
+                        <?php if($datactbsp): ?>
+                        <div class="row">
+                            <div class="col-12 mt-2 p-3" style="border: solid 1px #ccc; margin-bottom: 20px; background: #f6f6f6; text-align: center; border-radius: 7px;">
+                                <h6>Sản phẩm cùng bộ/liên quan</h6>
+                                <div class="d-flex justify-content-center">
+                                <?php foreach($datactbsp  as  $datactbspitem ):?> 
+                                    <div class="mx-2">
+                                        <a href="detail.php?id=<?=$datactbspitem['IDSanPham']?>">
+                                            <img class="img-responsive" style="width: 100px;height: 140px;" src="<?=$datactbspitem['HinhAnh'] ?>" alt="">
+                                        </a>
+                                    </div>
+                                <?php endforeach ;?>    
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif ?>
                         <div>
                             <button id="size-guide-button" class="btn-outline-dark btn-sm" style="margin-top: 10px;">Hướng dẫn chọn size</button>
                                 <div id="size-chart-overlay" class="zoom-overlay" style="display: none;">

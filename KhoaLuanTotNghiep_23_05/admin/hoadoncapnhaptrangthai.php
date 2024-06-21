@@ -8,7 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $hoadon = new hoadon();
         $result = $hoadon->CapNhatTrangthai($IDHoaDon,$IDTrangThai);
-
+        $NgayGiao = date('Y-m-d H:i:s');
+        if($IDTrangThai==6)
+        {
+            $capnhapgiaogiao = $hoadon->CapNhatNgayGiao($IDHoaDon,$NgayGiao);
+        }
         // echo $result;
         // header("Location: hoadonshowdetail.php?id=$IDHoaDon");
         header("Location: hoadonshow.php");

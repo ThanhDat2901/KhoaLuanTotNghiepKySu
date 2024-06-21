@@ -104,7 +104,7 @@ try {
                 $mail->send();
 
                 // Cập nhật trạng thái gửi email trong cơ sở dữ liệu
-                $brand->updateEmailSentStatus($result['IDHoaDon'], 1);
+                // $brand->updateEmailSentStatus($result['IDHoaDon'], 1);
             }
         }
     }
