@@ -7,6 +7,7 @@ $comment = new comment();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $IDHoaDon = $_POST['IDHoaDonDanhGia'];
+    $IDSanPhamDanhGia = $_POST['IDSanPhamDanhGia'];
     $Rate = $_POST['ratingValue'];
     $NoiDung = $_POST['reviewContent']; 
 
@@ -14,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $IDNguoiDung  = $_SESSION['user_id'];
     }
 
-    $sanphaminhoadon = $hoadon->show_SanPhamTrongHoaDon($IDHoaDon);
+    $sanphaminhoadon = $hoadon->show_SanPhamTrongHoaDon($IDHoaDon,$IDSanPhamDanhGia);
     $product = $sanphaminhoadon->fetch_assoc();
     $IDSanPham = $product['idsp'];
     

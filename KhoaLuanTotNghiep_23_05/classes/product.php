@@ -179,6 +179,18 @@ public function getAllLoaiSanPhamByID($id)
 			$result = $this->db->select($query);
 			return $result;
 		}
+		public function KiemTraSanPhamDaXoa($id)
+		{
+		
+			$sql = "SELECT sanpham.*,size.*,chitietsanpham.* FROM sanpham,size,chitietsanpham  where sanpham.IDSanPham = chitietsanpham.IDSanPham AND size.IDSize = chitietsanpham.IDSize AND sanpham.IDSanPham  =  '$id' and sanpham.isdel=1";
+			$result = $this->db->select($sql);
+
+			if ($result && mysqli_num_rows($result) > 0) {
+				return 1;  
+			} else {
+				return -1; 
+			}
+		}
 		public function getproductbyId($id){
 			$query = "SELECT sanpham.*,chuongtrinhkhuyenmai.*,mausac.* FROM sanpham,chuongtrinhkhuyenmai,mausac  where sanpham.IDKhuyenMai=chuongtrinhkhuyenmai.IDKhuyenMai AND sanpham.IDMau = mausac.IDMau AND IDSanPham =  '$id'";
 			$result = $this->db->select($query);

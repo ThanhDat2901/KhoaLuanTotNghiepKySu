@@ -9,7 +9,7 @@ require 'vendor/PHPMailer/src/SMTP.php';
 
 class Database {
     private $host = 'localhost';
-    private $db = 'yameshop';
+    private $db = 'dbyameshop';
     private $user = 'root';
     private $pass = '';
     public $pdo;

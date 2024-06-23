@@ -493,8 +493,9 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
 
 
             /*--------------------------------------------- */
-            function showCancelPopupDanhGia(IDHoaDonDanhGia) {
+            function showCancelPopupDanhGia(IDHoaDonDanhGia,IDSanPhamDanhGia) {
                 document.getElementById('IDHoaDonDanhGia').value = IDHoaDonDanhGia;
+                document.getElementById('IDSanPhamDanhGia').value = IDSanPhamDanhGia;
                 document.getElementById('cancelPopupDanhGia').style.display = 'block';
             }
 
@@ -933,9 +934,19 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                             <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
                                                                         </p>
                                                                     </td>
+                                                                    <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                    <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                                    <td>
+                                                                        <?php if($kiemtra2 !=1): ?>
+                                                          
+                                                                                                      
+                                                                                <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>, <?=$data['IDSanPham']?>)">Đánh giá</button>
+                                                                           
+                                                                        <?php endif ?> 
+                                                                    </td>
+
                                                                 </tr>
-                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
-                                                                <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                             
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         
@@ -949,7 +960,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           
 
                                                             <div >                                   
-                                                                <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
+                                                                <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                                 
                                                                     <?php
                                                                         $ngayGiao = strtotime($datatemp['NgayGiao']);
@@ -976,7 +987,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                             <h3>Đánh giá sản phẩm</h3>
                                                             <form id="cancelFormDanhGia">
                                                                 <input type="hidden" id="IDHoaDonDanhGia" name="IDHoaDonDanhGia">
-                                                            
+                                                                <input type="hidden" id="IDSanPhamDanhGia" name="IDSanPhamDanhGia" >
                                                                 <label>
                                                                     Chất lượng sản phẩm:
                                                                     <div class="rating" id="rating">
@@ -1079,9 +1090,18 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                             <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
                                                                         </p>
                                                                     </td>
+                                                                    <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                    <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                                    <td>
+                                                                        <?php if($kiemtra2 !=1): ?>
+                                                          
+                                                                                                      
+                                                                                <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>, <?=$data['IDSanPham']?>)">Đánh giá</button>
+                                                                           
+                                                                        <?php endif ?> 
+                                                                    </td>
                                                                 </tr>
-                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
-                                                                <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                             
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         
@@ -1094,7 +1114,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           
 
                                                           <div >                                   
-                                                              <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
+                                                              <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
                                                                         $ngayGiao = strtotime($datatemp['NgayGiao']);
@@ -1146,9 +1166,18 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                             <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
                                                                         </p>
                                                                     </td>
+                                                                    <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                    <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                                    <td>
+                                                                        <?php if($kiemtra2 !=1): ?>
+                                                          
+                                                                                                      
+                                                                                <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>, <?=$data['IDSanPham']?>)">Đánh giá</button>
+                                                                           
+                                                                        <?php endif ?> 
+                                                                    </td>
                                                                 </tr>
-                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
-                                                                <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                              
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         
@@ -1161,7 +1190,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           
 
                                                           <div >                                   
-                                                              <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
+                                                              <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
                                                                         $ngayGiao = strtotime($datatemp['NgayGiao']);
@@ -1213,9 +1242,18 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                             <span style="font-size: 16px;"> Số lượng:<span style="display: inline-block; margin: 0 5px; vertical-align: middle;"> <b><?=$data['SoluongInCTHD']?></b></span> </span>
                                                                         </p>
                                                                     </td>
+                                                                    <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
+                                                                    <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                                    <td>
+                                                                        <?php if($kiemtra2 !=1): ?>
+                                                          
+                                                                                                      
+                                                                                <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>, <?=$data['IDSanPham']?>)">Đánh giá</button>
+                                                                           
+                                                                        <?php endif ?> 
+                                                                    </td>
                                                                 </tr>
-                                                                <?php $kiemtra = $comment->KiemTraNguoiDungDanhGia($IDNguoiDung,$data['IDSanPham']) ?>
-                                                                <?php $kiemtra2 = $comment->KiemTraNguoiDungDanhGiaByHoaDon($IDNguoiDung,$data['IDSanPham'],$datatemp['IDHoaDon']) ?>
+                                                             
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         
@@ -1228,7 +1266,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                           
 
                                                           <div >                                   
-                                                              <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button>
+                                                              <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
                                                                         $ngayGiao = strtotime($datatemp['NgayGiao']);

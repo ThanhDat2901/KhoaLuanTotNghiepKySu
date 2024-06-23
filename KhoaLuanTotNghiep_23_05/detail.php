@@ -18,6 +18,7 @@ require 'classes/chitietbosanpham.php';
      if (!$id) {
          die("id không hợp lệ.");
      }
+     $kiemtrasanphamdaxoa= $pr->KiemTraSanPhamDaXoa($id);
      $listAnh = $ha->showListAnhByIdSanPham($id);
 
      $product_by_id = $pr->getproductbyId($id);
@@ -332,7 +333,8 @@ else{
         });
     });
 </script>
-
+<?php var_dump($kiemtrasanphamdaxoa)?>
+<?php if($kiemtrasanphamdaxoa ==-1): ?>
 <div id="about" class="shop" style="margin-top:12vh">
     <div id="notificationPopup" class="notification-popup" style="display: none;">
         Đã cập nhật giỏ hàng thành công!
@@ -591,7 +593,11 @@ else{
 
 
 </div>
-
+<?php else: ?>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw;">
+    <h1 style="color: #ee4d2d; text-align: center;">Page not found</h1>
+</div>
+<?php endif ?>  
 
 <?php  require 'inc/footer.php'?>
 

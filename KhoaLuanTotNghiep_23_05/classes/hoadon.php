@@ -75,7 +75,7 @@
 			$IDNguoiDung = mysqli_real_escape_string($this->db->link, $IDNguoiDung);
             $IDTrangThai = mysqli_real_escape_string($this->db->link, $IDTrangThai);
 			$IDHoaDon = mysqli_real_escape_string($this->db->link, $IDHoaDon);
-			$query = "SELECT chitiethoadon.*,thongtinnguoidung.*,chitietsanpham.*,sanpham.*,TrangThai.*,hoadon.*,mausac.*,size.*,chitiethoadon.SoLuong AS SoluongInCTHD 
+			$query = "SELECT chitiethoadon.*,thongtinnguoidung.*,chitietsanpham.*,sanpham.*,TrangThai.*,hoadon.*,mausac.*,size.*,chitiethoadon.SoLuong AS SoluongInCTHD,hoadon.IDHoaDon AS idhd  
 			FROM hoadon,chitiethoadon,thongtinnguoidung,chitietsanpham,sanpham,TrangThai,mausac,size 
 			WHERE size.IDSize = chitietsanpham.IDSize 
 			and sanpham.IDMau = mausac.IDMau 
@@ -103,13 +103,14 @@
 			$result = $this->db->select($query);
 			return $result;
 		}
-		public function show_SanPhamTrongHoaDon($id){
+		public function show_SanPhamTrongHoaDon($id,$idsp){
 			$query = "SELECT sanpham.IDSanPham as idsp,sanpham.*
 					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
 					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
 					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
 					  AND chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
 					  AND hoadon.IDHoaDon = '$id' 
+					   AND sanpham.IDSanPham = '$idsp' 
 					  ORDER BY hoadon.IDHoaDon DESC
 					  LIMIT 1";
 			$result = $this->db->select($query);

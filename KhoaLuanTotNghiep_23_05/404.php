@@ -10,7 +10,7 @@
     color: red;
 }
 </style>
- <div class="main">
+ <div class="main" style="margin-top: 10vh;">
     <div class="content">
     	<div class="cartoption">		
 			<div class="cartpage">
@@ -23,7 +23,4 @@
        <div class="clear"></div>
     </div>
  </div>
- <?php 
-	include 'inc/footer.php';
-	
- ?>
+
