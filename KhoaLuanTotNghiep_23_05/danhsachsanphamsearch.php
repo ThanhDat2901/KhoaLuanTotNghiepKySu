@@ -9,7 +9,7 @@
 
     $MenuTrangChu = $menu->getMenuTrangChu();
 
-    $perPage = 8;
+    $perPage = 50;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $perPage;
     $limit = $perPage;
@@ -155,7 +155,7 @@
             <?php endif; ?>    
         </div>
     </div>	
-    <div colspan="9">
+    <!-- <div colspan="9">
         <div class="pagination justify-content-center " style="margin-left:10vh; margin-top:8vh">
                 <?php if ($totalPages > 1) : ?>
                     <nav aria-label="Page navigation example">
@@ -167,7 +167,7 @@
                     </nav>
                 <?php endif; ?>
         </div>
-    </div>    
+    </div>     -->
 
 </div>
 <?php include 'inc/footer.php';?>    

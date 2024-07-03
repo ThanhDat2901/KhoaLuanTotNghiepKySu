@@ -4,7 +4,7 @@ include('connect.php');
 $sql = $conn->prepare("SELECT sanpham.*, bosuutap.IDBoSuuTap AS IDBST, bosuutap.TenBoSuuTap AS NAMEBST
                         FROM sanpham
                         INNER JOIN chitietbosuutap ON sanpham.IDSanPham = chitietbosuutap.IDSanPham
-                        INNER JOIN bosuutap ON chitietbosuutap.IDBoSuuTap = bosuutap.IDBoSuuTap");
+                        INNER JOIN bosuutap ON chitietbosuutap.IDBoSuuTap = bosuutap.IDBoSuuTap where sanpham.isdel=0");
 $sql->execute();
 $data = $sql->fetchAll(PDO::FETCH_ASSOC);
 

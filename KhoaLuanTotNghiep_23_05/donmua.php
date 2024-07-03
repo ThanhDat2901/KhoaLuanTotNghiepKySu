@@ -958,8 +958,13 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                    
                                                         <?php if($kiemtra2 !=1): ?>
                                                           
-
-                                                            <div >                                   
+                                                        <?php else: ?>
+                                                            <div style="text-align: left;color: #26aa99;">
+                                                                    <h4>Đã đánh giá</h4>
+                                                                </div>
+                                                        <?php endif ?>   
+                                                        
+                                                        <div >                                   
                                                                 <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                                 
                                                                     <?php
@@ -978,11 +983,6 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                     <button class="js-btnPlaceOrder btn btn-info fw "   style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;"  onclick="showCancelPopupDoiHang(<?=$datatemp['IDHoaDon']?>)" >Đổi hàng</button>
                                                                     <?php endif; ?>
                                                             </div>
-                                                        <?php else: ?>
-                                                            <div style="text-align: left;color: #26aa99;">
-                                                                    <h4>Đã đánh giá</h4>
-                                                                </div>
-                                                        <?php endif ?>   
                                                     <div id="cancelPopupDanhGia">
                                                             <h3>Đánh giá sản phẩm</h3>
                                                             <form id="cancelFormDanhGia">
@@ -1112,8 +1112,12 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                         </div> 
                                                         <?php if($kiemtra2 !=1): ?>
                                                           
-
-                                                          <div >                                   
+                                                      <?php else: ?>
+                                                          <div style="text-align: left;color: #26aa99;">
+                                                                  <h4>Đã đánh giá</h4>
+                                                              </div>
+                                                      <?php endif ?>  
+                                                      <div >                                   
                                                               <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
@@ -1133,11 +1137,6 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                   <?php endif; ?>
                                                               <!-- id="<?=$datatemp['IDHoaDon']?>" -->
                                                           </div>
-                                                      <?php else: ?>
-                                                          <div style="text-align: left;color: #26aa99;">
-                                                                  <h4>Đã đánh giá</h4>
-                                                              </div>
-                                                      <?php endif ?>  
 
                                                 </div>
                                             <?php endif ?>
@@ -1189,7 +1188,13 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                         <?php if($kiemtra2 !=1): ?>
                                                           
 
-                                                          <div >                                   
+
+                                                      <?php else: ?>
+                                                          <div style="text-align: left;color: #26aa99;">
+                                                                  <h4>Đã đánh giá</h4>
+                                                              </div>
+                                                      <?php endif ?>  
+                                                      <div >                                   
                                                               <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
@@ -1209,11 +1214,6 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                   <?php endif; ?>
                                                               <!-- id="<?=$datatemp['IDHoaDon']?>" -->
                                                           </div>
-                                                      <?php else: ?>
-                                                          <div style="text-align: left;color: #26aa99;">
-                                                                  <h4>Đã đánh giá</h4>
-                                                              </div>
-                                                      <?php endif ?>  
 
                                                 </div>
                                             <?php endif ?>
@@ -1265,7 +1265,14 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                         <?php if($kiemtra2 !=1): ?>
                                                           
 
-                                                          <div >                                   
+
+                                                      <?php else: ?>
+                                                          <div style="text-align: left;color: #26aa99;">
+                                                                  <h4>Đã đánh giá</h4>
+                                                              </div>
+                                                              
+                                                      <?php endif ?> 
+                                                      <div >                                   
                                                               <!-- <button class="js-btnPlaceOrder btn btn-info fw" style="width:200px; height: 50px;text-transform: uppercase;font-size: 20px; margin-top: 20px;" onclick="showCancelPopupDanhGia(<?=$datatemp['IDHoaDon']?>)">Đánh giá</button> -->
                                                               
                                                               <?php
@@ -1285,12 +1292,6 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                   <?php endif; ?>
                                                               <!-- id="<?=$datatemp['IDHoaDon']?>" -->
                                                           </div>
-                                                      <?php else: ?>
-                                                          <div style="text-align: left;color: #26aa99;">
-                                                                  <h4>Đã đánh giá</h4>
-                                                              </div>
-                                                              
-                                                      <?php endif ?> 
 
                                                 </div>
                                             <?php endif ?>

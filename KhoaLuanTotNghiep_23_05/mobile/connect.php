@@ -4,7 +4,7 @@ $username = "root";
 $password = "";
 $dbname = "dbyameshop";
 
-$connect = new mysqli("localhost","root","","yameshop");
+$connect = new mysqli("localhost","root","","dbyameshop");
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
