@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $hoadon = new hoadon();
         $result = $hoadon->CapNhatTrangthai($IDHoaDon,$IDTrangThai);
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $NgayGiao = date('Y-m-d H:i:s');
         if($IDTrangThai==6)
         {

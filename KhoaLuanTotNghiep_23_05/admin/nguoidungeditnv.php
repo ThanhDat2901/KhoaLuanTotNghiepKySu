@@ -85,7 +85,7 @@
                                 <label>Mật Khẩu</label>
                             </td>
                             <td>
-                                <input style="width: 300px;" type="password" value="<?php echo $result['MatKhau']; ?>" name="MatKhau" id="" readonly  class="medium" />
+                                <input style="width: 300px;" type="password" value="<?php echo $result['MatKhau']; ?>" name="MatKhau" id=""  class="medium" />
                             </td>
                         </tr>
                         

@@ -1056,7 +1056,7 @@ $kiemtrakhongchapnhandoihang= $hoadon->KiemTraDanhSachHoaDonByIDNguoiDung($IDNgu
                                                                     <input type="radio" name="LyDoDoi" value="Hàng giả, nhái"> Hàng giả, nhái
                                                                 </label>
                                                                 <label>
-                                                                    <input type="radio" name="LyDoDoi" value="Thay đổi size, màu"> Thay đổi size, màu
+                                                                    <input type="radio" name="LyDoDoi" value="Thay đổi size"> Thay đổi size
                                                                 </label>
                                                                 <button type="button" onclick="submitCancelDoiHang()">Xác nhận đổi hàng</button>
                                                                 <button type="button" onclick="closeCancelPopupDoiHang()">Đóng</button>

@@ -148,6 +148,7 @@ $detailnguoidung = $thongtinnguoidung->fetch_assoc();
         $username = $_POST['userName'];
         $userEmail = $_POST['userEmail'];
         $Phone = $_POST['Phone'];
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $NgayLap = date('Y-m-d H:i:s'); 
         $city = $_POST['city2'];
         $district = $_POST['district2'];

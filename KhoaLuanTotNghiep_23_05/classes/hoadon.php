@@ -93,11 +93,12 @@
 			return $result;
 		}
 		public function show_HoaDonDetail($id){
-			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake,chitietsanpham.*
-					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham 
+			$query = "SELECT sanpham.*, chitiethoadon.SoLuong as SoLuongMua, hoadon.*,hoadon.IDHoaDon as IdHoaDonFake,chitietsanpham.*,chitietsanpham.IDChiTiet as IDChiTietDetail,chitietsanpham.IDSize as CTIDSize,size.TenSize
+					  FROM chitiethoadon, chitietsanpham, hoadon, sanpham,size  
 					  WHERE sanpham.IDSanPham = chitietsanpham.IDSanPham 
 					  AND hoadon.IDHoaDon = chitiethoadon.IDHoaDon 
 					  AND chitiethoadon.IDChiTiet = chitietsanpham.IDChiTiet 
+					AND chitietsanpham.IDSize = size.IDSize
 					  AND hoadon.IDHoaDon = '$id' 
 					  ORDER BY hoadon.IDHoaDon DESC";
 			$result = $this->db->select($query);
